@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameratest
+package com.arsvechkarev.cameram
 
 import org.junit.Test
 

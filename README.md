@@ -1,5 +1,5 @@
 # CameraM
 
-Android app camera app with simple image editing
+#### Simple android camera app with image editing
 
 -- Work in progress --

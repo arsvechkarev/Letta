@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     
     supportFragmentManager.beginTransaction()
-      .replace(android.R.id.content, CameraFragment())
+      .replace(android.R.id.content, EditFragment())
       .commit()
   }
 }

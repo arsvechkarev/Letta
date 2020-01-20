@@ -18,6 +18,7 @@ import android.hardware.camera2.CaptureResult
 import android.hardware.camera2.TotalCaptureResult
 import android.media.ImageReader
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
@@ -40,8 +41,8 @@ import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
 
+// TODO (1/20/2020): make this work
 class CameraFragment : Fragment() {
-  
   /**
    * [TextureView.SurfaceTextureListener] handles several lifecycle events on a
    * [TextureView].
@@ -109,7 +110,7 @@ class CameraFragment : Fragment() {
     }
     
     override fun onError(cameraDevice: CameraDevice, error: Int) {
-      log("onError")
+      log("onError, code = $error")
       onDisconnected(cameraDevice)
       this@CameraFragment.activity?.finish()
     }
@@ -262,7 +263,10 @@ class CameraFragment : Fragment() {
   
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    file = File(requireActivity().getExternalFilesDir(null), "picture_file")
+    file = File(
+      requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+      "picture_file${kotlin.random.Random.nextInt(5000)}"
+    )
   }
   
   override fun onResume() {
@@ -486,7 +490,7 @@ class CameraFragment : Fragment() {
         object : CameraCaptureSession.StateCallback() {
           
           override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
-        
+            
             log("creating preview session, onConfigured")
             // The camera is already closed
             if (cameraDevice == null) return

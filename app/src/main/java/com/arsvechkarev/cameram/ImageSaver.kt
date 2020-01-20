@@ -9,7 +9,7 @@ import java.io.IOException
 /**
  * Saves a JPEG [Image] into the specified [File].
  */
-internal class ImageSaver(
+class ImageSaver(
   /**
    * The JPEG image
    */
@@ -48,6 +48,6 @@ internal class ImageSaver(
     /**
      * Tag for the [Log].
      */
-    private val TAG = "ImageSaver"
+    private const val TAG = "ImageSaver"
   }
 }

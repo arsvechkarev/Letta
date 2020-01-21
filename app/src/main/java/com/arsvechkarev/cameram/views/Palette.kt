@@ -57,16 +57,7 @@ class Palette @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
-    path.moveTo(width.f, 0f)
-    path.lineTo(CORNER_RADIUS, 0f)
-    path.quadTo(0f, 0f, 0f, CORNER_RADIUS)
-    path.lineTo(0f, height.f - CORNER_RADIUS)
-    path.quadTo(0f, height.f, CORNER_RADIUS, height.f)
-    path.lineTo(width.f, height.f)
-    path.close()
-    
-    canvas.drawPath(path, paint)
-    
+    drawRoundRectangle(canvas)
     val x = circleDiameter
     var y = circleDistance + circleDiameter / 2
     for (i in 1..NUMBER_OF_CIRCLES) {
@@ -89,6 +80,18 @@ class Palette @JvmOverloads constructor(
       }
     }
     return false
+  }
+  
+  private fun drawRoundRectangle(canvas: Canvas) {
+    path.moveTo(width.f, 0f)
+    path.lineTo(CORNER_RADIUS, 0f)
+    path.quadTo(0f, 0f, 0f, CORNER_RADIUS)
+    path.lineTo(0f, height.f - CORNER_RADIUS)
+    path.quadTo(0f, height.f, CORNER_RADIUS, height.f)
+    path.lineTo(width.f, height.f)
+    path.close()
+    
+    canvas.drawPath(path, paint)
   }
   
   private fun setupCirclePaint(i: Int) {

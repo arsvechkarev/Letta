@@ -9,8 +9,9 @@
   <com.arsvechkarev.cameram.views.DrawingCanvas
     android:id="@+id/drawingCanvas"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
-
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp"/>
   <com.arsvechkarev.cameram.views.Palette
     android:id="@+id/palette"
     android:layout_width="40dp"
@@ -20,6 +21,7 @@
     app:layout_constraintTop_toTopOf="parent"/>
 
   <ImageButton
+    android:id="@+id/buttonUndo"
     android:layout_width="50dp"
     android:layout_height="50dp"
     android:layout_margin="16dp"
@@ -27,5 +29,39 @@
     android:src="@drawable/ic_undo"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageButton
+    android:id="@+id/buttonDone"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:layout_margin="24dp"
+    android:background="@drawable/bg_round"
+    android:backgroundTint="@android:color/holo_red_dark"
+    android:src="@drawable/ic_checkmark"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <ImageButton
+    android:id="@+id/buttonText"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_margin="24dp"
+    android:background="@drawable/bg_round"
+    android:src="@drawable/ic_text"
+    app:layout_constraintBottom_toBottomOf="@+id/buttonDone"
+    app:layout_constraintEnd_toStartOf="@id/buttonDone"
+    app:layout_constraintTop_toTopOf="@+id/buttonDone"/>
+
+  <ImageButton
+    android:id="@+id/buttonStickers"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_margin="24dp"
+    android:background="@drawable/bg_round"
+    android:src="@drawable/ic_attach"
+    app:layout_constraintBottom_toBottomOf="@+id/buttonDone"
+    app:layout_constraintStart_toEndOf="@id/buttonDone"
+    app:layout_constraintTop_toTopOf="@+id/buttonDone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

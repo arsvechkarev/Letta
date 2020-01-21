@@ -6,12 +6,25 @@
   android:layout_height="match_parent"
   tools:context=".EditFragment">
 
+  <com.arsvechkarev.cameram.views.DrawingCanvas
+    android:id="@+id/drawingCanvas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+  <com.arsvechkarev.cameram.views.Palette
+    android:id="@+id/palette"
+    android:layout_width="40dp"
+    android:layout_height="300dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
   <ImageButton
     android:layout_width="50dp"
     android:layout_height="50dp"
     android:layout_margin="16dp"
     android:background="@drawable/bg_round"
-    android:src="@drawable/ic_arrow_back_black_24dp"
+    android:src="@drawable/ic_undo"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 

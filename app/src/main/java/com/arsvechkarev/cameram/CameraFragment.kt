@@ -34,6 +34,9 @@ import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.arsvechkarev.cameram.extensions.TAG
+import com.arsvechkarev.cameram.extensions.log
+import com.arsvechkarev.cameram.extensions.showToast
 import java.io.File
 import java.util.Collections
 import java.util.Collections.max

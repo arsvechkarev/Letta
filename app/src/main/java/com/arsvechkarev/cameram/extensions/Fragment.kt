@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram
+package com.arsvechkarev.cameram.extensions
 
 import android.util.Log
 import android.widget.Toast

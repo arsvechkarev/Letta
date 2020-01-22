@@ -16,7 +16,6 @@ import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.Style.FILL
 import android.graphics.Path
-import android.graphics.PointF
 import android.graphics.PorterDuff.Mode.SRC_ATOP
 import android.graphics.PorterDuffColorFilter
 import android.graphics.RectF
@@ -28,8 +27,7 @@ import com.arsvechkarev.cameram.R
 import com.arsvechkarev.cameram.utils.f
 import com.arsvechkarev.cameram.utils.toBitmap
 import com.arsvechkarev.cameram.utils.toPointF
-import kotlin.math.abs
-import kotlin.math.sqrt
+import com.arsvechkarev.cameram.views.common.Circle
 
 
 class Palette @JvmOverloads constructor(
@@ -113,7 +111,7 @@ class Palette @JvmOverloads constructor(
     for (i in 1..NUMBER_OF_CIRCLES) {
       paint.setCircleStyle(i)
       canvas.drawCircle(x, y, circleDiameter / 2, paint)
-      circles[i - 1].set(x, y, paint.color)
+      circles[i - 1].set(x, y, circleDiameter / 2, paint.color)
       paint.setStrokeStyle()
       canvas.drawCircle(x, y, circleDiameter / 2, paint)
       y += circleDistance + circleDiameter
@@ -164,24 +162,4 @@ class Palette @JvmOverloads constructor(
     this.style = FILL
   }
   
-  
-  inner class Circle {
-    var x: Float = 0f
-    var y: Float = 0f
-    var color: Int = 0
-    
-    fun set(x: Float, y: Float, color: Int) {
-      this.x = x
-      this.y = y
-      this.color = color
-    }
-    
-    operator fun contains(pointF: PointF): Boolean {
-      val absX = abs(pointF.x - x)
-      val absY = abs(pointF.y - y)
-      val distToCenter = sqrt(absX * absX + absY * absY)
-      return distToCenter <= circleDiameter / 2
-    }
-    
-  }
 }

@@ -6,11 +6,13 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    Timber.plant(Timber.DebugTree())
     setContentView(R.layout.activity_main)
     ActivityCompat.requestPermissions(
       this,

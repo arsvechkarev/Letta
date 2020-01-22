@@ -1,19 +1,36 @@
 package com.arsvechkarev.cameram.views
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
+import android.graphics.Color.BLACK
+import android.graphics.Color.BLUE
+import android.graphics.Color.GRAY
+import android.graphics.Color.GREEN
+import android.graphics.Color.RED
+import android.graphics.Color.TRANSPARENT
+import android.graphics.Color.WHITE
+import android.graphics.Color.YELLOW
 import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
+import android.graphics.Paint.Style.FILL
 import android.graphics.Path
 import android.graphics.PointF
+import android.graphics.PorterDuff.Mode.SRC_ATOP
+import android.graphics.PorterDuffColorFilter
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import com.arsvechkarev.cameram.extensions.f
-import com.arsvechkarev.cameram.extensions.toPointF
+import androidx.core.content.ContextCompat
+import com.arsvechkarev.cameram.R
+import com.arsvechkarev.cameram.utils.f
+import com.arsvechkarev.cameram.utils.toBitmap
+import com.arsvechkarev.cameram.utils.toPointF
 import kotlin.math.abs
 import kotlin.math.sqrt
+
 
 class Palette @JvmOverloads constructor(
   context: Context,
@@ -29,20 +46,23 @@ class Palette @JvmOverloads constructor(
   
   private val path = Path()
   private val paint = Paint(ANTI_ALIAS_FLAG).apply {
-    style = Paint.Style.FILL
-    color = Color.WHITE
+    style = FILL
+    color = WHITE
   }
   // Creating array of empty circles that will be filled later
   private val circles = Array(NUMBER_OF_CIRCLES) { Circle() }
-  
-  private var circleSegmentHeight = 0f
   private var circleDiameter = 0f
   private var circleDistance = 0f
+  
+  private val checkmark: Bitmap
+  private val rectOfBitmap = RectF()
+  private var selectedCircleColor = 0
   
   private var onColorSelectedAction: (Int) -> Unit = {}
   
   init {
-    setBackgroundColor(Color.TRANSPARENT)
+    setBackgroundColor(TRANSPARENT)
+    checkmark = ContextCompat.getDrawable(context, R.drawable.ic_checkmark)!!.toBitmap()
   }
   
   fun onColorSelected(block: (Int) -> Unit) {
@@ -53,7 +73,28 @@ class Palette @JvmOverloads constructor(
     super.onSizeChanged(w, h, oldw, oldh)
     circleDiameter = w / 2f
     circleDistance = (h - (NUMBER_OF_CIRCLES * circleDiameter)) / (NUMBER_OF_CIRCLES + 1)
-    circleSegmentHeight = h / NUMBER_OF_CIRCLES.f
+  }
+  
+  @SuppressLint("ClickableViewAccessibility")
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    if (event.action == MotionEvent.ACTION_DOWN) {
+      for (circle in circles) {
+        if (event.toPointF() in circle) {
+          val radius = circleDiameter / 2
+          selectedCircleColor = circle.color
+          rectOfBitmap.set(
+            circle.x - radius,
+            circle.y - radius,
+            circle.x + radius,
+            circle.y + radius
+          )
+          onColorSelectedAction(circle.color)
+          invalidate()
+          return true
+        }
+      }
+    }
+    return false
   }
   
   override fun onDraw(canvas: Canvas) {
@@ -64,67 +105,74 @@ class Palette @JvmOverloads constructor(
     path.quadTo(0f, height.f, CORNER_RADIUS, height.f)
     path.lineTo(width.f, height.f)
     path.close()
-    
+    paint.setRectStyle()
     canvas.drawPath(path, paint)
     
     val x = circleDiameter
     var y = circleDistance + circleDiameter / 2
     for (i in 1..NUMBER_OF_CIRCLES) {
-      setupCirclePaint(i)
+      paint.setCircleStyle(i)
       canvas.drawCircle(x, y, circleDiameter / 2, paint)
-      circles[i - 1].set(x, y, circleDiameter / 2, paint.color)
-      setupStrokePaint()
+      circles[i - 1].set(x, y, paint.color)
+      paint.setStrokeStyle()
       canvas.drawCircle(x, y, circleDiameter / 2, paint)
       y += circleDistance + circleDiameter
     }
+    paint.setCheckmarkStyle(selectedCircleColor)
+    canvas.drawBitmap(checkmark, null, rectOfBitmap, paint)
   }
   
-  override fun onTouchEvent(event: MotionEvent): Boolean {
-    if (event.action == MotionEvent.ACTION_DOWN) {
-      for (circle in circles) {
-        if (event.toPointF() in circle) {
-          onColorSelectedAction(circle.color)
-          return true
-        }
-      }
-    }
-    return false
+  private fun Paint.setRectStyle() {
+    reset()
+    this.color = WHITE
+    this.style = FILL
   }
   
-  private fun setupCirclePaint(i: Int) {
-    with(paint) {
-      style = Paint.Style.FILL
+  private fun Paint.setCircleStyle(i: Int) {
+    reset()
+    with(this) {
+      style = FILL
       color = when (i) {
-        1 -> Color.WHITE
-        2 -> Color.BLACK
-        3 -> Color.BLUE
-        4 -> Color.GRAY
-        5 -> Color.GREEN
-        6 -> Color.RED
-        7 -> Color.YELLOW
+        1 -> WHITE
+        2 -> BLACK
+        3 -> BLUE
+        4 -> GRAY
+        5 -> GREEN
+        6 -> RED
+        7 -> YELLOW
         else -> error("Unknown color for position $i")
       }
     }
   }
   
-  private fun setupStrokePaint() {
-    with(paint) {
+  private fun Paint.setStrokeStyle() {
+    reset()
+    with(this) {
       style = Paint.Style.STROKE
       strokeWidth = CIRCLE_BORDER_WIDTH
-      color = Color.GRAY
+      color = GRAY
     }
   }
   
-  class Circle {
+  private fun Paint.setCheckmarkStyle(circleColor: Int) {
+    reset()
+    colorFilter = if (circleColor == WHITE || circleColor == YELLOW) {
+      PorterDuffColorFilter(BLACK, SRC_ATOP)
+    } else {
+      PorterDuffColorFilter(WHITE, SRC_ATOP)
+    }
+    this.style = FILL
+  }
+  
+  
+  inner class Circle {
     var x: Float = 0f
     var y: Float = 0f
-    var radius: Float = 0f
     var color: Int = 0
     
-    fun set(x: Float, y: Float, radius: Float, color: Int) {
+    fun set(x: Float, y: Float, color: Int) {
       this.x = x
       this.y = y
-      this.radius = radius
       this.color = color
     }
     
@@ -132,7 +180,7 @@ class Palette @JvmOverloads constructor(
       val absX = abs(pointF.x - x)
       val absY = abs(pointF.y - y)
       val distToCenter = sqrt(absX * absX + absY * absY)
-      return distToCenter <= radius
+      return distToCenter <= circleDiameter / 2
     }
     
   }

@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram.extensions
+package com.arsvechkarev.cameram.utils
 
 import android.graphics.PointF
 import android.view.MotionEvent

@@ -1,15 +1,21 @@
 package com.arsvechkarev.cameram.views
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Bitmap.Config.ARGB_8888
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Path
 import android.graphics.PointF
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
+import com.arsvechkarev.cameram.R
 import com.arsvechkarev.cameram.extensions.f
 import com.arsvechkarev.cameram.extensions.toPointF
 import kotlin.math.abs
@@ -28,21 +34,32 @@ class Palette @JvmOverloads constructor(
   }
   
   private val path = Path()
+  private val bitmapPaint = Paint(ANTI_ALIAS_FLAG)
   private val paint = Paint(ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.FILL
     color = Color.WHITE
   }
   // Creating array of empty circles that will be filled later
   private val circles = Array(NUMBER_OF_CIRCLES) { Circle() }
+  private val bitmap: Bitmap
   
   private var circleSegmentHeight = 0f
   private var circleDiameter = 0f
   private var circleDistance = 0f
   
+  // Draw checkmark at the center of a circle that user clicks on
+  private var drawCheckMarkOnCircle = false
+  private var clickedCircle = Circle()
+  private val clickedCircleRect = RectF()
+  
   private var onColorSelectedAction: (Int) -> Unit = {}
   
   init {
     setBackgroundColor(Color.TRANSPARENT)
+    val drawable = AppCompatResources.getDrawable(context, R.drawable.ic_checkmark)!!
+    bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, ARGB_8888)
+    val canvas = Canvas(bitmap)
+    drawable.draw(canvas)
   }
   
   fun onColorSelected(block: (Int) -> Unit) {
@@ -56,7 +73,32 @@ class Palette @JvmOverloads constructor(
     circleSegmentHeight = h / NUMBER_OF_CIRCLES.f
   }
   
+  @SuppressLint("ClickableViewAccessibility")
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    if (event.action == MotionEvent.ACTION_DOWN) {
+      for (circle in circles) {
+        if (event.toPointF() in circle) {
+          drawCheckMarkOnCircle = true
+          clickedCircle = circle
+          val left = circle.x - circle.radius
+          val top = circle.y - circle.radius
+          val right = circle.x + circle.radius
+          val bottom = circle.y + circle.radius
+          clickedCircleRect.set(left, top, right, bottom)
+          onColorSelectedAction(circle.color)
+          invalidate()
+          return true
+        }
+      }
+    }
+    return false
+  }
+  
   override fun onDraw(canvas: Canvas) {
+    if (drawCheckMarkOnCircle) {
+      canvas.drawBitmap(bitmap, null, clickedCircleRect, bitmapPaint)
+      drawCheckMarkOnCircle = false
+    }
     drawRoundRectangle(canvas)
     val x = circleDiameter
     var y = circleDistance + circleDiameter / 2
@@ -68,18 +110,6 @@ class Palette @JvmOverloads constructor(
       canvas.drawCircle(x, y, circleDiameter / 2, paint)
       y += circleDistance + circleDiameter
     }
-  }
-  
-  override fun onTouchEvent(event: MotionEvent): Boolean {
-    if (event.action == MotionEvent.ACTION_DOWN) {
-      for (circle in circles) {
-        if (event.toPointF() in circle) {
-          onColorSelectedAction(circle.color)
-          return true
-        }
-      }
-    }
-    return false
   }
   
   private fun drawRoundRectangle(canvas: Canvas) {

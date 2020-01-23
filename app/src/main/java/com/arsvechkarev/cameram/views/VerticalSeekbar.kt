@@ -12,6 +12,7 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
+import androidx.annotation.FloatRange
 import com.arsvechkarev.cameram.utils.f
 import com.arsvechkarev.cameram.utils.toPointF
 import com.arsvechkarev.cameram.views.common.Circle
@@ -28,6 +29,7 @@ class VerticalSeekbar @JvmOverloads constructor(
     private const val LINE_WIDTH = 11f
   }
   
+  private var onPercentChangedAction: (Float) -> Unit = {}
   private val path = Path()
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.FILL
@@ -36,12 +38,16 @@ class VerticalSeekbar @JvmOverloads constructor(
   private var lineLength = 0f
   
   private var allowMoving = false
-  private var progress = 0.3f
   private var currentY = 0f
   private var circle = Circle()
   
+  fun onPercentChanged(block: (Float) -> Unit) {
+    this.onPercentChangedAction = block
+  }
+  
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     lineLength = h - CORNER_RADIUS * 2
+    currentY = (lineLength + LINE_TRIM) - (0.5f * lineLength) // 20% from bottom
   }
   
   override fun onDraw(canvas: Canvas) {
@@ -59,11 +65,11 @@ class VerticalSeekbar @JvmOverloads constructor(
     canvas.drawLine(width.f / 2, LINE_TRIM, width.f / 2, height - LINE_TRIM, paint)
     
     paint.color = Color.RED
-    val progressPoint = height.f - (lineLength * progress)
-    canvas.drawLine(width.f / 2, height - LINE_TRIM, width.f / 2, progressPoint, paint)
+    canvas.drawLine(width.f / 2, height - LINE_TRIM, width.f / 2, currentY, paint)
     
     paint.setCircleStyle()
-    canvas.drawCircle(width.f / 2, progressPoint, 20f, paint)
+    circle.set(width.f / 2, currentY, 20f)
+    canvas.drawCircle(width.f / 2, currentY, 20f, paint)
   }
   
   @SuppressLint("ClickableViewAccessibility")
@@ -78,7 +84,9 @@ class VerticalSeekbar @JvmOverloads constructor(
       }
       ACTION_MOVE -> {
         if (allowMoving) {
-          currentY = event.y.coerceIn(LINE_TRIM, lineLength + LINE_TRIM)
+          currentY = event.y.coerceIn(LINE_TRIM, height.f - LINE_TRIM)
+          val percent = (lineLength + LINE_TRIM - currentY) / lineLength
+          onPercentChangedAction(percent)
           invalidate()
           return true
         }

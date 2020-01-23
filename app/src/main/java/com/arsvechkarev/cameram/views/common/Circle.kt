@@ -10,7 +10,7 @@ class Circle {
   var radius: Float = 0f
   var color: Int = 0
   
-  fun set(x: Float, y: Float, radius: Float, color: Int) {
+  fun set(x: Float, y: Float, radius: Float, color: Int = 0) {
     this.x = x
     this.y = y
     this.radius = radius

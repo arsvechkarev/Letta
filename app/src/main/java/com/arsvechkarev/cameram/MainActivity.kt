@@ -6,6 +6,7 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.arsvechkarev.cameram.camera.CameraFragment
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     
     supportFragmentManager.beginTransaction()
-      .replace(android.R.id.content, EditFragment())
+      .replace(android.R.id.content, CameraFragment())
       .commit()
   }
 }

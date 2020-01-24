@@ -1,8 +1,9 @@
 package com.arsvechkarev.cameram.views
 
+import android.animation.PropertyValuesHolder
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color.BLACK
 import android.graphics.Color.BLUE
@@ -16,18 +17,11 @@ import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.Style.FILL
 import android.graphics.Path
-import android.graphics.PorterDuff.Mode.SRC_ATOP
-import android.graphics.PorterDuffColorFilter
-import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.ContextCompat
-import com.arsvechkarev.cameram.R
+import androidx.core.animation.addListener
 import com.arsvechkarev.cameram.utils.f
-import com.arsvechkarev.cameram.utils.toBitmap
-import com.arsvechkarev.cameram.utils.toPointF
-import com.arsvechkarev.cameram.views.common.Circle
 
 
 class Palette @JvmOverloads constructor(
@@ -37,6 +31,7 @@ class Palette @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
   
   companion object {
+    private const val SELECTION_ANIMATION_DURATION = 300L
     private const val CORNER_RADIUS = 50f
     private const val NUMBER_OF_CIRCLES = 7
     private const val CIRCLE_BORDER_WIDTH = 2f
@@ -48,44 +43,65 @@ class Palette @JvmOverloads constructor(
     color = WHITE
   }
   // Creating array of empty circles that will be filled later
-  private val circles = Array(NUMBER_OF_CIRCLES) { Circle() }
+  private val circles = Array(NUMBER_OF_CIRCLES) { PaletteCircle() }
+  private var circleX: Float = 0f
   private var circleDiameter = 0f
+  private var circleIncreasedDiameter = 0f
   private var circleDistance = 0f
   
-  private val checkmark: Bitmap
-  private val rectOfBitmap = RectF()
-  private var selectedCircleColor = 0
+  private var previousCircle = PaletteCircle()
+  private var currentCircle = PaletteCircle()
+  
+  private var updateSelectedColors = false
+  private var currentIncreasingRadius = 0f
+  private var currentDecreasingRadius = 0f
   
   private var onColorSelectedAction: (Int) -> Unit = {}
   
   init {
     setBackgroundColor(TRANSPARENT)
-    checkmark = ContextCompat.getDrawable(context, R.drawable.ic_checkmark)!!.toBitmap()
+    setInitialColor(6)
   }
   
   fun onColorSelected(block: (Int) -> Unit) {
     this.onColorSelectedAction = block
   }
   
+  fun setInitialColor(colorIndex: Int) {
+    updateSelectedColors = true
+    paint.setCircleStyle(colorIndex)
+    previousCircle = PaletteCircle()
+    var y = circleDistance + circleDiameter / 2
+    when (colorIndex) {
+      1 -> previousCircle.set(y, paint.color)
+      in 2..7 -> {
+        y += (circleDistance + circleDiameter) * colorIndex
+        previousCircle.set(y, paint.color)
+      }
+      else -> error("Unknown color for position $colorIndex")
+    }
+  }
+  
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     super.onSizeChanged(w, h, oldw, oldh)
-    circleDiameter = w / 2f
+    circleX = w / 2f
+    circleDiameter = w / 2.3f
+    circleIncreasedDiameter = w / 2f
     circleDistance = (h - (NUMBER_OF_CIRCLES * circleDiameter)) / (NUMBER_OF_CIRCLES + 1)
+    var segmentBottom = 0f
+    val segmentBottomIncrease = h / NUMBER_OF_CIRCLES.f
+    circles.forEach {
+      segmentBottom += segmentBottomIncrease
+      it.segmentBorder = segmentBottom
+    }
   }
   
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
     if (event.action == MotionEvent.ACTION_DOWN) {
       for (circle in circles) {
-        if (event.toPointF() in circle) {
-          val radius = circleDiameter / 2
-          selectedCircleColor = circle.color
-          rectOfBitmap.set(
-            circle.x - radius,
-            circle.y - radius,
-            circle.x + radius,
-            circle.y + radius
-          )
+        if (event.y in circle) {
+          animateCircle(circle)
           onColorSelectedAction(circle.color)
           invalidate()
           return true
@@ -96,28 +112,55 @@ class Palette @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
-    path.moveTo(width.f, 0f)
-    path.lineTo(CORNER_RADIUS, 0f)
-    path.quadTo(0f, 0f, 0f, CORNER_RADIUS)
-    path.lineTo(0f, height.f - CORNER_RADIUS)
-    path.quadTo(0f, height.f, CORNER_RADIUS, height.f)
-    path.lineTo(width.f, height.f)
-    path.close()
+    with(path) {
+      moveTo(width.f, 0f)
+      lineTo(CORNER_RADIUS, 0f)
+      quadTo(0f, 0f, 0f, CORNER_RADIUS)
+      lineTo(0f, height.f - CORNER_RADIUS)
+      quadTo(0f, height.f, CORNER_RADIUS, height.f)
+      lineTo(width.f, height.f)
+      close()
+    }
     paint.setRectStyle()
     canvas.drawPath(path, paint)
     
-    val x = circleDiameter
     var y = circleDistance + circleDiameter / 2
     for (i in 1..NUMBER_OF_CIRCLES) {
       paint.setCircleStyle(i)
-      canvas.drawCircle(x, y, circleDiameter / 2, paint)
-      circles[i - 1].set(x, y, circleDiameter / 2, paint.color)
+      canvas.drawCircle(circleX, y, circleDiameter / 2, paint)
+      circles[i - 1].set(y, paint.color)
       paint.setStrokeStyle()
-      canvas.drawCircle(x, y, circleDiameter / 2, paint)
+      canvas.drawCircle(circleX, y, circleDiameter / 2, paint)
       y += circleDistance + circleDiameter
     }
-    paint.setCheckmarkStyle(selectedCircleColor)
-    canvas.drawBitmap(checkmark, null, rectOfBitmap, paint)
+    
+    if (updateSelectedColors) {
+      paint.reset()
+      paint.style = FILL
+      paint.color = previousCircle.color
+      canvas.drawCircle(circleX, previousCircle.y, currentDecreasingRadius, paint)
+      if (currentCircle.isInitialized) {
+        paint.color = currentCircle.color
+        canvas.drawCircle(circleX, currentCircle.y, currentIncreasingRadius, paint)
+      }
+    }
+  }
+  
+  private fun animateCircle(circle: PaletteCircle) {
+    val holderInc = PropertyValuesHolder.ofFloat("inc", circleDiameter, circleIncreasedDiameter)
+    val holderDec = PropertyValuesHolder.ofFloat("dec", circleIncreasedDiameter, circleDiameter)
+    updateSelectedColors = true
+    ValueAnimator.ofPropertyValuesHolder(holderInc, holderDec).apply {
+      addUpdateListener {
+        currentIncreasingRadius = it.getAnimatedValue("inc") as Float
+        currentDecreasingRadius = it.getAnimatedValue("dec") as Float
+        invalidate()
+      }
+      addListener(onEnd = {
+        currentCircle = circle
+      })
+      start()
+    }
   }
   
   private fun Paint.setRectStyle() {
@@ -152,14 +195,26 @@ class Palette @JvmOverloads constructor(
     }
   }
   
-  private fun Paint.setCheckmarkStyle(circleColor: Int) {
-    reset()
-    colorFilter = if (circleColor == WHITE || circleColor == YELLOW) {
-      PorterDuffColorFilter(BLACK, SRC_ATOP)
-    } else {
-      PorterDuffColorFilter(WHITE, SRC_ATOP)
+  class PaletteCircle {
+    var y: Float = 0f
+    var color: Int = 0
+    var segmentBorder = 0f
+    
+    val isInitialized: Boolean
+      get() = y != 0f
+    
+    fun set(y: Float, color: Int) {
+      this.y = y
+      this.color = color
     }
-    this.style = FILL
+    
+    operator fun contains(y: Float): Boolean {
+      return y <= segmentBorder
+    }
+    
+    override fun toString(): String {
+      return "Circle2(y=$y, color=$color, segmentBorder=$segmentBorder)"
+    }
+    
   }
-  
 }

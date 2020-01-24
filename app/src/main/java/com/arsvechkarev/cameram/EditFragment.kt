@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_edit.seekbar
 class EditFragment : Fragment(R.layout.fragment_edit) {
   
   companion object {
-    const val FADE_OUT_DURATION = 250L
+    const val FADE_OUT_DURATION = 200L
   }
   
   private lateinit var tools: Group

@@ -12,9 +12,7 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
-import androidx.annotation.FloatRange
 import com.arsvechkarev.cameram.utils.f
-import com.arsvechkarev.cameram.utils.toPointF
 import com.arsvechkarev.cameram.views.common.Circle
 
 class VerticalSeekbar @JvmOverloads constructor(
@@ -37,7 +35,6 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   private var lineLength = 0f
   
-  private var allowMoving = false
   private var currentY = 0f
   private var circle = Circle()
   
@@ -76,24 +73,14 @@ class VerticalSeekbar @JvmOverloads constructor(
   override fun onTouchEvent(event: MotionEvent): Boolean {
     when (event.action) {
       ACTION_DOWN -> {
-        val point = event.toPointF()
-        if (point in circle) {
-          // Getting ready to moving the circle
-          allowMoving = true
-        } else {
-          // Positioning circle according to "y" coordinate
-          notifyEvent(event)
-        }
+        notifyEvent(event)
         return true
       }
       ACTION_MOVE -> {
-        if (allowMoving) {
-          notifyEvent(event)
-          return true
-        }
+        notifyEvent(event)
+        return true
       }
       ACTION_UP -> {
-        allowMoving = false
         return true
       }
     }

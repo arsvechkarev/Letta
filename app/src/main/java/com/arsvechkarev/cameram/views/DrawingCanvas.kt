@@ -43,10 +43,8 @@ class DrawingCanvas @JvmOverloads constructor(
   private var latestPaint = Paint(ANTI_ALIAS_FLAG and DITHER_FLAG)
   private var lastX = 0f
   private var lastY = 0f
-  private var currentPaintWidth =
-    PAINT_WIDTH_COEFFICIENT
-  private var currentPaintColor =
-    INITIAL_PAINT_COLOR
+  private var currentPaintWidth = 0f
+  private var currentPaintColor = INITIAL_PAINT_COLOR
   
   private val paths = ArrayList<Path>()
   private val paints = ArrayList<Paint>()
@@ -61,9 +59,9 @@ class DrawingCanvas @JvmOverloads constructor(
   var onUp: (Int, Int) -> Unit = { _, _ -> }
   var onLast: (Int, Int) -> Unit = { _, _ -> }
   
-  fun changeWidth(width: Int) {
+  fun changeWidth(width: Float) {
     if (width > 0) {
-      currentPaintWidth = width * PAINT_WIDTH_COEFFICIENT
+      currentPaintWidth = width
     }
   }
   
@@ -185,7 +183,6 @@ class DrawingCanvas @JvmOverloads constructor(
   }
   
   companion object {
-    private const val PAINT_WIDTH_COEFFICIENT = 3f
     private const val TOUCH_TOLERANCE = 6f
     
     private const val INITIAL_PAINT_COLOR = Color.RED

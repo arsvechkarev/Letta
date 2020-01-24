@@ -47,7 +47,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     lineLength = h - CORNER_RADIUS * 2
-    currentY = (lineLength + LINE_TRIM) - (0.5f * lineLength) // 20% from bottom
+    currentY = (lineLength + LINE_TRIM) - (0.2f * lineLength) // 20% from bottom
   }
   
   override fun onDraw(canvas: Canvas) {
@@ -78,16 +78,17 @@ class VerticalSeekbar @JvmOverloads constructor(
       ACTION_DOWN -> {
         val point = event.toPointF()
         if (point in circle) {
+          // Getting ready to moving the circle
           allowMoving = true
+        } else {
+          // Positioning circle according to "y" coordinate
+          notifyEvent(event)
         }
         return true
       }
       ACTION_MOVE -> {
         if (allowMoving) {
-          currentY = event.y.coerceIn(LINE_TRIM, height.f - LINE_TRIM)
-          val percent = (lineLength + LINE_TRIM - currentY) / lineLength
-          onPercentChangedAction(percent)
-          invalidate()
+          notifyEvent(event)
           return true
         }
       }
@@ -97,6 +98,13 @@ class VerticalSeekbar @JvmOverloads constructor(
       }
     }
     return false
+  }
+  
+  private fun notifyEvent(event: MotionEvent) {
+    currentY = event.y.coerceIn(LINE_TRIM, height.f - LINE_TRIM)
+    val percent = (lineLength + LINE_TRIM - currentY) / lineLength
+    onPercentChangedAction(percent)
+    invalidate()
   }
   
   private fun Paint.setRectStyle() {

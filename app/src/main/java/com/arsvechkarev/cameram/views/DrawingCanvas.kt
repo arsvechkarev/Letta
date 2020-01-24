@@ -1,5 +1,6 @@
 package com.arsvechkarev.cameram.views
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -34,11 +35,6 @@ class DrawingCanvas @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
   
-  private fun debug(message: String) = Log.d("DrawingCanvas", message)
-  private fun debug(e: Exception) {
-    Log.e("DrawingCanvas", "Error: ", e)
-  }
-  
   private var latestPath = Path()
   private var latestPaint = Paint(ANTI_ALIAS_FLAG and DITHER_FLAG)
   private var lastX = 0f
@@ -54,10 +50,8 @@ class DrawingCanvas @JvmOverloads constructor(
     latestPaint = createNewPaint()
   }
   
-  var onDown: (Int, Int) -> Unit = { _, _ -> }
-  var onMove: (Int, Int) -> Unit = { _, _ -> }
-  var onUp: (Int, Int) -> Unit = { _, _ -> }
-  var onLast: (Int, Int) -> Unit = { _, _ -> }
+  var onDown: () -> Unit = {}
+  var onUp: () -> Unit = {}
   
   fun changeWidth(width: Float) {
     if (width > 0) {
@@ -98,9 +92,7 @@ class DrawingCanvas @JvmOverloads constructor(
         FileOutputStream(newFile).use {
           bitmap.compress(Bitmap.CompressFormat.JPEG, 90, it)
         }
-        debug("Image saved successfully")
       } catch (e: Exception) {
-        debug(e)
       }
     }
     
@@ -122,25 +114,22 @@ class DrawingCanvas @JvmOverloads constructor(
     }
   }
   
+  @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
     when (event.action) {
       ACTION_DOWN -> {
-        onDown(event.x.toInt(), event.y.toInt())
-        onLast(event.x.toInt(), event.y.toInt())
+        onDown()
         handleTouchDown(event.x, event.y)
         invalidate()
         return true
       }
       ACTION_MOVE -> {
-        onMove(event.x.toInt(), event.y.toInt())
-        onLast(event.x.toInt(), event.y.toInt())
         handleTouchMove(event.x, event.y)
         invalidate()
         return true
       }
       ACTION_UP -> {
-        onUp(event.x.toInt(), event.y.toInt())
-        onLast(event.x.toInt(), event.y.toInt())
+        onUp()
         handleTouchUp()
         invalidate()
         return true

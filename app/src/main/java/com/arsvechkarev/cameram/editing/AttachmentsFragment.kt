@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram
+package com.arsvechkarev.cameram.editing
 
 
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.arsvechkarev.cameram.R
 
 class AttachmentsFragment : Fragment() {
   

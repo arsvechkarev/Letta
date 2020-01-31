@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.arsvechkarev.cameram.camera.CameraFragment
+import com.arsvechkarev.cameram.editing.EditFragment
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +15,6 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Timber.plant(Timber.DebugTree())
-    setContentView(R.layout.activity_main)
     ActivityCompat.requestPermissions(
       this,
       arrayOf(CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE),
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     
     supportFragmentManager.beginTransaction()
-      .replace(android.R.id.content, CameraFragment())
+      .replace(android.R.id.content, EditFragment())
       .commit()
   }
 }

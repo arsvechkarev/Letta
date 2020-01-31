@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".EditFragment">
+  tools:context=".editing.EditFragment">
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -40,9 +40,9 @@
       android:layout_height="50dp"
       android:layout_margin="16dp"
       android:background="@drawable/bg_round"
-      app:srcCompat="@drawable/ic_undo"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"/>
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/ic_undo"/>
 
     <ImageButton
       android:id="@+id/buttonDone"
@@ -50,10 +50,10 @@
       android:layout_height="70dp"
       android:layout_margin="24dp"
       android:background="@drawable/bg_round"
-      app:srcCompat="@drawable/ic_checkmark"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"/>
+      app:layout_constraintStart_toStartOf="parent"
+      app:srcCompat="@drawable/ic_checkmark"/>
 
     <ImageButton
       android:id="@+id/buttonText"
@@ -61,10 +61,10 @@
       android:layout_height="50dp"
       android:layout_margin="24dp"
       android:background="@drawable/bg_round"
-      app:srcCompat="@drawable/ic_text"
       app:layout_constraintBottom_toBottomOf="@+id/buttonDone"
       app:layout_constraintEnd_toStartOf="@id/buttonDone"
-      app:layout_constraintTop_toTopOf="@+id/buttonDone"/>
+      app:layout_constraintTop_toTopOf="@+id/buttonDone"
+      app:srcCompat="@drawable/ic_text"/>
 
     <ImageButton
       android:id="@+id/buttonStickers"
@@ -72,10 +72,22 @@
       android:layout_height="50dp"
       android:layout_margin="24dp"
       android:background="@drawable/bg_round"
-      app:srcCompat="@drawable/ic_attach"
       app:layout_constraintBottom_toBottomOf="@+id/buttonDone"
       app:layout_constraintStart_toEndOf="@id/buttonDone"
-      app:layout_constraintTop_toTopOf="@+id/buttonDone"/>
+      app:layout_constraintTop_toTopOf="@+id/buttonDone"
+      app:srcCompat="@drawable/ic_attach"/>
+
+    <EditText
+      android:id="@+id/edtEnterText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@null"
+      android:hint="Type text here"
+      android:textColorHint="@android:color/darker_gray"
+      app:layout_constraintBottom_toTopOf="@id/seekbar"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@id/palette"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

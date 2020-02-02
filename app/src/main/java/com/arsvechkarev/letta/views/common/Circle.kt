@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram.views.common
+package com.arsvechkarev.letta.views.common
 
 import android.graphics.PointF
 import kotlin.math.abs

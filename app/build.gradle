@@ -4,9 +4,9 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
   compileSdkVersion 29
-  buildToolsVersion "29.0.2"
+  buildToolsVersion "29.0.3"
   defaultConfig {
-    applicationId "com.arsvechkarev.cameram"
+    applicationId "com.arsvechkarev.letta"
     minSdkVersion 16
     targetSdkVersion 29
     versionCode 1

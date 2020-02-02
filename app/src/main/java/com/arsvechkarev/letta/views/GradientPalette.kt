@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram.views
+package com.arsvechkarev.letta.views
 
 import android.content.Context
 import android.util.AttributeSet

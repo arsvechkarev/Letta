@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram.camera
+package com.arsvechkarev.letta.camera
 
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
@@ -10,7 +10,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import com.arsvechkarev.cameram.R
+import com.arsvechkarev.letta.R
 import kotlinx.android.synthetic.main.fragment_camera.textureView
 import timber.log.Timber
 import java.io.IOException

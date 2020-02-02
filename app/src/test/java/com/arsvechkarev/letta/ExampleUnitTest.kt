@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram
+package com.arsvechkarev.letta
 
 import org.junit.Test
 

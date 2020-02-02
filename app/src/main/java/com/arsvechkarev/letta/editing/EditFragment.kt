@@ -1,11 +1,11 @@
-package com.arsvechkarev.cameram.editing
+package com.arsvechkarev.letta.editing
 
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.arsvechkarev.cameram.R
-import com.arsvechkarev.cameram.utils.Group
+import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.utils.Group
 import kotlinx.android.synthetic.main.fragment_edit.buttonDone
 import kotlinx.android.synthetic.main.fragment_edit.buttonStickers
 import kotlinx.android.synthetic.main.fragment_edit.buttonText

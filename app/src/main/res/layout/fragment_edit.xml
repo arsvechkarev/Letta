@@ -10,7 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.arsvechkarev.cameram.views.DrawingCanvas
+    <com.arsvechkarev.letta.views.DrawingCanvas
       android:id="@+id/drawingCanvas"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -18,7 +18,7 @@
       tools:layout_editor_absoluteX="0dp"
       tools:layout_editor_absoluteY="0dp"/>
 
-    <com.arsvechkarev.cameram.views.Palette
+    <com.arsvechkarev.letta.views.Palette
       android:id="@+id/palette"
       android:layout_width="40dp"
       android:layout_height="300dp"
@@ -26,7 +26,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.arsvechkarev.cameram.views.VerticalSeekbar
+    <com.arsvechkarev.letta.views.VerticalSeekbar
       android:id="@+id/seekbar"
       android:layout_width="40dp"
       android:layout_height="300dp"

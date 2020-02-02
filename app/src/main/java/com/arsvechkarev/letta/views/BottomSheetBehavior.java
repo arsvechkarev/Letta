@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram.views;
+package com.arsvechkarev.letta.views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -27,7 +27,7 @@ import androidx.core.math.MathUtils;
 import androidx.core.view.ViewCompat;
 import androidx.customview.view.AbsSavedState;
 import androidx.customview.widget.ViewDragHelper;
-import com.arsvechkarev.cameram.R;
+import com.arsvechkarev.letta.R;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;

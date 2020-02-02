@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram.views
+package com.arsvechkarev.letta.views
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,7 +11,6 @@ import android.graphics.Paint.DITHER_FLAG
 import android.graphics.Path
 import android.os.Environment.getExternalStorageDirectory
 import android.util.AttributeSet
-import android.util.Log
 import android.view.KeyEvent.ACTION_UP
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN

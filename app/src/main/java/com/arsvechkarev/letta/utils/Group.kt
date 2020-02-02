@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram.utils
+package com.arsvechkarev.letta.utils
 
 import android.view.View
 

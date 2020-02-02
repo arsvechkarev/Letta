@@ -1,9 +1,8 @@
-package com.arsvechkarev.cameram.utils
+package com.arsvechkarev.letta.utils
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.VectorDrawable
 
 fun Drawable.toBitmap(): Bitmap {
   val bitmap = Bitmap.createBitmap(

@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram.views
+package com.arsvechkarev.letta.views
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,8 +12,8 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
-import com.arsvechkarev.cameram.utils.f
-import com.arsvechkarev.cameram.views.common.Circle
+import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.views.common.Circle
 
 class VerticalSeekbar @JvmOverloads constructor(
   context: Context,

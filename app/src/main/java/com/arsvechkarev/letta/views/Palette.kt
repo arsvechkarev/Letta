@@ -1,4 +1,4 @@
-package com.arsvechkarev.cameram.views
+package com.arsvechkarev.letta.views
 
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
@@ -21,7 +21,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.animation.addListener
-import com.arsvechkarev.cameram.utils.f
+import com.arsvechkarev.letta.utils.f
 
 
 class Palette @JvmOverloads constructor(

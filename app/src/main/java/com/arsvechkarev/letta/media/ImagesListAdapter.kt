@@ -3,6 +3,7 @@ package com.arsvechkarev.letta.media
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.arsvechkarev.imagesloader.ImagesLoader
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.Image
 import com.arsvechkarev.letta.utils.inflate
@@ -38,7 +39,9 @@ class ImagesListAdapter(
     
     fun bind(image: Image) {
       // TODO (2/3/2020): Create placeholder
-      imagesLoader.loadImage(image.url, itemView.image, R.drawable.bg_round)
+      imagesLoader.load(image.url)
+        .placeholder(R.drawable.bg_round)
+        .into(itemView.image)
     }
   }
 }

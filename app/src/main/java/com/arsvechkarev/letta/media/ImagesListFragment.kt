@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragment_images_list.recyclerPhotos
 
 class ImagesListFragment : Fragment(R.layout.fragment_images_list) {
   
-  private val imagesLoader = MediaDiInjector.getImageLoader(this)
+  private val imagesLoader = MediaInjector.getImageLoader(this)
   private val adapter = ImagesListAdapter(imagesLoader)
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

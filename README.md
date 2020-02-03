@@ -1,5 +1,5 @@
-# CameraM
+# Letta
 
-#### Simple android camera app with image editing
+#### Simple android image editing app
 
 -- Work in progress --

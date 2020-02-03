@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.photoslist
+package com.arsvechkarev.letta.media
 
 import android.content.ContentResolver
 import android.net.Uri

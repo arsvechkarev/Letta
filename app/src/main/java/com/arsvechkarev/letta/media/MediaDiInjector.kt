@@ -1,8 +1,8 @@
-package com.arsvechkarev.letta.photoslist
+package com.arsvechkarev.letta.media
 
 import androidx.fragment.app.Fragment
 
-object Injector {
+object MediaDiInjector {
   
   fun getImageLoader(fragment: Fragment): ImagesLoader {
     return GlideImagesLoader(fragment)

@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.photoslist
+package com.arsvechkarev.letta.media
 
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +8,10 @@ import com.arsvechkarev.letta.core.Image
 import com.arsvechkarev.letta.utils.inflate
 import kotlinx.android.synthetic.main.item_image.view.image
 
-class PhotosAdapter(
+class ImagesListAdapter(
   private val imagesLoader: ImagesLoader,
   private val clickListener: (Image) -> Unit = {}
-) : RecyclerView.Adapter<PhotosAdapter.PhotoViewHolder>() {
+) : RecyclerView.Adapter<ImagesListAdapter.PhotoViewHolder>() {
   
   private var data: List<Image> = ArrayList()
   

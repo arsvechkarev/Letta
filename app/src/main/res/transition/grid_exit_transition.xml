@@ -3,7 +3,7 @@
   android:duration="375"
   android:interpolator="@android:interpolator/fast_out_slow_in"
   android:startDelay="25">
-  <fade>
-    <targets android:targetId="@id/itemImageRoot"/>
-  </fade>
+<!--  <fade>-->
+<!--    <targets android:targetId="@id/itemImageRoot"/>-->
+<!--  </fade>-->
 </transitionSet>

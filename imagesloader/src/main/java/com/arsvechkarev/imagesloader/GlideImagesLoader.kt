@@ -1,86 +1,69 @@
 package com.arsvechkarev.imagesloader
 
-import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target as GlideTarget
 
 class GlideImagesLoader(private val fragment: Fragment) : ImagesLoader {
   
-  private lateinit var requestBuilder: RequestBuilder<Drawable>
+  private lateinit var url: String
+  private var onError: (Throwable) -> Unit = {}
+  private var onSuccess: (Drawable) -> Unit = {}
+  private var placeholderResId: Int = -1
   
-  override fun load(url: String): GlideImagesLoader {
-    requestBuilder = Glide.with(fragment).load(url)
+  override fun load(url: String): ImagesLoader {
+    this.url = url
     return this
   }
   
-  @SuppressLint("CheckResult")
-  override fun onError(callback: (Throwable) -> Unit): GlideImagesLoader {
-    requestBuilder.addListener(object : RequestListener<Drawable> {
-      override fun onLoadFailed(
-        e: GlideException?,
-        model: Any?,
-        target: GlideTarget<Drawable>?,
-        isFirstResource: Boolean
-      ): Boolean {
-        e ?: return true
-        callback(e)
-        return true
-      }
-      
-      override fun onResourceReady(
-        resource: Drawable?,
-        model: Any?,
-        target: GlideTarget<Drawable>?,
-        dataSource: DataSource?,
-        isFirstResource: Boolean
-      ): Boolean {
-        return true
-      }
-    })
+  override fun placeholder(placeholderResId: Int): ImagesLoader {
+    this.placeholderResId = placeholderResId
     return this
   }
   
-  @SuppressLint("CheckResult")
-  override fun onCompleted(callback: (Drawable) -> Unit): GlideImagesLoader {
-    requestBuilder.addListener(object : RequestListener<Drawable> {
-      override fun onLoadFailed(
-        e: GlideException?,
-        model: Any,
-        target: GlideTarget<Drawable>,
-        isFirstResource: Boolean
-      ): Boolean {
-        return true
-      }
-      
-      override fun onResourceReady(
-        resource: Drawable,
-        model: Any,
-        target: GlideTarget<Drawable>,
-        dataSource: DataSource,
-        isFirstResource: Boolean
-      ): Boolean {
-        callback(resource)
-        return true
-      }
-    })
+  override fun onError(callback: (Throwable) -> Unit): ImagesLoader {
+    this.onError = callback
     return this
   }
   
-  @SuppressLint("CheckResult")
-  override fun placeholder(placeholderResId: Int): GlideImagesLoader {
-    requestBuilder.placeholder(placeholderResId)
+  override fun onSuccess(callback: (Drawable) -> Unit): ImagesLoader {
+    this.onSuccess = callback
     return this
   }
   
   override fun into(imageView: ImageView) {
-    requestBuilder.into(imageView)
+    Glide.with(fragment)
+      .load(url)
+      .placeholder(placeholderResId)
+      .listener(object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+          e: GlideException?,
+          model: Any,
+          target: com.bumptech.glide.request.target.Target<Drawable>,
+          isFirstResource: Boolean
+        ): Boolean {
+          e ?: return true
+          onError(e)
+          return true
+        }
+        
+        override fun onResourceReady(
+          resource: Drawable,
+          model: Any,
+          target: com.bumptech.glide.request.target.Target<Drawable>,
+          dataSource: DataSource,
+          isFirstResource: Boolean
+        ): Boolean {
+          onSuccess(resource)
+          return true
+        }
+      })
+      .into(imageView)
   }
+  
   
 }

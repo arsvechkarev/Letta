@@ -10,8 +10,7 @@ class SquareImageView @JvmOverloads constructor(
 ) : AppCompatImageView(context, attrs) {
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    setMeasuredDimension(measuredWidth, measuredWidth)
+    super.onMeasure(widthMeasureSpec, widthMeasureSpec)
   }
   
 }

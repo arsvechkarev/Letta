@@ -18,7 +18,7 @@ class SimpleImagesLoader : ImagesLoader {
     return this
   }
   
-  override fun onCompleted(callback: (Drawable) -> Unit): ImagesLoader {
+  override fun onSuccess(callback: (Drawable) -> Unit): ImagesLoader {
     return this
   }
   

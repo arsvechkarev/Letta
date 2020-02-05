@@ -9,7 +9,7 @@ import androidx.core.app.ActivityCompat
 import com.arsvechkarev.letta.media.ImagesListFragment
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     supportFragmentManager.beginTransaction()
-      .replace(android.R.id.content, ImagesListFragment())
-      .commit()
+        .replace(R.id.fragmentContainer, ImagesListFragment())
+        .commit()
   }
 }

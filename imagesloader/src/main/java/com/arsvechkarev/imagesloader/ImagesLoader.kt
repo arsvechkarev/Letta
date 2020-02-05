@@ -12,7 +12,7 @@ interface ImagesLoader {
   
   fun onError(callback: (Throwable) -> Unit): ImagesLoader
   
-  fun onCompleted(callback: (Drawable) -> Unit): ImagesLoader
+  fun onSuccess(callback: (Drawable) -> Unit): ImagesLoader
   
   fun into(imageView: ImageView)
   

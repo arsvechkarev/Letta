@@ -5,7 +5,8 @@ import android.transition.TransitionInflater
 import android.view.View
 import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.media.MediaInjector
 import com.arsvechkarev.letta.media.common.ImagesViewModel
@@ -18,6 +19,15 @@ class GalleryPagerFragment : Fragment(R.layout.fragment_gallery_pager) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     imagesViewModel = MediaInjector.provideImagesViewModel(this)
     photosViewPager.adapter = GalleryViewPagerAdapter(this, imagesViewModel)
+    photosViewPager.currentItem = imagesViewModel.currentPosition
+    photosViewPager.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
+      override fun onPageSelected(position: Int) {
+        imagesViewModel.currentPosition = position
+      }
+    })
+    if (savedInstanceState == null) {
+      postponeEnterTransition()
+    }
     prepareSharedElementTransition()
   }
   

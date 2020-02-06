@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.transition.TransitionSet
 import android.view.View
-import android.widget.ImageView
+import android.view.View.OnLayoutChangeListener
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.media.common.ImagesViewModel
 import com.arsvechkarev.letta.media.gallery.GalleryPagerFragment
@@ -21,19 +20,44 @@ class ImagesListFragment : Fragment(R.layout.fragment_images_list) {
   
   private val loadingFlag = AtomicBoolean()
   
-  private val imagesLoader = MediaInjector.getImageLoader(this)
   private lateinit var adapter: ImagesListAdapter
   private lateinit var imagesViewModel: ImagesViewModel
   
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     imagesViewModel = MediaInjector.provideImagesViewModel(this)
-    adapter = ImagesListAdapter(imagesViewModel, this, ::onPhotoClicked, ::startPostponeTransition)
+    adapter = ImagesListAdapter(imagesViewModel, MediaInjector.getImageLoader(this),
+      ::onPhotoClicked, ::startPostponeTransition)
+  }
+  
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     recyclerPhotos.layoutManager = GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
     recyclerPhotos.adapter = adapter
     adapter.submitList(imagesViewModel.loadDataIfNecessary())
     
     prepareTransitions()
     postponeEnterTransition()
+    scrollToPosition()
+  }
+  
+  
+  /**
+   * Scrolls the recycler view to show the last viewed item in the grid. This is important when
+   * navigating back from the grid.
+   */
+  private fun scrollToPosition() {
+    recyclerPhotos.addOnLayoutChangeListener(object : OnLayoutChangeListener {
+      override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int,
+                                  oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+        recyclerPhotos.removeOnLayoutChangeListener(this)
+        val layoutManager = recyclerPhotos.layoutManager!!
+        val viewAtPosition = layoutManager.findViewByPosition(imagesViewModel.currentPosition)
+        if (viewAtPosition == null || layoutManager
+                .isViewPartiallyVisible(viewAtPosition, false, true)) {
+          recyclerPhotos.post { layoutManager.scrollToPosition(imagesViewModel.currentPosition) }
+        }
+      }
+    })
   }
   
   private fun onPhotoClicked(clickedView: View, position: Int) {
@@ -45,18 +69,18 @@ class ImagesListFragment : Fragment(R.layout.fragment_images_list) {
     (exitTransition as TransitionSet).excludeTarget(clickedView, true)
     
     val transitioningView = clickedView.findViewById<ConstraintLayout>(R.id.itemImageRoot)
-    this.childFragmentManager
-      .beginTransaction()
-      .setReorderingAllowed(true) // Optimize for shared element transition
-      .addSharedElement(transitioningView, transitioningView.transitionName)
-      .replace(R.id.recyclerPhotos, GalleryPagerFragment())
-      .addToBackStack(null)
-      .commit()
+    requireActivity().supportFragmentManager
+        .beginTransaction()
+        .setReorderingAllowed(true)
+        .addSharedElement(transitioningView, transitioningView.transitionName)
+        .replace(R.id.imageListRoot, GalleryPagerFragment(), GalleryPagerFragment::class.java.simpleName)
+        .addToBackStack(null)
+        .commit()
   }
   
   private fun prepareTransitions() {
     exitTransition =
-      TransitionInflater.from(context).inflateTransition(R.transition.grid_exit_transition)
+        TransitionInflater.from(context).inflateTransition(R.transition.grid_exit_transition)
     // A similar mapping is set at the ImagePagerFragment with a setEnterSharedElementCallback.
     setExitSharedElementCallback(
       object : SharedElementCallback() {
@@ -65,7 +89,7 @@ class ImagesListFragment : Fragment(R.layout.fragment_images_list) {
           sharedElements: MutableMap<String?, View?>
         ) { // Locate the ViewHolder for the clicked position.
           val selectedViewHolder =
-            recyclerPhotos.findViewHolderForAdapterPosition(imagesViewModel.currentPosition)
+              recyclerPhotos.findViewHolderForAdapterPosition(imagesViewModel.currentPosition)
           if (selectedViewHolder?.itemView == null) return
           // Map the first shared element name to the child ImageView.
           sharedElements[names[0]] = selectedViewHolder.itemView.findViewById(R.id.imageInRecycler)
@@ -74,8 +98,7 @@ class ImagesListFragment : Fragment(R.layout.fragment_images_list) {
   }
   
   private fun startPostponeTransition(position: Int) {
-    if (imagesViewModel.currentPosition == position && !loadingFlag.getAndSet(true)) {
-      startPostponedEnterTransition()
-    }
+    if (imagesViewModel.currentPosition != position || loadingFlag.getAndSet(true)) return
+    startPostponedEnterTransition()
   }
 }

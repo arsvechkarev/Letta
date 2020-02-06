@@ -9,10 +9,9 @@ import com.arsvechkarev.letta.media.common.ImagesViewModel
 object MediaInjector {
   
   fun provideImagesViewModel(fragment: Fragment): ImagesViewModel {
-    return ViewModelProvider(
-      fragment.requireActivity(),
-      provideImagesViewModelFactory(fragment)
-    ).get(ImagesViewModel::class.java)
+    val provider = ViewModelProvider(fragment.requireActivity(),
+      provideImagesViewModelFactory(fragment))
+    return provider[ImagesViewModel::class.java]
   }
   
   fun getImageLoader(fragment: Fragment): ImagesLoader {

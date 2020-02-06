@@ -46,9 +46,9 @@ class GlideImagesLoader(private val fragment: Fragment) : ImagesLoader {
           target: com.bumptech.glide.request.target.Target<Drawable>,
           isFirstResource: Boolean
         ): Boolean {
-          e ?: return true
+          e ?: return false
           onError(e)
-          return true
+          return false
         }
         
         override fun onResourceReady(
@@ -59,7 +59,7 @@ class GlideImagesLoader(private val fragment: Fragment) : ImagesLoader {
           isFirstResource: Boolean
         ): Boolean {
           onSuccess(resource)
-          return true
+          return false
         }
       })
       .into(imageView)

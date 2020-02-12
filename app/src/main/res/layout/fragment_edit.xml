@@ -1,98 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  tools:context=".editing.EditFragment">
+  android:layout_height="match_parent">
 
-  <androidx.constraintlayout.widget.ConstraintLayout
+  <com.arsvechkarev.letta.views.DrawingCanvas
+    android:id="@+id/drawingCanvas"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:layout_height="match_parent"/>
 
-    <com.arsvechkarev.letta.views.DrawingCanvas
-      android:id="@+id/drawingCanvas"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="?selectableItemBackgroundBorderless"
-      tools:layout_editor_absoluteX="0dp"
-      tools:layout_editor_absoluteY="0dp"/>
+  <ImageButton
+    android:id="@+id/buttonText"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginTop="@dimen/img_tool_m_top_big"
+    android:layout_marginEnd="@dimen/img_tool_m_end"
+    android:background="@drawable/bg_round"
+    android:padding="@dimen/img_tool_padding"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/ic_text"/>
 
-    <com.arsvechkarev.letta.views.GradientPalette
-      android:id="@+id/palette"
-      android:layout_width="30dp"
-      android:padding="6dp"
-      android:layout_height="200dp"
-      android:layout_marginEnd="16dp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"/>
+  <ImageButton
+    android:id="@+id/buttonPaint"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:layout_marginEnd="@dimen/img_tool_m_end"
+    android:background="@drawable/bg_round"
+    android:padding="@dimen/img_tool_padding"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/buttonText"
+    app:srcCompat="@drawable/ic_paint"/>
 
-    <com.arsvechkarev.letta.views.VerticalSeekbar
-      android:id="@+id/seekbar"
-      android:layout_width="40dp"
-      android:layout_height="300dp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"/>
+  <ImageButton
+    android:id="@+id/buttonStickers"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:layout_marginEnd="@dimen/img_tool_m_end"
+    android:background="@drawable/bg_round"
+    android:padding="@dimen/img_tool_padding"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/buttonPaint"
+    app:srcCompat="@drawable/ic_stickers"/>
 
-    <ImageButton
-      android:id="@+id/buttonUndo"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      android:layout_margin="16dp"
-      android:background="@drawable/bg_round"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_undo"/>
+  <ImageButton
+    android:id="@+id/buttonCrop"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:layout_marginEnd="@dimen/img_tool_m_end"
+    android:background="@drawable/bg_round"
+    android:padding="@dimen/img_tool_padding"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/buttonStickers"
+    app:srcCompat="@drawable/ic_crop"/>
 
-    <ImageButton
-      android:id="@+id/buttonDone"
-      android:layout_width="70dp"
-      android:layout_height="70dp"
-      android:layout_margin="24dp"
-      android:background="@drawable/bg_round"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:srcCompat="@drawable/ic_checkmark"/>
+  <ImageButton
+    android:id="@+id/buttonDone"
+    android:layout_width="@dimen/img_done_size"
+    android:layout_height="@dimen/img_done_size"
+    android:layout_margin="@dimen/img_done_margin"
+    android:background="@drawable/bg_round_done"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:srcCompat="@drawable/ic_checkmark"/>
 
-    <ImageButton
-      android:id="@+id/buttonText"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      android:layout_margin="24dp"
-      android:background="@drawable/bg_round"
-      app:layout_constraintBottom_toBottomOf="@+id/buttonDone"
-      app:layout_constraintEnd_toStartOf="@id/buttonDone"
-      app:layout_constraintTop_toTopOf="@+id/buttonDone"
-      app:srcCompat="@drawable/ic_text"/>
-
-    <ImageButton
-      android:id="@+id/buttonStickers"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      android:layout_margin="24dp"
-      android:background="@drawable/bg_round"
-      app:layout_constraintBottom_toBottomOf="@+id/buttonDone"
-      app:layout_constraintStart_toEndOf="@id/buttonDone"
-      app:layout_constraintTop_toTopOf="@+id/buttonDone"
-      app:srcCompat="@drawable/ic_attach"/>
-
-    <EditText
-      android:id="@+id/edtEnterText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="@null"
-      android:hint="Type text here"
-      android:textColorHint="@android:color/darker_gray"
-      app:layout_constraintBottom_toTopOf="@id/seekbar"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@id/palette"/>
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="ic_default_size">24dp</dimen>
+
+  <dimen name="img_tool_size">36dp</dimen>
+  <dimen name="img_tool_m_top">16dp</dimen>
+  <dimen name="img_tool_m_end">16dp</dimen>
+  <dimen name="img_tool_padding">6dp</dimen>
+</resources>

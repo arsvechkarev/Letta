@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <ImageButton
+    android:id="@+id/buttonText"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:layout_marginEnd="@dimen/img_tool_m_end"
+    android:background="@drawable/bg_round"
+    android:padding="@dimen/img_tool_padding"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/ic_text"/>
+
+  <ImageButton
+    android:id="@+id/buttonPaint"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:layout_marginEnd="@dimen/img_tool_m_end"
+    android:background="@drawable/bg_round"
+    android:padding="@dimen/img_tool_padding"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/buttonText"
+    app:srcCompat="@drawable/ic_brush"/>
+
+  <ImageButton
+    android:id="@+id/buttonAttachments"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:layout_marginEnd="@dimen/img_tool_m_end"
+    android:background="@drawable/bg_round"
+    android:padding="@dimen/img_tool_padding"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/buttonPaint"
+    app:srcCompat="@drawable/ic_attach"/>
+
+  <ImageButton
+    android:id="@+id/buttonCrop"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:layout_marginEnd="@dimen/img_tool_m_end"
+    android:background="@drawable/bg_round"
+    android:padding="@dimen/img_tool_padding"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/buttonAttachments"
+    app:srcCompat="@drawable/ic_crop"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

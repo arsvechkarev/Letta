@@ -16,4 +16,5 @@ interface ImagesLoader {
   
   fun into(imageView: ImageView)
   
+  fun start()
 }

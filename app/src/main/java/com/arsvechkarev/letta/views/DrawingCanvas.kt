@@ -9,6 +9,7 @@ import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.DITHER_FLAG
 import android.graphics.Path
+import android.graphics.drawable.Drawable
 import android.os.Environment.getExternalStorageDirectory
 import android.util.AttributeSet
 import android.view.KeyEvent.ACTION_UP
@@ -18,6 +19,7 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.graphics.drawable.toBitmap
+import androidx.palette.graphics.Palette
 import java.io.File
 import java.io.File.separator
 import java.io.FileOutputStream
@@ -43,6 +45,7 @@ class DrawingCanvas @JvmOverloads constructor(
   
   private val paths = ArrayList<Path>()
   private val paints = ArrayList<Paint>()
+  private val bitmaps = ArrayList<Bitmap>()
   
   init {
     setBackgroundColor(INITIAL_BG_COLOR)
@@ -62,6 +65,7 @@ class DrawingCanvas @JvmOverloads constructor(
     currentPaintColor = color
   }
   
+  
   fun clear() {
     paths.clear()
     paints.clear()
@@ -69,7 +73,6 @@ class DrawingCanvas @JvmOverloads constructor(
     latestPath = Path()
     invalidate()
   }
-  
   
   @Suppress("DEPRECATION")
   fun saveBitmapToGallery() {

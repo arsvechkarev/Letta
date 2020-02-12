@@ -36,34 +36,44 @@ class GlideImagesLoader(private val fragment: Fragment) : ImagesLoader {
   }
   
   override fun into(imageView: ImageView) {
-    Glide.with(fragment)
-      .load(url)
-      .placeholder(placeholderResId)
-      .listener(object : RequestListener<Drawable> {
-        override fun onLoadFailed(
-          e: GlideException?,
-          model: Any,
-          target: com.bumptech.glide.request.target.Target<Drawable>,
-          isFirstResource: Boolean
-        ): Boolean {
-          e ?: return false
-          onError(e)
-          return false
-        }
-        
-        override fun onResourceReady(
-          resource: Drawable,
-          model: Any,
-          target: com.bumptech.glide.request.target.Target<Drawable>,
-          dataSource: DataSource,
-          isFirstResource: Boolean
-        ): Boolean {
-          onSuccess(resource)
-          return false
-        }
-      })
-      .into(imageView)
+    loadInternal(imageView)
   }
   
+  override fun start() {
+    loadInternal(null)
+  }
   
+  private fun loadInternal(imageView: ImageView?) {
+    val requestBuilder = Glide.with(fragment)
+        .load(url)
+        .placeholder(placeholderResId)
+        .listener(object : RequestListener<Drawable> {
+          override fun onLoadFailed(
+            e: GlideException?,
+            model: Any,
+            target: com.bumptech.glide.request.target.Target<Drawable>,
+            isFirstResource: Boolean
+          ): Boolean {
+            e ?: return false
+            onError(e)
+            return false
+          }
+          
+          override fun onResourceReady(
+            resource: Drawable,
+            model: Any,
+            target: com.bumptech.glide.request.target.Target<Drawable>,
+            dataSource: DataSource,
+            isFirstResource: Boolean
+          ): Boolean {
+            onSuccess(resource)
+            return false
+          }
+        })
+    if (imageView == null) {
+      requestBuilder.preload()
+    } else {
+      requestBuilder.into(imageView)
+    }
+  }
 }

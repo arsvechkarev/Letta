@@ -14,10 +14,6 @@ object MediaInjector {
     return provider[ImagesViewModel::class.java]
   }
   
-  fun getImageLoader(fragment: Fragment): ImagesLoader {
-    return GlideImagesLoader(fragment)
-  }
-  
   private fun provideImagesViewModelFactory(fragment: Fragment): ImagesViewModel.Factory {
     return ImagesViewModel.Factory(fragment.requireActivity().contentResolver)
   }

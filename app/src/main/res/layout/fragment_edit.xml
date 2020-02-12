@@ -8,7 +8,9 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <com.arsvechkarev.letta.views.DrawingCanvas
       android:id="@+id/drawingCanvas"
@@ -18,10 +20,12 @@
       tools:layout_editor_absoluteX="0dp"
       tools:layout_editor_absoluteY="0dp"/>
 
-    <com.arsvechkarev.letta.views.Palette
+    <com.arsvechkarev.letta.views.GradientPalette
       android:id="@+id/palette"
-      android:layout_width="40dp"
-      android:layout_height="300dp"
+      android:layout_width="30dp"
+      android:padding="6dp"
+      android:layout_height="200dp"
+      android:layout_marginEnd="16dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>

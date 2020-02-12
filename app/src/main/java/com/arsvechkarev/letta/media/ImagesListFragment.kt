@@ -10,6 +10,7 @@ import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.arsvechkarev.letta.CommonInjector
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.media.common.ImagesViewModel
 import com.arsvechkarev.letta.media.gallery.GalleryPagerFragment
@@ -26,7 +27,7 @@ class ImagesListFragment : Fragment(R.layout.fragment_images_list) {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     imagesViewModel = MediaInjector.provideImagesViewModel(this)
-    adapter = ImagesListAdapter(imagesViewModel, MediaInjector.getImageLoader(this),
+    adapter = ImagesListAdapter(imagesViewModel, CommonInjector.getImageLoader(this),
       ::onPhotoClicked, ::startPostponeTransition)
   }
   
@@ -68,12 +69,10 @@ class ImagesListFragment : Fragment(R.layout.fragment_images_list) {
     // instead of fading out with the rest to prevent an overlapping animation of fade and move).
     (exitTransition as TransitionSet).excludeTarget(clickedView, true)
     
-    val transitioningView = clickedView.findViewById<ConstraintLayout>(R.id.itemImageRoot)
     requireActivity().supportFragmentManager
         .beginTransaction()
-        .setReorderingAllowed(true)
-        .addSharedElement(transitioningView, transitioningView.transitionName)
-        .replace(R.id.imageListRoot, GalleryPagerFragment(), GalleryPagerFragment::class.java.simpleName)
+        .addSharedElement(clickedView, clickedView.transitionName)
+        .replace(R.id.fragmentContainer, GalleryPagerFragment(), GalleryPagerFragment::class.java.simpleName)
         .addToBackStack(null)
         .commit()
   }

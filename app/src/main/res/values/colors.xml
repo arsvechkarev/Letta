@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorRipple">#42FFFFFF</color>
+  <color name="colorRipple">#2C2C2C</color>
   <color name="colorIcon">#000000</color>
   <color name="colorIconDone">#FFF</color>
   <color name="colorImgToolCircle">#FFFFFF</color>

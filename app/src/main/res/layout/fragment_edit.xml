@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/editRootLayout"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
@@ -10,7 +11,7 @@
     android:layout_height="match_parent"/>
 
   <ImageButton
-    android:id="@+id/buttonText"
+    android:id="@+id/buttonPaint"
     android:layout_width="@dimen/img_tool_size"
     android:layout_height="@dimen/img_tool_size"
     android:layout_marginTop="@dimen/img_tool_m_top_big"
@@ -19,10 +20,10 @@
     android:padding="@dimen/img_tool_padding"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_text"/>
+    app:srcCompat="@drawable/ic_paint"/>
 
   <ImageButton
-    android:id="@+id/buttonPaint"
+    android:id="@+id/buttonText"
     android:layout_width="@dimen/img_tool_size"
     android:layout_height="@dimen/img_tool_size"
     android:layout_marginTop="@dimen/img_tool_m_top"
@@ -30,8 +31,8 @@
     android:background="@drawable/bg_round"
     android:padding="@dimen/img_tool_padding"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/buttonText"
-    app:srcCompat="@drawable/ic_paint"/>
+    app:layout_constraintTop_toBottomOf="@id/buttonPaint"
+    app:srcCompat="@drawable/ic_text"/>
 
   <ImageButton
     android:id="@+id/buttonStickers"
@@ -42,7 +43,7 @@
     android:background="@drawable/bg_round"
     android:padding="@dimen/img_tool_padding"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/buttonPaint"
+    app:layout_constraintTop_toBottomOf="@id/buttonText"
     app:srcCompat="@drawable/ic_stickers"/>
 
   <ImageButton

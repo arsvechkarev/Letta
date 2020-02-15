@@ -3,10 +3,8 @@ package com.arsvechkarev.letta.utils
 import android.graphics.PointF
 import android.view.MotionEvent
 
-/**
- * Shorter way to write toFloat()
- */
 val Int.f get() = this.toFloat()
+val Float.i get() = this.toInt()
 
 /**
  * Deconstructing motion event:

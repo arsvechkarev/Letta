@@ -3,7 +3,9 @@ package com.arsvechkarev.letta.utils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewPropertyAnimator
 import androidx.annotation.LayoutRes
+import androidx.constraintlayout.widget.ConstraintLayout
 
 fun View.visible() {
   visibility = View.VISIBLE
@@ -19,4 +21,11 @@ fun View.gone() {
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
   return LayoutInflater.from(context).inflate(layoutRes, this, false)
+}
+
+fun View.constraints(block: ConstraintLayout.LayoutParams.() -> Unit) {
+  (this.layoutParams as ConstraintLayout.LayoutParams).apply(block)
+}
+fun View.params(block: ViewGroup.MarginLayoutParams.() -> Unit) {
+  (this.layoutParams as ViewGroup.MarginLayoutParams).apply(block)
 }

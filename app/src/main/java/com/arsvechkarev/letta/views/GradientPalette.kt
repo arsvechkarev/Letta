@@ -21,7 +21,8 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.core.animation.doOnEnd
+import com.arsvechkarev.letta.utils.doOnEnd
+import com.arsvechkarev.letta.utils.i
 import com.arsvechkarev.letta.views.GradientPalette.Mode.ANIMATING
 import com.arsvechkarev.letta.views.GradientPalette.Mode.FLOATING_CIRCLE
 import com.arsvechkarev.letta.views.GradientPalette.Mode.SELECTED_CIRCLE
@@ -79,8 +80,8 @@ class GradientPalette @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     gradient = LinearGradient(w / 2f, 0f, w / 2f, h.f, paletteColors, null, Shader.TileMode.CLAMP)
-    pathRect.set(paddingLeft.f, paddingTop.f + strokeWidthValue * 2, width.f - paddingEnd,
-      height.f - paddingBottom - strokeWidthValue * 2)
+    pathRect.set(paddingLeft.f, paddingTop.f + strokeWidthValue * 2, w.f - paddingEnd,
+      h.f - paddingBottom - strokeWidthValue * 2)
     bgPaint.shader = gradient
     rectRadius = w.f / 2
     startAnimX = w / 2f
@@ -88,11 +89,16 @@ class GradientPalette @JvmOverloads constructor(
     radiusFloating = w * 1.5f
     radiusSelected = width / 2f - strokeWidthValue / 2
     currentCircle.set(w / 2f, h / 2f, radiusSelected)
-    initBitmap(w, h)
+    initBitmap(w - paddingStart - paddingEnd, h - paddingTop - paddingBottom)
     circlePaint.color = bgBitmap.getPixel(w / 2, h / 2)
   }
   
   override fun onDraw(canvas: Canvas) {
+    canvas.drawRect(pathRect, Paint().apply {
+      style = Paint.Style.STROKE
+      strokeWidth = 3f
+      color = Color.RED
+    })
     canvas.drawBitmap(bgBitmap, 0f, 0f, bgPaint)
     currentCircle.draw(canvas, circlePaint)
     currentCircle.draw(canvas, circleStrokePaint)
@@ -171,18 +177,8 @@ class GradientPalette @JvmOverloads constructor(
   private fun initBitmap(width: Int, height: Int) {
     bgBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bgBitmap)
-    with(path) {
-      addRoundRect(pathRect, width / 2f, width / 2f, Path.Direction.CW)
-      //      moveTo(0f, rectRadius * 1.5f)
-      //      quadTo(0f, 0f, rectRadius, 0f)
-      //      quadTo(width.f, 0f, width.f, rectRadius * 1.5f)
-      //      lineTo(width.f, height - rectRadius * 1.5f)
-      //      quadTo(width.f, height.f, rectRadius, height.f)
-      //      quadTo(0f, height.f, 0f, height - rectRadius * 1.5f)
-      //      close()
-    }
-    val rect = Rect(0, 0, width, height)
-    region.setPath(path, Region(rect))
+    path.addRoundRect(pathRect, width / 2f, width / 2f, Path.Direction.CW)
+    region.setPath(path, Region(pathRect.toRect()))
     canvas.drawPath(path, bgPaint)
   }
   
@@ -210,4 +206,8 @@ class GradientPalette @JvmOverloads constructor(
   
   private val Int.f get() = toFloat()
   private val String.color get() = Color.parseColor(this)
+  
+  private fun RectF.toRect(): Rect {
+    return Rect(left.i, top.i, right.i, bottom.i)
+  }
 }

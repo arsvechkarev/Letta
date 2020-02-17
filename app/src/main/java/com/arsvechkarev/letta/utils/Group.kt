@@ -1,7 +1,8 @@
 package com.arsvechkarev.letta.utils
 
 import android.view.View
-import com.arsvechkarev.letta.editing.animateToolHiding
+import com.arsvechkarev.letta.animations.animateToolAppearing
+import com.arsvechkarev.letta.animations.animateToolHiding
 
 class Group(vararg views: View) {
   
@@ -9,13 +10,13 @@ class Group(vararg views: View) {
   
   fun animateHide(except: View) {
     viewsList.forEach {
-      if (it != except) { it.animateToolHiding() }
+      if (it != except) it.animateToolHiding()
     }
   }
   
-  fun animateAlpha(visible: Boolean, duration: Long) {
+  fun animateAppear(except: View) {
     viewsList.forEach {
-      it.animateAlpha(visible, duration)
+      if (it != except) it.animateToolAppearing()
     }
   }
   

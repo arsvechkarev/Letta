@@ -1,19 +1,42 @@
 package com.arsvechkarev.letta.utils
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.util.Property
 import android.view.View
-import android.view.ViewPropertyAnimator
+import com.arsvechkarev.letta.animations.configure
 
-fun View.animateAlpha(visible: Boolean, duration: Long) {
-  val targetAlpha = if (visible) 1f else 0f
-  if (alpha == targetAlpha) return
-  visible()
-  val anim = this.animate().alpha(targetAlpha).duration(duration)
-  if (!visible) {
-    anim.withEndAction { gone() }
-  }
+fun ValueAnimator.doOnUpdate(block: ValueAnimator.() -> Unit): ValueAnimator {
+  addUpdateListener(block)
+  return this
 }
 
-fun ViewPropertyAnimator.duration(duration: Long): ViewPropertyAnimator {
-  this.duration = duration
+fun ValueAnimator.doOnEnd(block: () -> Unit): ValueAnimator {
+  this.addListener(object : AnimatorListenerAdapter() {
+    override fun onAnimationEnd(animation: Animator?) {
+      block()
+    }
+  })
   return this
+}
+
+fun ObjectAnimator.doOnEnd(block: () -> Unit): ObjectAnimator {
+  this.addListener(object : AnimatorListenerAdapter() {
+    override fun onAnimationEnd(animation: Animator?) {
+      block()
+    }
+  })
+  return this
+}
+
+fun View.animate(property: Property<View, Float>, vararg values: Float, onEnd: () -> Unit = {}) {
+  this.isClickable = false
+  ObjectAnimator.ofFloat(this, property, *values).configure()
+      .doOnEnd {
+        isClickable = true
+        onEnd()
+      }
+      .start()
 }

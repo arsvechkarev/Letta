@@ -16,8 +16,10 @@ import android.graphics.Region
 import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_OUTSIDE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -27,6 +29,7 @@ import com.arsvechkarev.letta.views.GradientPalette.Mode.ANIMATING
 import com.arsvechkarev.letta.views.GradientPalette.Mode.FLOATING_CIRCLE
 import com.arsvechkarev.letta.views.GradientPalette.Mode.SELECTED_CIRCLE
 
+@Suppress("MemberVisibilityCanBePrivate")
 class GradientPalette @JvmOverloads constructor(
   context: Context,
   attributeSet: AttributeSet? = null
@@ -144,7 +147,7 @@ class GradientPalette @JvmOverloads constructor(
         }
         return true
       }
-      ACTION_UP -> {
+      ACTION_UP, ACTION_CANCEL -> {
         mode = ANIMATING
         val y = event.y.coerceIn(pathRect.top + gradientSensitivity,
           pathRect.bottom - gradientSensitivity)
@@ -165,7 +168,7 @@ class GradientPalette @JvmOverloads constructor(
       }
     } else {
       if (circleAnimator.isRunning) {
-        circlePaint.color = bgBitmap.getPixel(width / 2, currentAnimY.i)
+        circlePaint.color = bgBitmap.getPixel(width / 2, currentAnimY.i - pathRect.top.i)
         currentCircle.y = currentAnimY
       } else {
         xHolder = PropertyValuesHolder.ofFloat("xHolder", startAnimX, endAnimX)

@@ -16,15 +16,19 @@
     android:visibility="invisible"
     app:srcCompat="@drawable/ic_undo"/>
 
+  <com.arsvechkarev.letta.views.VerticalSeekbar
+    android:id="@+id/verticalSeekbar"
+    android:layout_width="30dp"
+    android:layout_height="200dp"
+    android:layout_gravity="center_vertical"
+    android:visibility="invisible"/>
+
   <com.arsvechkarev.letta.views.GradientPalette
     android:id="@+id/palette"
     android:layout_width="30dp"
     android:layout_height="200dp"
     android:layout_gravity="center_vertical|end"
     android:padding="6dp"
-    android:visibility="invisible"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+    android:visibility="invisible"/>
 
 </FrameLayout>

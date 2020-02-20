@@ -18,8 +18,9 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.View
 import androidx.annotation.ColorInt
-import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
+import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.utils.toBitmap
 import java.io.File
 import java.io.File.separator
 import java.io.FileOutputStream
@@ -76,7 +77,7 @@ class DrawingCanvas @JvmOverloads constructor(
   
   @Suppress("DEPRECATION")
   fun saveBitmapToGallery() {
-    val bitmap = background.toBitmap(width, height)
+    val bitmap = background.toBitmap()
     val canvas = Canvas(bitmap)
     for (i in paths.indices) {
       canvas.drawPath(paths[i], paints[i])

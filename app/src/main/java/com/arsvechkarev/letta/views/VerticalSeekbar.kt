@@ -25,7 +25,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   
   companion object {
     private const val CORNER_RADIUS = 50f
-    private const val LINE_TRIM = 50f
+    private const val LINE_OFFSET = 50f
     private const val LINE_WIDTH = 11f
   }
   
@@ -46,7 +46,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     lineLength = h - CORNER_RADIUS * 2
-    currentY = (lineLength + LINE_TRIM) - (0.2f * lineLength) // 20% from bottom
+    currentY = (lineLength + LINE_OFFSET) - (0.2f * lineLength) // 20% from bottom
   }
   
   override fun onDraw(canvas: Canvas) {
@@ -61,10 +61,10 @@ class VerticalSeekbar @JvmOverloads constructor(
     canvas.drawPath(path, paint)
     
     paint.setLineStyle()
-    canvas.drawLine(width.f / 2, LINE_TRIM, width.f / 2, height - LINE_TRIM, paint)
+    canvas.drawLine(width.f / 2, LINE_OFFSET, width.f / 2, height - LINE_OFFSET, paint)
     
     paint.color = Color.RED
-    canvas.drawLine(width.f / 2, height - LINE_TRIM, width.f / 2, currentY, paint)
+    canvas.drawLine(width.f / 2, height - LINE_OFFSET, width.f / 2, currentY, paint)
     
     paint.setCircleStyle()
     circle.set(width.f / 2, currentY, 20f)
@@ -90,8 +90,8 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   private fun notifyEvent(event: MotionEvent) {
-    currentY = event.y.coerceIn(LINE_TRIM, height.f - LINE_TRIM)
-    val percent = (lineLength + LINE_TRIM - currentY) / lineLength
+    currentY = event.y.coerceIn(LINE_OFFSET, height.f - LINE_OFFSET)
+    val percent = (lineLength + LINE_OFFSET - currentY) / lineLength
     onPercentChangedAction(percent)
     invalidate()
   }
@@ -102,14 +102,14 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   private fun Paint.setLineStyle() {
-    color = Color.GRAY
+    color = Color.parseColor("#CCCCCC")
     strokeWidth = LINE_WIDTH
     strokeCap = Paint.Cap.ROUND
   }
   
   private fun Paint.setCircleStyle() {
-    style = Paint.Style.FILL
     color = Color.RED
+    style = Paint.Style.FILL
   }
   
   class Circle {

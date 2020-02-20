@@ -3,8 +3,11 @@ package com.arsvechkarev.letta.editing
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.R.layout.container_edit_paint
 import com.arsvechkarev.letta.animations.animateToolMoveBack
 import com.arsvechkarev.letta.animations.animateToolMoveToTop
 import com.arsvechkarev.letta.constants.KEY_IMAGE_URL
@@ -26,7 +29,7 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
   
   private val textContainer by lazy { TextFragment() }
   private val paintContainer by lazy {
-    PaintContainer(editRootLayout.inflate(R.layout.container_edit_paint))
+    PaintContainer(editRootLayout.inflate(container_edit_paint))
   }
   private val stickersFragment by lazy { StickersFragment() }
   private val cropFragment by lazy { CropFragment() }
@@ -35,21 +38,25 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
   
   private var currentMode: Mode = NONE
   
+  private val backCallback: OnBackPressedCallback = object : OnBackPressedCallback(false) {
+    override fun handleOnBackPressed() {
+      if (currentMode != NONE) {
+        toggleMode(currentMode)
+      }
+    }
+  }
+  
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    (activity as ComponentActivity).onBackPressedDispatcher.addCallback(this, backCallback)
+  }
+  
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     toolsGroup = Group(buttonPaint, buttonText, buttonStickers, buttonCrop)
     buttonText.setOnClickListener { toggleMode(TEXT) }
     buttonPaint.setOnClickListener { toggleMode(PAINT) }
     buttonStickers.setOnClickListener { toggleMode(STICKERS) }
     buttonCrop.setOnClickListener { toggleMode(CROP) }
-  }
-  
-  companion object {
-    
-    fun create(imageUrl: String) = EditFragment().apply {
-      arguments = Bundle().apply {
-        putString(KEY_IMAGE_URL, imageUrl)
-      }
-    }
   }
   
   @Suppress("NON_EXHAUSTIVE_WHEN")
@@ -62,6 +69,7 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
         CROP -> performModeSwitch(buttonCrop, paintContainer)
       }
       currentMode = mode
+      backCallback.isEnabled = true
     } else {
       when (currentMode) {
         TEXT -> performModeReturn(buttonText, paintContainer)
@@ -70,6 +78,7 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
         CROP -> performModeReturn(buttonCrop, paintContainer)
       }
       currentMode = NONE
+      backCallback.isEnabled = false
     }
   }
   
@@ -94,5 +103,14 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
     PAINT,
     STICKERS,
     CROP
+  }
+  
+  companion object {
+    
+    fun create(imageUrl: String) = EditFragment().apply {
+      arguments = Bundle().apply {
+        putString(KEY_IMAGE_URL, imageUrl)
+      }
+    }
   }
 }

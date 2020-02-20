@@ -19,7 +19,7 @@
   <com.arsvechkarev.letta.views.VerticalSeekbar
     android:id="@+id/verticalSeekbar"
     android:layout_width="30dp"
-    android:layout_height="200dp"
+    android:layout_height="240dp"
     android:layout_gravity="center_vertical"
     android:visibility="invisible"/>
 

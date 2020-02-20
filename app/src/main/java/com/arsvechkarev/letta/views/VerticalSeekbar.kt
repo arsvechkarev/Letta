@@ -25,7 +25,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   
   companion object {
     private const val CORNER_RADIUS = 50f
-    private const val LINE_OFFSET = 50f
+    private const val LINE_OFFSET = 100f
     private const val LINE_WIDTH = 11f
   }
   
@@ -50,22 +50,26 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
-    path.moveTo(0f, 0f)
-    path.lineTo(width - CORNER_RADIUS, 0f)
-    path.quadTo(width.f, 0f, width.f, CORNER_RADIUS)
-    path.lineTo(width.f, height.f - CORNER_RADIUS)
-    path.quadTo(width.f, height.f, width - CORNER_RADIUS, height.f)
-    path.lineTo(0f, height.f)
-    path.close()
+    with(path) {
+      moveTo(0f, CORNER_RADIUS / 2)
+      quadTo(0f, CORNER_RADIUS, CORNER_RADIUS, CORNER_RADIUS)
+      lineTo(width - CORNER_RADIUS, CORNER_RADIUS)
+      quadTo(width.f, CORNER_RADIUS, width.f, CORNER_RADIUS * 2)
+      lineTo(width.f, height.f - CORNER_RADIUS * 2)
+      quadTo(width.f, height.f - CORNER_RADIUS, width - CORNER_RADIUS, height.f - CORNER_RADIUS)
+      lineTo(CORNER_RADIUS, height.f - CORNER_RADIUS)
+      quadTo(0f, height.f - CORNER_RADIUS, 0f, height.f - CORNER_RADIUS / 2)
+      close()
+    }
     paint.setRectStyle()
     canvas.drawPath(path, paint)
     
     paint.setLineStyle()
     canvas.drawLine(width.f / 2, LINE_OFFSET, width.f / 2, height - LINE_OFFSET, paint)
-    
+
     paint.color = Color.RED
     canvas.drawLine(width.f / 2, height - LINE_OFFSET, width.f / 2, currentY, paint)
-    
+
     paint.setCircleStyle()
     circle.set(width.f / 2, currentY, 20f)
     canvas.drawCircle(width.f / 2, currentY, 20f, paint)

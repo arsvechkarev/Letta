@@ -4,7 +4,6 @@ import android.view.View
 import androidx.annotation.DimenRes
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.letta.LettaApplication
-import com.arsvechkarev.letta.core.Container
 
 val Int.dp: Float
   get() = this * LettaApplication.density

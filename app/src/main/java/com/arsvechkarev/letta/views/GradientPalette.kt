@@ -19,7 +19,6 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
-import android.view.MotionEvent.ACTION_OUTSIDE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -29,6 +28,7 @@ import com.arsvechkarev.letta.views.GradientPalette.Mode.ANIMATING
 import com.arsvechkarev.letta.views.GradientPalette.Mode.FLOATING_CIRCLE
 import com.arsvechkarev.letta.views.GradientPalette.Mode.SELECTED_CIRCLE
 
+// TODO (2/20/2020): add custom attrs
 @Suppress("MemberVisibilityCanBePrivate")
 class GradientPalette @JvmOverloads constructor(
   context: Context,
@@ -46,7 +46,7 @@ class GradientPalette @JvmOverloads constructor(
   
   companion object {
     const val strokeWidthValue = 10f
-    const val gradientSensitivity = 8
+    const val GRADIENT_SENSITIVITY = 8
   }
   
   private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -116,8 +116,8 @@ class GradientPalette @JvmOverloads constructor(
     when (event.action) {
       ACTION_DOWN -> {
         mode = ANIMATING
-        val y = event.y.coerceIn(pathRect.top + gradientSensitivity,
-          pathRect.bottom - gradientSensitivity)
+        val y = event.y.coerceIn(pathRect.top + GRADIENT_SENSITIVITY,
+          pathRect.bottom - GRADIENT_SENSITIVITY)
         val i = (y - pathRect.top).i
         currentCircle.y = y
         updateAnimation(y)
@@ -127,15 +127,9 @@ class GradientPalette @JvmOverloads constructor(
         return true
       }
       ACTION_MOVE -> {
-        val y = event.y.coerceIn(pathRect.top + gradientSensitivity,
-          pathRect.bottom - gradientSensitivity)
+        val y = event.y.coerceIn(pathRect.top + GRADIENT_SENSITIVITY,
+          pathRect.bottom - GRADIENT_SENSITIVITY)
         val i = (y - pathRect.top).i
-        println("aa_ pb = ${pathRect.bottom - pathRect.top}")
-        println("aa_ pt = ${pathRect.top}")
-        println("aa_ y = $y")
-        println("aa_ yi = $i")
-        println("aa_ h = $height")
-        println("aa_ hb = ${bgBitmap.height}")
         currentCircle.y = y
         if (mode == ANIMATING) {
           updateAnimation(y)
@@ -149,8 +143,8 @@ class GradientPalette @JvmOverloads constructor(
       }
       ACTION_UP, ACTION_CANCEL -> {
         mode = ANIMATING
-        val y = event.y.coerceIn(pathRect.top + gradientSensitivity,
-          pathRect.bottom - gradientSensitivity)
+        val y = event.y.coerceIn(pathRect.top + GRADIENT_SENSITIVITY,
+          pathRect.bottom - GRADIENT_SENSITIVITY)
         currentCircle.y = y
         updateAnimation(y, true)
         return true

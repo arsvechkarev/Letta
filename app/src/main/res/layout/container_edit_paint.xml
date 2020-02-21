@@ -31,4 +31,9 @@
     android:padding="6dp"
     android:visibility="invisible"/>
 
+  <com.arsvechkarev.letta.views.ShowerCircle
+    android:id="@+id/showCircle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
 </FrameLayout>

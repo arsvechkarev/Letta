@@ -9,6 +9,7 @@ import android.graphics.Path
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
@@ -29,7 +30,9 @@ class VerticalSeekbar @JvmOverloads constructor(
     private const val LINE_WIDTH = 11f
   }
   
-  private var onPercentChangedAction: (Float) -> Unit = {}
+  var onPercentChanged: (Float) -> Unit = {}
+  var onUp: () -> Unit = {}
+  
   private val path = Path()
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.FILL
@@ -40,16 +43,9 @@ class VerticalSeekbar @JvmOverloads constructor(
   private var currentY = 0f
   private var circle = Circle()
   
-  fun onPercentChanged(block: (Float) -> Unit) {
-    this.onPercentChangedAction = block
-  }
-  
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     lineLength = h - CORNER_RADIUS * 2
     currentY = (lineLength + LINE_OFFSET) - (0.2f * lineLength) // 20% from bottom
-  }
-  
-  override fun onDraw(canvas: Canvas) {
     with(path) {
       moveTo(0f, CORNER_RADIUS / 2)
       quadTo(0f, CORNER_RADIUS, CORNER_RADIUS, CORNER_RADIUS)
@@ -61,15 +57,18 @@ class VerticalSeekbar @JvmOverloads constructor(
       quadTo(0f, height.f - CORNER_RADIUS, 0f, height.f - CORNER_RADIUS / 2)
       close()
     }
+  }
+  
+  override fun onDraw(canvas: Canvas) {
     paint.setRectStyle()
     canvas.drawPath(path, paint)
     
     paint.setLineStyle()
     canvas.drawLine(width.f / 2, LINE_OFFSET, width.f / 2, height - LINE_OFFSET, paint)
-
+    
     paint.color = Color.RED
     canvas.drawLine(width.f / 2, height - LINE_OFFSET, width.f / 2, currentY, paint)
-
+    
     paint.setCircleStyle()
     circle.set(width.f / 2, currentY, 20f)
     canvas.drawCircle(width.f / 2, currentY, 20f, paint)
@@ -86,7 +85,8 @@ class VerticalSeekbar @JvmOverloads constructor(
         notifyEvent(event)
         return true
       }
-      ACTION_UP -> {
+      ACTION_UP, ACTION_CANCEL -> {
+        onUp()
         return true
       }
     }
@@ -96,7 +96,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   private fun notifyEvent(event: MotionEvent) {
     currentY = event.y.coerceIn(LINE_OFFSET, height.f - LINE_OFFSET)
     val percent = (lineLength + LINE_OFFSET - currentY) / lineLength
-    onPercentChangedAction(percent)
+    onPercentChanged(percent)
     invalidate()
   }
   
@@ -106,7 +106,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   private fun Paint.setLineStyle() {
-    color = Color.parseColor("#CCCCCC")
+    color = -3355444 // #CCCCCC
     strokeWidth = LINE_WIDTH
     strokeCap = Paint.Cap.ROUND
   }

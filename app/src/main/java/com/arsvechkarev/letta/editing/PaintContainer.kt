@@ -7,14 +7,36 @@ import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.animateFadeIn
 import com.arsvechkarev.letta.animations.animateFadeOut
 import com.arsvechkarev.letta.utils.animate
+import com.arsvechkarev.letta.views.DrawingCanvas
 import com.arsvechkarev.letta.views.GradientPalette
+import com.arsvechkarev.letta.views.ShowerCircle
 import com.arsvechkarev.letta.views.VerticalSeekbar
 
-class PaintContainer(view: View) : Container(view) {
+class PaintContainer(
+  view: View,
+  private val drawingCanvas: DrawingCanvas
+) : Container(view) {
   
   private var palette: GradientPalette = findViewById(R.id.palette)
   private var verticalSeekbar: VerticalSeekbar = findViewById(R.id.verticalSeekbar)
   private var buttonBack: ImageButton = findViewById(R.id.buttonBack)
+  private var showerCircle: ShowerCircle = findViewById(R.id.showCircle)
+  
+  init {
+    verticalSeekbar.onPercentChanged = {
+      drawingCanvas.changePaintWidth(it * 30)
+      showerCircle.draw(palette.currentColor, it * 30)
+    }
+    verticalSeekbar.onUp = {
+      showerCircle.erase()
+    }
+    palette.onColorChanged = {
+      drawingCanvas.setPaintColor(it)
+    }
+    buttonBack.setOnClickListener {
+      drawingCanvas.undo()
+    }
+  }
   
   override fun animateEnter() {
     view.post {

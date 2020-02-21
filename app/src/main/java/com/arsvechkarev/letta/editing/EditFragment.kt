@@ -23,14 +23,16 @@ import kotlinx.android.synthetic.main.fragment_edit.buttonCrop
 import kotlinx.android.synthetic.main.fragment_edit.buttonPaint
 import kotlinx.android.synthetic.main.fragment_edit.buttonStickers
 import kotlinx.android.synthetic.main.fragment_edit.buttonText
+import kotlinx.android.synthetic.main.fragment_edit.drawingCanvas
 import kotlinx.android.synthetic.main.fragment_edit.editRootLayout
 
 class EditFragment : Fragment(R.layout.fragment_edit) {
   
   private val textContainer by lazy { TextFragment() }
   private val paintContainer by lazy {
-    PaintContainer(editRootLayout.inflate(container_edit_paint))
+    PaintContainer(editRootLayout.inflate(container_edit_paint), drawingCanvas)
   }
+  
   private val stickersFragment by lazy { StickersFragment() }
   private val cropFragment by lazy { CropFragment() }
   

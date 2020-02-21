@@ -65,6 +65,9 @@ class GradientPalette @JvmOverloads constructor(
   private val region = Region()
   private var currentCircle = Circle()
   
+  var currentColor = 0
+    private set
+  
   private var mode = SELECTED_CIRCLE
   
   private var startAnimX = 0f
@@ -102,7 +105,8 @@ class GradientPalette @JvmOverloads constructor(
     radiusSelected = width / 2f - strokeWidthValue / 2
     currentCircle.set(w / 2f, h / 2f, radiusSelected)
     initBitmap(pathRect.width().i, pathRect.height().i)
-    circlePaint.color = bgBitmap.getPixel(w / 2, h / 2)
+    currentColor = bgBitmap.getPixel(w / 2, h / 2)
+    circlePaint.color = currentColor
   }
   
   override fun onDraw(canvas: Canvas) {
@@ -121,9 +125,9 @@ class GradientPalette @JvmOverloads constructor(
         val i = (y - pathRect.top).i
         currentCircle.y = y
         updateAnimation(y)
-        val color = bgBitmap.getPixel(width / 2, i)
-        onColorChanged(color)
-        circlePaint.color = color
+        currentColor = bgBitmap.getPixel(width / 2, i)
+        onColorChanged(currentColor)
+        circlePaint.color = currentColor
         return true
       }
       ACTION_MOVE -> {
@@ -134,9 +138,9 @@ class GradientPalette @JvmOverloads constructor(
         if (mode == ANIMATING) {
           updateAnimation(y)
         } else {
-          val color = bgBitmap.getPixel(width / 2, i)
-          onColorChanged(color)
-          circlePaint.color = color
+          currentColor = bgBitmap.getPixel(width / 2, i)
+          onColorChanged(currentColor)
+          circlePaint.color = currentColor
           invalidate()
         }
         return true
@@ -162,7 +166,8 @@ class GradientPalette @JvmOverloads constructor(
       }
     } else {
       if (circleAnimator.isRunning) {
-        circlePaint.color = bgBitmap.getPixel(width / 2, currentAnimY.i - pathRect.top.i)
+        currentColor = bgBitmap.getPixel(width / 2, currentAnimY.i - pathRect.top.i)
+        circlePaint.color = currentColor
         currentCircle.y = currentAnimY
       } else {
         xHolder = PropertyValuesHolder.ofFloat("xHolder", startAnimX, endAnimX)

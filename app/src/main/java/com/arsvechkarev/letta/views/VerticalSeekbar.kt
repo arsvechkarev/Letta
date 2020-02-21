@@ -14,6 +14,7 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
+import androidx.annotation.FloatRange
 import com.arsvechkarev.letta.utils.f
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -42,6 +43,13 @@ class VerticalSeekbar @JvmOverloads constructor(
   
   private var currentY = 0f
   private var circle = Circle()
+  
+  fun updatePercent(@FloatRange(from = 0.0, to = 1.0) percent: Float) {
+    val lineLength = height - LINE_OFFSET * 2
+    val value = lineLength * percent
+    currentY = height - value - LINE_OFFSET
+    invalidate()
+  }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     lineLength = h - CORNER_RADIUS * 2

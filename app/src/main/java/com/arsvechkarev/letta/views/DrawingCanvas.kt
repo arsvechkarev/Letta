@@ -56,7 +56,7 @@ class DrawingCanvas @JvmOverloads constructor(
   var onDown: () -> Unit = {}
   var onUp: () -> Unit = {}
   
-  fun changePaintWidth(width: Float) {
+  fun setPaintWidth(width: Float) {
     if (width > 0) {
       currentPaintWidth = width
     }

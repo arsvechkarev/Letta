@@ -7,6 +7,7 @@ import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.animateFadeIn
 import com.arsvechkarev.letta.animations.animateFadeOut
 import com.arsvechkarev.letta.utils.animate
+import com.arsvechkarev.letta.utils.exponentiate
 import com.arsvechkarev.letta.views.DrawingCanvas
 import com.arsvechkarev.letta.views.GradientPalette
 import com.arsvechkarev.letta.views.ShowerCircle
@@ -23,18 +24,18 @@ class PaintContainer(
   private var showerCircle: ShowerCircle = findViewById(R.id.showCircle)
   
   init {
-    verticalSeekbar.onPercentChanged = {
-      drawingCanvas.changePaintWidth(it * 30)
-      showerCircle.draw(palette.currentColor, it * 30)
-    }
-    verticalSeekbar.onUp = {
-      showerCircle.erase()
-    }
-    palette.onColorChanged = {
-      drawingCanvas.setPaintColor(it)
-    }
-    buttonBack.setOnClickListener {
-      drawingCanvas.undo()
+    post {
+      drawingCanvas.setPaintColor(palette.currentColor)
+      verticalSeekbar.updatePercent(0.3f)
+      drawingCanvas.setPaintWidth(0.3f.exponentiate())
+      verticalSeekbar.onPercentChanged = {
+        val width = it.exponentiate()
+        drawingCanvas.setPaintWidth(width)
+        showerCircle.draw(palette.currentColor, width)
+      }
+      verticalSeekbar.onUp = { showerCircle.erase() }
+      palette.onColorChanged = { drawingCanvas.setPaintColor(it) }
+      buttonBack.setOnClickListener { drawingCanvas.undo() }
     }
   }
   

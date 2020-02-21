@@ -46,7 +46,7 @@ class GradientPalette @JvmOverloads constructor(
   
   companion object {
     const val strokeWidthValue = 10f
-    const val GRADIENT_SENSITIVITY = 8
+    const val GRADIENT_SENSITIVITY = 9
   }
   
   private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)

@@ -7,7 +7,7 @@
   <dimen name="img_tool_m_top_big">40dp</dimen>
   <dimen name="img_tool_m_top">16dp</dimen>
   <dimen name="img_tool_m_end">16dp</dimen>
-  <dimen name="img_tool_padding">6dp</dimen>
+  <dimen name="img_tool_padding">8dp</dimen>
   <dimen name="img_undo_m_start">16dp</dimen>
   <dimen name="img_done_size">60dp</dimen>
   <dimen name="img_done_margin">24dp</dimen>

@@ -9,7 +9,8 @@
   <com.arsvechkarev.letta.views.DrawingCanvas
     android:id="@+id/drawingCanvas"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    android:clickable="false"/>
 
   <LinearLayout
     android:layout_width="wrap_content"
@@ -26,6 +27,7 @@
       android:layout_marginTop="@dimen/img_tool_m_top_big"
       android:background="@drawable/bg_round"
       android:padding="@dimen/img_tool_padding"
+      android:scaleType="fitXY"
       app:srcCompat="@drawable/ic_text"/>
 
     <ImageButton
@@ -35,6 +37,7 @@
       android:layout_marginTop="@dimen/img_tool_m_top"
       android:background="@drawable/bg_round"
       android:padding="@dimen/img_tool_padding"
+      android:scaleType="fitXY"
       app:srcCompat="@drawable/ic_paint"/>
 
     <ImageButton
@@ -44,12 +47,14 @@
       android:layout_marginTop="@dimen/img_tool_m_top"
       android:background="@drawable/bg_round"
       android:padding="@dimen/img_tool_padding"
+      android:scaleType="fitXY"
       app:srcCompat="@drawable/ic_stickers"/>
 
     <ImageButton
       android:id="@+id/buttonCrop"
       android:layout_width="@dimen/img_tool_size"
       android:layout_height="@dimen/img_tool_size"
+      android:scaleType="fitXY"
       android:layout_marginTop="@dimen/img_tool_m_top"
       android:background="@drawable/bg_round"
       android:padding="@dimen/img_tool_padding"

@@ -25,10 +25,10 @@
 
   <com.arsvechkarev.letta.views.GradientPalette
     android:id="@+id/palette"
-    android:layout_width="30dp"
-    android:layout_height="200dp"
+    android:layout_width="32dp"
+    android:layout_height="240dp"
     android:layout_gravity="center_vertical|end"
-    android:padding="6dp"
+    android:padding="8dp"
     android:visibility="invisible"/>
 
   <com.arsvechkarev.letta.views.ShowerCircle

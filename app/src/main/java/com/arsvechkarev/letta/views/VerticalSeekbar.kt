@@ -15,6 +15,7 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.annotation.FloatRange
+import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.f
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -26,9 +27,9 @@ class VerticalSeekbar @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
   
   companion object {
-    private const val CORNER_RADIUS = 50f
-    private const val LINE_OFFSET = 100f
-    private const val LINE_WIDTH = 11f
+    private val CORNER_RADIUS = 16.dp
+    private val LINE_OFFSET = 30.dp
+    private val LINE_WIDTH = 4.dp
   }
   
   var onPercentChanged: (Float) -> Unit = {}
@@ -55,14 +56,14 @@ class VerticalSeekbar @JvmOverloads constructor(
     lineLength = h - CORNER_RADIUS * 2
     currentY = (lineLength + LINE_OFFSET) - (0.2f * lineLength) // 20% from bottom
     with(path) {
-      moveTo(0f, CORNER_RADIUS / 2)
+      moveTo((-1).dp, CORNER_RADIUS / 2)
       quadTo(0f, CORNER_RADIUS, CORNER_RADIUS, CORNER_RADIUS)
       lineTo(width - CORNER_RADIUS, CORNER_RADIUS)
       quadTo(width.f, CORNER_RADIUS, width.f, CORNER_RADIUS * 2)
       lineTo(width.f, height.f - CORNER_RADIUS * 2)
       quadTo(width.f, height.f - CORNER_RADIUS, width - CORNER_RADIUS, height.f - CORNER_RADIUS)
       lineTo(CORNER_RADIUS, height.f - CORNER_RADIUS)
-      quadTo(0f, height.f - CORNER_RADIUS, 0f, height.f - CORNER_RADIUS / 2)
+      quadTo(0f, height.f - CORNER_RADIUS, (-1).dp, height.f - CORNER_RADIUS / 2)
       close()
     }
   }

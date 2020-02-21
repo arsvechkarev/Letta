@@ -40,7 +40,8 @@ class PaintContainer(
   }
   
   override fun animateEnter() {
-    view.post {
+    post {
+      drawingCanvas.isClickable = true
       buttonBack.animateFadeIn()
       buttonBack.animate(TRANSLATION_X, -buttonBack.width / 2f, 0f)
       verticalSeekbar.animateFadeIn()
@@ -51,6 +52,7 @@ class PaintContainer(
   }
   
   override fun animateExit(andThen: () -> Unit) {
+    drawingCanvas.isClickable = false
     buttonBack.animateFadeOut()
     buttonBack.animate(TRANSLATION_X, -buttonBack.width / 2f)
     verticalSeekbar.animateFadeOut()

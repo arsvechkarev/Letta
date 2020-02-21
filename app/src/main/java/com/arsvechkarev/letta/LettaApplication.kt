@@ -1,16 +1,17 @@
 package com.arsvechkarev.letta
 
 import android.app.Application
+import android.content.res.Resources
 
-class LettaApplication : Application(){
+class LettaApplication : Application() {
   
   companion object {
-    var density: Float = -0f
-  }
-  
-  override fun onCreate() {
-    super.onCreate()
-    density = resources.displayMetrics.density
+    fun initResources(resources: Resources) {
+      density = resources.displayMetrics.density
+    }
+    
+    var density: Float = -1f
+      private set
   }
   
 }

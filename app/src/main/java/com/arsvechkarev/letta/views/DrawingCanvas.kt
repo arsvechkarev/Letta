@@ -110,8 +110,6 @@ class DrawingCanvas @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
-    println("paints = ${paints.size}")
-    println("paths = ${paths.size}")
     paints.forEachIndexed { i, paint ->
       canvas.drawPath(paths[i], paint)
     }
@@ -119,6 +117,7 @@ class DrawingCanvas @JvmOverloads constructor(
   
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
+    if (!isClickable) return false
     when (event.action) {
       ACTION_DOWN -> {
         onDown()

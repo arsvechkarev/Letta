@@ -7,13 +7,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.arsvechkarev.letta.editing.EditFragment
-import com.arsvechkarev.letta.media.ImagesListFragment
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    LettaApplication.initResources(resources)
     Timber.plant(Timber.DebugTree())
     ActivityCompat.requestPermissions(
       this,

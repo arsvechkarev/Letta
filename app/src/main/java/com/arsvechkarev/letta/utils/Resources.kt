@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment
 import com.arsvechkarev.letta.LettaApplication
 
 val Int.dp: Float
-  get() = this * LettaApplication.density
+  get() {
+    check(LettaApplication.density != -1f) { "Density is not initialized yet" }
+    return this * LettaApplication.density
+  }
 
 fun Fragment.dmFloat(@DimenRes resId: Int): Float {
   return dmInt(resId).f

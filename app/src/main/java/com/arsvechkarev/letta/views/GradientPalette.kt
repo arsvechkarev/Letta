@@ -23,6 +23,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.utils.doOnEnd
+import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.i
 import com.arsvechkarev.letta.views.GradientPalette.Mode.ANIMATING
 import com.arsvechkarev.letta.views.GradientPalette.Mode.FLOATING_CIRCLE
@@ -35,6 +36,12 @@ class GradientPalette @JvmOverloads constructor(
   attributeSet: AttributeSet? = null
 ) : View(context, attributeSet) {
   
+  companion object {
+    private val strokeWidthValue = 3.dp
+    private const val GRADIENT_SENSITIVITY = 9
+  }
+  
+  // Gradient palette stuff
   private val paletteColors = intArrayOf(
     "#FF0000".color,
     "#FF7F00".color,
@@ -43,33 +50,21 @@ class GradientPalette @JvmOverloads constructor(
     "#005FE5".color,
     "#8B00FF".color
   )
+  private val gradientPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+  private val gradientRect = RectF()
+  private val gradientPath = Path()
+  private val region = Region()
+  private lateinit var gradientBitmap: Bitmap
   
-  companion object {
-    const val strokeWidthValue = 10f
-    const val GRADIENT_SENSITIVITY = 9
-  }
-  
-  private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+  // Circle stuff
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Color.WHITE
     this.strokeWidth = strokeWidthValue
     style = Paint.Style.STROKE
   }
-  
-  private lateinit var bgBitmap: Bitmap
-  private val pathRect = RectF()
-  
+  private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private var rectRadius = 0f
-  private val path = Path()
-  private val region = Region()
   private var currentCircle = Circle()
-  
-  var currentColor = 0
-    private set
-  
-  private var mode = SELECTED_CIRCLE
-  
   private var startAnimX = 0f
   private var endAnimX = 0f
   private var radiusSelected = 0f
@@ -81,19 +76,21 @@ class GradientPalette @JvmOverloads constructor(
   private lateinit var radiusHolder: PropertyValuesHolder
   private var circleAnimator = ValueAnimator()
   
+  private var mode = SELECTED_CIRCLE
+  
+  var currentColor = 0
+    private set
+  
   var onColorChanged: (Int) -> Unit = {}
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    val left = paddingLeft.f
-    val top = paddingTop.f + strokeWidthValue * 2
-    val right = w.f - paddingEnd
-    val bottom = h.f - paddingBottom - strokeWidthValue * 2
-    pathRect.set(left, top, right, bottom)
-    bgPaint.shader = LinearGradient(
-      pathRect.width() / 2,
-      pathRect.top,
-      pathRect.width() / 2,
-      pathRect.bottom,
+    gradientRect.set(paddingLeft.f, paddingTop.f + strokeWidthValue * 2,
+      w.f - paddingEnd, h.f - paddingBottom - strokeWidthValue * 2)
+    gradientPaint.shader = LinearGradient(
+      gradientRect.width() / 2,
+      gradientRect.top,
+      gradientRect.width() / 2,
+      gradientRect.bottom,
       paletteColors,
       null,
       Shader.TileMode.CLAMP
@@ -104,13 +101,13 @@ class GradientPalette @JvmOverloads constructor(
     radiusFloating = w * 1.5f
     radiusSelected = width / 2f - strokeWidthValue / 2
     currentCircle.set(w / 2f, h / 2f, radiusSelected)
-    initBitmap(pathRect.width().i, pathRect.height().i)
-    currentColor = bgBitmap.getPixel(w / 2, h / 2)
+    initBitmap(gradientRect.width().i, gradientRect.height().i)
+    currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2, h / 2)
     circlePaint.color = currentColor
   }
   
   override fun onDraw(canvas: Canvas) {
-    canvas.drawBitmap(bgBitmap, pathRect.left, pathRect.top, bgPaint)
+    canvas.drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
     currentCircle.draw(canvas, circlePaint)
     currentCircle.draw(canvas, circleStrokePaint)
   }
@@ -120,25 +117,25 @@ class GradientPalette @JvmOverloads constructor(
     when (event.action) {
       ACTION_DOWN -> {
         mode = ANIMATING
-        val y = event.y.coerceIn(pathRect.top + GRADIENT_SENSITIVITY,
-          pathRect.bottom - GRADIENT_SENSITIVITY)
-        val i = (y - pathRect.top).i
+        val y = event.y.coerceIn(gradientRect.top + GRADIENT_SENSITIVITY,
+          gradientRect.bottom - GRADIENT_SENSITIVITY)
+        val i = (y - gradientRect.top).i
         currentCircle.y = y
         updateAnimation(y)
-        currentColor = bgBitmap.getPixel(width / 2, i)
+        currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2, i)
         onColorChanged(currentColor)
         circlePaint.color = currentColor
         return true
       }
       ACTION_MOVE -> {
-        val y = event.y.coerceIn(pathRect.top + GRADIENT_SENSITIVITY,
-          pathRect.bottom - GRADIENT_SENSITIVITY)
-        val i = (y - pathRect.top).i
+        val y = event.y.coerceIn(gradientRect.top + GRADIENT_SENSITIVITY,
+          gradientRect.bottom - GRADIENT_SENSITIVITY)
+        val i = (y - gradientRect.top).i
         currentCircle.y = y
         if (mode == ANIMATING) {
           updateAnimation(y)
         } else {
-          currentColor = bgBitmap.getPixel(width / 2, i)
+          currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2, i)
           onColorChanged(currentColor)
           circlePaint.color = currentColor
           invalidate()
@@ -147,8 +144,8 @@ class GradientPalette @JvmOverloads constructor(
       }
       ACTION_UP, ACTION_CANCEL -> {
         mode = ANIMATING
-        val y = event.y.coerceIn(pathRect.top + GRADIENT_SENSITIVITY,
-          pathRect.bottom - GRADIENT_SENSITIVITY)
+        val y = event.y.coerceIn(gradientRect.top + GRADIENT_SENSITIVITY,
+          gradientRect.bottom - GRADIENT_SENSITIVITY)
         currentCircle.y = y
         updateAnimation(y, true)
         return true
@@ -166,7 +163,8 @@ class GradientPalette @JvmOverloads constructor(
       }
     } else {
       if (circleAnimator.isRunning) {
-        currentColor = bgBitmap.getPixel(width / 2, currentAnimY.i - pathRect.top.i)
+        currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2,
+          currentAnimY.i - gradientRect.top.i)
         circlePaint.color = currentColor
         currentCircle.y = currentAnimY
       } else {
@@ -192,12 +190,13 @@ class GradientPalette @JvmOverloads constructor(
   }
   
   private fun initBitmap(width: Int, height: Int) {
-    bgBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-    val canvas = Canvas(bgBitmap)
-    path.addRoundRect(0f, 0f, pathRect.width(), pathRect.height(), pathRect.width() / 2,
-      pathRect.width() / 2, Path.Direction.CCW)
-    region.setPath(path, Region(pathRect.toRect()))
-    canvas.drawPath(path, bgPaint)
+    gradientBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(gradientBitmap)
+    gradientPath.addRoundRect(0f, 0f, gradientRect.width(), gradientRect.height(),
+      gradientRect.width() / 2,
+      gradientRect.width() / 2, Path.Direction.CCW)
+    region.setPath(gradientPath, Region(gradientRect.toRect()))
+    canvas.drawPath(gradientPath, gradientPaint)
   }
   
   private enum class Mode {

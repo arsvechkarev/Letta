@@ -44,7 +44,7 @@ class OutlinedImage @JvmOverloads constructor(
   
   private var imageSize = 0f
   private var innerPadding = 0f
-  private var inverseColorsOnClick = false
+  private var autoInverse = false
   
   private var scaleFactor = 1f
   private var colorsAreReversed = false
@@ -56,11 +56,25 @@ class OutlinedImage @JvmOverloads constructor(
     image = typedArray.getDrawable(R.styleable.OutlinedImage_image)?.toBitmap()
     innerPadding = typedArray.getDimension(R.styleable.OutlinedImage_innerPadding, 5.dp)
     strokePaint.strokeWidth = typedArray.getDimension(R.styleable.OutlinedImage_strokeWidth, 2.dp)
-    inverseColorsOnClick = typedArray.getBoolean(R.styleable.OutlinedImage_inverseColorsOnClick,
+    autoInverse = typedArray.getBoolean(R.styleable.OutlinedImage_autoInverse,
       false)
     typedArray.recycle()
     
     imageSize = image?.width?.f ?: 0f
+  }
+  
+  fun inverse() {
+    val currentImageColor: Int
+    if (colorsAreReversed) {
+      currentImageColor = primaryColor
+      strokePaint.style = Paint.Style.STROKE
+    } else {
+      currentImageColor = secondaryColor
+      strokePaint.style = Paint.Style.FILL_AND_STROKE
+    }
+    imagePaint.colorFilter = PorterDuffColorFilter(currentImageColor, PorterDuff.Mode.SRC_ATOP)
+    colorsAreReversed = !colorsAreReversed
+    invalidate()
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -84,18 +98,8 @@ class OutlinedImage @JvmOverloads constructor(
   }
   
   override fun performClick(): Boolean {
-    if (inverseColorsOnClick) {
-      val currentImageColor: Int
-      if (colorsAreReversed) {
-        currentImageColor = primaryColor
-        strokePaint.style = Paint.Style.STROKE
-      } else {
-        currentImageColor = secondaryColor
-        strokePaint.style = Paint.Style.FILL_AND_STROKE
-      }
-      imagePaint.colorFilter = PorterDuffColorFilter(currentImageColor, PorterDuff.Mode.SRC_ATOP)
-      colorsAreReversed = !colorsAreReversed
-      invalidate()
+    if (autoInverse) {
+      inverse()
     }
     return super.performClick()
   }

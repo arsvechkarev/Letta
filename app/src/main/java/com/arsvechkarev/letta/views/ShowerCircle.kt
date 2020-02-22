@@ -30,7 +30,7 @@ class ShowerCircle @JvmOverloads constructor(
     invalidate()
   }
   
-  fun erase() {
+  fun clear() {
     isDrawing = false
     invalidate()
   }

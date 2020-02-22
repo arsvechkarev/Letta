@@ -2,6 +2,7 @@
 <resources>
   <dimen name="ic_size_default">24dp</dimen>
   <dimen name="ic_size_big">40dp</dimen>
+  <dimen name="img_swapper">32dp</dimen>
 
   <dimen name="img_tool_size">40dp</dimen>
   <dimen name="img_tool_m_top_big">40dp</dimen>

@@ -10,6 +10,8 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Region
@@ -22,9 +24,13 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.core.content.ContextCompat
+import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.utils.doOnEnd
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.utils.i
+import com.arsvechkarev.letta.utils.toBitmap
 
 // TODO (2/20/2020): add custom attrs
 @Suppress("MemberVisibilityCanBePrivate")
@@ -34,12 +40,12 @@ class GradientPalette @JvmOverloads constructor(
 ) : View(context, attributeSet) {
   
   companion object {
-    private val strokeWidthValue = 3.dp
+    private val strokeWidthValue = 4.dp
     private const val GRADIENT_SENSITIVITY = 3
   }
   
-  // Gradient palette stuff
-  private val paletteColors = intArrayOf(
+  // Gradient palette
+  private val rainbowColors = intArrayOf(
     "#FF0000".color,
     "#FF7F00".color,
     "#FFFF00".color,
@@ -47,13 +53,28 @@ class GradientPalette @JvmOverloads constructor(
     "#005FE5".color,
     "#8B00FF".color
   )
+  private val blackAndWhiteColors = intArrayOf(
+    "#FFFFFF".color,
+    "#000000".color
+  )
+  
+  private val gradientStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    strokeWidth = 4.dp
+    color = Color.WHITE
+    style = Paint.Style.STROKE
+  }
   private val gradientPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val gradientRect = RectF()
   private val gradientPath = Path()
   private val gradientRegion = Region()
+  private lateinit var rainbowGradient: LinearGradient
+  private lateinit var blackAndWhiteGradient: LinearGradient
   private lateinit var gradientBitmap: Bitmap
+  private var swapperMode = SwapperMode.RAINBOW
+  private var isTouchInPalette = false
+  private var currentSwapperRotation = 0f
   
-  // Circle and animation stuff
+  // Circle and animation
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Color.WHITE
     this.strokeWidth = strokeWidthValue
@@ -73,18 +94,41 @@ class GradientPalette @JvmOverloads constructor(
   private val xHolder = PropertyValuesHolder.ofFloat("xHolder", 0f) // Put 0 as a stub
   private val radiusHolder = PropertyValuesHolder.ofFloat("radiusHolder", 0f) // Put 0 as a stub
   
+  // Swapper
+  private val swapperBitmap = ContextCompat.getDrawable(context, R.drawable.ic_swap)!!.toBitmap()
+  private val swapperPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+  }
+  private val swapperRect = RectF()
+  private val swapperAnimator = ValueAnimator()
+  
+  // Other
   var onColorChanged: (Int) -> Unit = {}
   var currentColor = 0
     private set
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    gradientRect.set(paddingLeft.f, paddingTop.f + strokeWidthValue * 2,
-      w.f - paddingEnd, h.f - paddingBottom - strokeWidthValue * 2)
-    gradientPaint.shader = LinearGradient(
+    swapperRect.set(
+      w / 2f - swapperBitmap.width / 2, h.f - swapperBitmap.height,
+      w / 2f + swapperBitmap.width / 2, h.f
+    )
+    gradientRect.set(
+      paddingLeft.f,
+      paddingTop.f + strokeWidthValue * 2,
+      w.f - paddingEnd,
+      h.f - paddingBottom - strokeWidthValue * 2 - swapperRect.height() * 1.2f
+    )
+    rainbowGradient = LinearGradient(
       gradientRect.width() / 2, gradientRect.top,
       gradientRect.width() / 2, gradientRect.bottom,
-      paletteColors, null, Shader.TileMode.CLAMP
+      rainbowColors, null, Shader.TileMode.CLAMP
     )
+    blackAndWhiteGradient = LinearGradient(
+      gradientRect.width() / 2, gradientRect.top,
+      gradientRect.width() / 2, gradientRect.bottom,
+      blackAndWhiteColors, null, Shader.TileMode.CLAMP
+    )
+    gradientPaint.shader = rainbowGradient
     rectRadius = w / 2f
     startAnimX = w / 2f
     endAnimX = -w * 3f
@@ -92,63 +136,118 @@ class GradientPalette @JvmOverloads constructor(
     radiusSelected = width / 2f - strokeWidthValue / 2
     currentAnimX = startAnimX
     currentAnimRadius = radiusSelected
-    currentCircle.set(w / 2f, h / 2f, radiusSelected)
-    initBitmap(gradientRect.width().i, gradientRect.height().i)
+    currentY = h / 2f
+    currentCircle.set(w / 2f, currentY, radiusSelected)
+    drawGradient()
     currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2, h / 2)
     circlePaint.color = currentColor
   }
   
   override fun onDraw(canvas: Canvas) {
-    canvas.drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
+    with(canvas) {
+      save()
+      rotate(currentSwapperRotation, swapperRect.centerX(), swapperRect.centerY())
+      drawBitmap(swapperBitmap, null, swapperRect, swapperPaint)
+      restore()
+      save()
+      translate(gradientRect.left, gradientRect.top)
+      drawPath(gradientPath, gradientStrokePaint)
+      restore()
+      drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
+    }
     currentCircle.draw(canvas, circlePaint)
     currentCircle.draw(canvas, circleStrokePaint)
   }
   
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    currentY = event.y.coerceIn(gradientRect.top + GRADIENT_SENSITIVITY,
-      gradientRect.bottom - GRADIENT_SENSITIVITY)
-    currentCircle.y = currentY
-    currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2,
-      (currentY - gradientRect.top).i)
-    onColorChanged(currentColor)
-    circlePaint.color = currentColor
     when (event.action) {
       ACTION_DOWN -> {
-        updateAnimation()
+        if (event.y <= height - swapperBitmap.height) {
+          isTouchInPalette = true
+          setupValues(event.y)
+          updateCircleAnimation()
+        }
         return true
       }
       ACTION_MOVE -> {
-        invalidate()
-        return true
+        if (isTouchInPalette) {
+          setupValues(event.y)
+          invalidate()
+          return true
+        }
       }
       ACTION_UP, ACTION_CANCEL -> {
-        updateAnimation(true)
+        if (isTouchInPalette) {
+          setupValues(event.y)
+          updateCircleAnimation(true)
+        } else {
+          changePaletteColors()
+        }
+        isTouchInPalette = false
         return true
       }
     }
     return false
   }
   
-  private fun updateAnimation(animateBack: Boolean = false) {
+  private fun changePaletteColors() {
+    if (swapperMode == SwapperMode.RAINBOW) {
+      gradientPaint.shader = blackAndWhiteGradient
+    } else {
+      gradientPaint.shader = rainbowGradient
+    }
+    swapperMode = swapperMode.swap()
+    drawGradient()
+    currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2,
+      (currentY - gradientRect.top).i)
+    onColorChanged(currentColor)
+    circlePaint.color = currentColor
+    with(swapperAnimator) {
+      cancel()
+      setFloatValues(currentSwapperRotation, 180f)
+      addUpdateListener {
+        currentSwapperRotation = animatedValue as Float
+        invalidate()
+      }
+      doOnEnd { currentSwapperRotation = 0f }
+      interpolator = AccelerateDecelerateInterpolator()
+      duration = 300
+      start()
+    }
+    invalidate()
+  }
+  
+  private fun setupValues(y: Float) {
+    currentY = y.coerceIn(gradientRect.top + GRADIENT_SENSITIVITY,
+      gradientRect.bottom - GRADIENT_SENSITIVITY)
+    currentCircle.y = currentY
+    currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2,
+      (currentY - gradientRect.top).i)
+    onColorChanged(currentColor)
+    circlePaint.color = currentColor
+  }
+  
+  private fun updateCircleAnimation(animateBack: Boolean = false) {
     currentCircle.set(width / 2f, currentY, radiusSelected)
     if (animateBack) {
       circleAnimator.cancel()
       xHolder.setFloatValues(currentAnimX, startAnimX)
       radiusHolder.setFloatValues(currentAnimRadius, radiusSelected)
       circleAnimator.setValues(xHolder, radiusHolder)
-      kickInAnimator()
+      kickInCircleAnimator()
     } else {
       circleAnimator.cancel()
       xHolder.setFloatValues(currentAnimX, endAnimX)
       radiusHolder.setFloatValues(currentAnimRadius, radiusFloating)
       circleAnimator.setValues(xHolder, radiusHolder)
-      kickInAnimator()
+      kickInCircleAnimator()
     }
   }
   
-  private fun kickInAnimator() {
+  private fun kickInCircleAnimator() {
     circleAnimator.apply {
+      cancel()
       addUpdateListener {
         currentAnimX = getAnimatedValue("xHolder") as Float
         currentAnimRadius = getAnimatedValue("radiusHolder") as Float
@@ -161,8 +260,18 @@ class GradientPalette @JvmOverloads constructor(
     }
   }
   
-  private fun initBitmap(width: Int, height: Int) {
-    gradientBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+  private enum class SwapperMode {
+    RAINBOW,
+    BLACK_AND_WHITE;
+    
+    fun swap(): SwapperMode {
+      return if (this == RAINBOW) BLACK_AND_WHITE else RAINBOW
+    }
+  }
+  
+  private fun drawGradient() {
+    gradientBitmap = Bitmap.createBitmap(gradientRect.width().i, gradientRect.height().i,
+      Bitmap.Config.ARGB_8888)
     val canvas = Canvas(gradientBitmap)
     gradientPath.addRoundRect(0f, 0f, gradientRect.width(), gradientRect.height(),
       gradientRect.width() / 2, gradientRect.width() / 2, Path.Direction.CW)

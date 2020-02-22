@@ -9,7 +9,8 @@ import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.DITHER_FLAG
 import android.graphics.Path
-import android.graphics.drawable.Drawable
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.os.Environment.getExternalStorageDirectory
 import android.util.AttributeSet
 import android.view.KeyEvent.ACTION_UP
@@ -18,8 +19,6 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.View
 import androidx.annotation.ColorInt
-import androidx.palette.graphics.Palette
-import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.utils.toBitmap
 import java.io.File
 import java.io.File.separator
@@ -43,10 +42,12 @@ class DrawingCanvas @JvmOverloads constructor(
   private var lastY = 0f
   private var currentPaintWidth = 0f
   private var currentPaintColor = INITIAL_PAINT_COLOR
-  
   private val paths = ArrayList<Path>()
+  
   private val paints = ArrayList<Paint>()
   private val bitmaps = ArrayList<Bitmap>()
+  
+  var isEraserMode: Boolean = false
   
   init {
     setBackgroundColor(INITIAL_BG_COLOR)
@@ -63,9 +64,9 @@ class DrawingCanvas @JvmOverloads constructor(
   }
   
   fun setPaintColor(@ColorInt color: Int) {
+    isEraserMode = false
     currentPaintColor = color
   }
-  
   
   fun clear() {
     paths.clear()
@@ -146,6 +147,9 @@ class DrawingCanvas @JvmOverloads constructor(
     strokeJoin = Paint.Join.ROUND
     strokeCap = Paint.Cap.ROUND
     strokeWidth = currentPaintWidth
+    if (isEraserMode) {
+      xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+    }
   }
   
   private fun handleTouchDown(x: Float, y: Float) {

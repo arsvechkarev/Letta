@@ -8,33 +8,34 @@
   <com.arsvechkarev.letta.views.ShowerCircle
     android:id="@+id/showCircle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    android:visibility="invisible"/>
 
-  <ImageButton
-    android:id="@+id/buttonUndo"
-    android:layout_width="@dimen/img_tool_size_small"
-    android:layout_height="@dimen/img_tool_size_small"
+  <com.arsvechkarev.letta.views.OutlinedImage
+    android:id="@+id/imageUndo"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
     android:layout_marginEnd="@dimen/img_tool_m_end"
-    android:background="@drawable/bg_round_transparent"
-    android:padding="@dimen/img_tool_padding"
     android:visibility="invisible"
+    app:image="@drawable/ic_undo"
+    app:innerPadding="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_undo"/>
+    app:strokeWidth="2dp"/>
 
-  <ImageButton
-    android:id="@+id/buttonEraser"
-    android:layout_width="@dimen/img_tool_size_small"
-    android:layout_height="@dimen/img_tool_size_small"
+  <com.arsvechkarev.letta.views.OutlinedImage
+    android:id="@+id/imageEraser"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
     android:layout_gravity="end"
     android:layout_marginTop="@dimen/img_tool_m_top"
     android:layout_marginEnd="@dimen/img_tool_m_end"
-    android:background="@drawable/bg_round_transparent"
-    android:padding="@dimen/img_tool_padding"
     android:visibility="invisible"
+    app:image="@drawable/ic_eraser"
+    app:innerPadding="8dp"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/buttonUndo"
-    android:src="@drawable/ic_eraser"/>
+    app:layout_constraintTop_toBottomOf="@id/imageUndo"
+    app:strokeWidth="2dp"/>
 
   <com.arsvechkarev.letta.views.VerticalSeekbar
     android:id="@+id/verticalSeekbar"

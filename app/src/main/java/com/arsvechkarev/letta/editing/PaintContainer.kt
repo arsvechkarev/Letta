@@ -1,5 +1,6 @@
 package com.arsvechkarev.letta.editing
 
+import android.graphics.Color.WHITE
 import android.view.View
 import android.view.View.TRANSLATION_X
 import android.view.View.TRANSLATION_Y
@@ -14,6 +15,7 @@ import com.arsvechkarev.letta.utils.exponentiate
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.views.DrawingCanvas
 import com.arsvechkarev.letta.views.GradientPalette
+import com.arsvechkarev.letta.views.OutlinedImage
 import com.arsvechkarev.letta.views.ShowerCircle
 import com.arsvechkarev.letta.views.VerticalSeekbar
 
@@ -28,8 +30,8 @@ class PaintContainer(
   
   private var palette: GradientPalette = findViewById(R.id.palette)
   private var verticalSeekbar: VerticalSeekbar = findViewById(R.id.verticalSeekbar)
-  private var buttonBack: ImageButton = findViewById(R.id.buttonUndo)
-  private var buttonEraser: ImageButton = findViewById(R.id.buttonEraser)
+  private var buttonBack: OutlinedImage = findViewById(R.id.imageUndo)
+  private var buttonEraser: OutlinedImage = findViewById(R.id.imageEraser)
   private var showerCircle: ShowerCircle = findViewById(R.id.showCircle)
   
   init {
@@ -40,11 +42,13 @@ class PaintContainer(
       verticalSeekbar.onPercentChanged = {
         val width = it.exponentiate()
         drawingCanvas.setPaintWidth(width)
-        showerCircle.draw(palette.currentColor, width)
+        val currentColor = if (drawingCanvas.isEraserMode) WHITE else palette.currentColor
+        showerCircle.draw(currentColor, width)
       }
       verticalSeekbar.onUp = { showerCircle.erase() }
       palette.onColorChanged = { drawingCanvas.setPaintColor(it) }
       buttonBack.setOnClickListener { drawingCanvas.undo() }
+      buttonEraser.setOnClickListener { drawingCanvas.isEraserMode = true }
       buttonBack.constraints {
         topMargin = topControlView.height + dmInt(R.dimen.img_tool_m_top2) * 2
       }
@@ -55,9 +59,9 @@ class PaintContainer(
     post {
       drawingCanvas.isClickable = true
       buttonBack.animateFadeIn()
-      buttonBack.animate(TRANSLATION_Y, buttonBack.height.f, 0f)
+      buttonBack.animate(TRANSLATION_Y, buttonBack.height.f * 2, 0f)
       buttonEraser.animateFadeIn()
-      buttonEraser.animate(TRANSLATION_Y, buttonEraser.height.f, 0f)
+      buttonEraser.animate(TRANSLATION_Y, buttonEraser.height.f * 2, 0f)
       verticalSeekbar.animateFadeIn()
       verticalSeekbar.animate(TRANSLATION_X, -verticalSeekbar.width / 2f, 0f)
       palette.animateFadeIn()
@@ -68,9 +72,9 @@ class PaintContainer(
   override fun animateExit(andThen: () -> Unit) {
     drawingCanvas.isClickable = false
     buttonBack.animateFadeOut()
-    buttonBack.animate(TRANSLATION_Y, buttonBack.height.f)
+    buttonBack.animate(TRANSLATION_Y, buttonBack.height.f * 2)
     buttonEraser.animateFadeOut()
-    buttonEraser.animate(TRANSLATION_Y, buttonEraser.height.f)
+    buttonEraser.animate(TRANSLATION_Y, buttonEraser.height.f * 2)
     verticalSeekbar.animateFadeOut()
     verticalSeekbar.animate(TRANSLATION_X, -verticalSeekbar.width / 2f)
     palette.animateFadeOut(andThen)

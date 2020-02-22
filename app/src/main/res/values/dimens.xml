@@ -4,7 +4,6 @@
   <dimen name="ic_size_big">40dp</dimen>
 
   <dimen name="img_tool_size">40dp</dimen>
-  <dimen name="img_tool_size_small">36dp</dimen>
   <dimen name="img_tool_m_top_big">40dp</dimen>
   <dimen name="img_tool_m_top">16dp</dimen>
   <dimen name="img_tool_m_top2">20dp</dimen>

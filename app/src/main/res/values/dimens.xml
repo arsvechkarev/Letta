@@ -4,13 +4,17 @@
   <dimen name="ic_size_big">40dp</dimen>
 
   <dimen name="img_tool_size">40dp</dimen>
+  <dimen name="img_tool_size_small">36dp</dimen>
   <dimen name="img_tool_m_top_big">40dp</dimen>
   <dimen name="img_tool_m_top">16dp</dimen>
+  <dimen name="img_tool_m_top2">20dp</dimen>
   <dimen name="img_tool_m_end">16dp</dimen>
   <dimen name="img_tool_padding">8dp</dimen>
   <dimen name="img_undo_m_start">16dp</dimen>
   <dimen name="img_done_size">60dp</dimen>
-  <dimen name="img_done_margin">24dp</dimen>
+  <dimen name="img_done_m_bottom">24dp</dimen>
+  <dimen name="img_done_margin">16dp</dimen>
+  <dimen name="img_tool_stroke_width">2dp</dimen>
 
   <!-- Animations -->
   <dimen name="img_tool_active">50dp</dimen>

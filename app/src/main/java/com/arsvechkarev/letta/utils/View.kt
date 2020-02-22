@@ -24,8 +24,8 @@ fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
 }
 
 fun View.constraints(block: ConstraintLayout.LayoutParams.() -> Unit) {
-  (this.layoutParams as ConstraintLayout.LayoutParams).apply(block)
+  layoutParams = (this.layoutParams as ConstraintLayout.LayoutParams).apply(block)
 }
-fun View.params(block: ViewGroup.MarginLayoutParams.() -> Unit) {
-  (this.layoutParams as ViewGroup.MarginLayoutParams).apply(block)
+fun View.layoutParams(block: ViewGroup.MarginLayoutParams.() -> Unit) {
+  layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply(block)
 }

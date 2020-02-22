@@ -4,12 +4,21 @@ import android.view.View
 import androidx.annotation.DimenRes
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.letta.LettaApplication
+import com.arsvechkarev.letta.editing.Container
 
 val Int.dp: Float
   get() {
     check(LettaApplication.density != -1f) { "Density is not initialized yet" }
     return this * LettaApplication.density
   }
+
+fun Container.dmFloat(@DimenRes resId: Int): Float {
+  return dmInt(resId).f
+}
+
+fun Container.dmInt(@DimenRes resId: Int): Int {
+  return view.resources.getDimensionPixelSize(resId)
+}
 
 fun Fragment.dmFloat(@DimenRes resId: Int): Float {
   return dmInt(resId).f

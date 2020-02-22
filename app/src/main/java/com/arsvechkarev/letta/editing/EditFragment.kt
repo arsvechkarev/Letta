@@ -30,7 +30,7 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
   
   private val textContainer by lazy { TextContainer() }
   private val paintContainer by lazy {
-    PaintContainer(editRootLayout.inflate(container_edit_paint), drawingCanvas)
+    PaintContainer(editRootLayout.inflate(container_edit_paint), drawingCanvas, buttonPaint)
   }
   
   private val stickersFragment by lazy { StickersContainer() }

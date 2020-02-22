@@ -35,7 +35,7 @@ class GradientPalette @JvmOverloads constructor(
   
   companion object {
     private val strokeWidthValue = 3.dp
-    private const val GRADIENT_SENSITIVITY = 9
+    private const val GRADIENT_SENSITIVITY = 3
   }
   
   // Gradient palette stuff

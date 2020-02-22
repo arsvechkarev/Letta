@@ -4,5 +4,6 @@
     <attr name="image" format="reference"/>
     <attr name="strokeWidth" format="dimension"/>
     <attr name="innerPadding" format="dimension"/>
+    <attr name="inverseColorsOnClick" format="boolean"/>
   </declare-styleable>
 </resources>

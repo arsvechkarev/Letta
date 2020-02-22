@@ -8,8 +8,7 @@
   <com.arsvechkarev.letta.views.ShowerCircle
     android:id="@+id/showCircle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="invisible"/>
+    android:layout_height="match_parent"/>
 
   <com.arsvechkarev.letta.views.OutlinedImage
     android:id="@+id/imageUndo"
@@ -32,6 +31,7 @@
     android:layout_marginEnd="@dimen/img_tool_m_end"
     android:visibility="invisible"
     app:image="@drawable/ic_eraser"
+    app:inverseColorsOnClick="true"
     app:innerPadding="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/imageUndo"

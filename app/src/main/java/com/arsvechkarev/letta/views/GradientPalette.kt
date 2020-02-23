@@ -256,28 +256,31 @@ class GradientPalette @JvmOverloads constructor(
   }
   
   private fun initRainbowShader() {
-    val colors = intArrayOf(
-      "#FFFFFF".color,
-      "#FF0000".color,
-      "#FFFF00".color,
-      "#FFFF00".color,
-      "#84FF00".color,
-      "#0BE024".color,
-      "#00FFFB".color,
-      "#0000FF".color,
-      "#FB00FF".color,
-      "#000000".color
+    val colorsMap = mapOf(
+      "#FFBFBF".c to 0.01f,
+      "#FF0000".c to 0.09f,
+      "#FFFF00".c to 0.16f,
+      "#FFFF00".c to 0.21f,
+      "#84FF00".c to 0.27f,
+      "#0BE024".c to 0.34f,
+      "#00FFFB".c to 0.44f,
+      "#00FFFB".c to 0.47f,
+      "#0000FF".c to 0.59f,
+      "#FB00FF".c to 0.67f,
+      "#FB00FF".c to 0.78f,
+      "#460A57".c to 0.91f
     )
-    val positions = floatArrayOf(0.00f, 0.08f, 0.11f, 0.16f, 0.20f, 0.25f, 0.42f, 0.64f, 0.74f, 0.91f)
     rainbowGradient = LinearGradient(
       gradientRect.width() / 2, 0f,
       gradientRect.width() / 2, gradientRect.bottom,
-      colors, positions, Shader.TileMode.CLAMP
+      colorsMap.keys.toTypedArray().toIntArray(),
+      colorsMap.values.toTypedArray().toFloatArray(),
+      Shader.TileMode.CLAMP
     )
   }
   
   private fun initBlackAndWhiteShader() {
-    val colors = intArrayOf("#FFFFFF".color, "#000000".color)
+    val colors = intArrayOf("#FFFFFF".c, "#000000".c)
     val positions = floatArrayOf(0f, 0.95f)
     blackAndWhiteGradient = LinearGradient(
       gradientRect.width() / 2, gradientRect.top,
@@ -312,7 +315,7 @@ class GradientPalette @JvmOverloads constructor(
     }
   }
   
-  private val String.color get() = Color.parseColor(this)
+  private val String.c get() = Color.parseColor(this)
   
   private fun RectF.toRect(): Rect {
     return Rect(left.i, top.i, right.i, bottom.i)

@@ -4,35 +4,17 @@ import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.Rect
-import android.graphics.RectF
-import android.graphics.Region
-import android.graphics.Shader
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.MotionEvent.ACTION_CANCEL
-import android.view.MotionEvent.ACTION_DOWN
-import android.view.MotionEvent.ACTION_MOVE
-import android.view.MotionEvent.ACTION_UP
+import android.view.MotionEvent.*
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.addBouncyBackEffect
-import com.arsvechkarev.letta.utils.block
-import com.arsvechkarev.letta.utils.doOnEnd
-import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.f
-import com.arsvechkarev.letta.utils.i
-import com.arsvechkarev.letta.utils.toBitmap
+import com.arsvechkarev.letta.utils.*
 
 // TODO (2/20/2020): add custom attrs
 @Suppress("MemberVisibilityCanBePrivate")
@@ -49,25 +31,12 @@ class GradientPalette @JvmOverloads constructor(
     private const val SWAP_ANIMATION_DURATION = 200L
   }
   
-  // Gradient palette
-  private val rainbowColors = intArrayOf(
-    "#FF0000".color,
-    "#FF7F00".color,
-    "#FFFF00".color,
-    "#00FF00".color,
-    "#005FE5".color,
-    "#8B00FF".color
-  )
-  private val blackAndWhiteColors = intArrayOf(
-    "#FFFFFF".color,
-    "#000000".color
-  )
   private val gradientStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     strokeWidth = 4.dp
     color = Color.WHITE
     style = Paint.Style.STROKE
   }
-  private val gradientPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+  private val gradientPaint = Paint()
   private val gradientRect = RectF()
   private val gradientPath = Path()
   private val gradientRegion = Region()
@@ -124,16 +93,8 @@ class GradientPalette @JvmOverloads constructor(
       w.f - paddingEnd,
       h.f - paddingBottom - strokeWidthValue * 2 - swapperRect.height() * 1.2f
     )
-    rainbowGradient = LinearGradient(
-      gradientRect.width() / 2, gradientRect.top,
-      gradientRect.width() / 2, gradientRect.bottom,
-      rainbowColors, null, Shader.TileMode.CLAMP
-    )
-    blackAndWhiteGradient = LinearGradient(
-      gradientRect.width() / 2, gradientRect.top,
-      gradientRect.width() / 2, gradientRect.bottom,
-      blackAndWhiteColors, null, Shader.TileMode.CLAMP
-    )
+    initRainbowShader()
+    initBlackAndWhiteShader()
     gradientPaint.shader = rainbowGradient
     rectRadius = w / 2f
     startAnimX = w / 2f
@@ -144,7 +105,7 @@ class GradientPalette @JvmOverloads constructor(
     currentAnimRadius = radiusSelected
     currentY = h / 2f
     currentCircle.set(w / 2f, currentY, radiusSelected)
-    drawGradient()
+    drawGradientBitmap()
     currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2, h / 2)
     circlePaint.color = currentColor
   }
@@ -204,7 +165,7 @@ class GradientPalette @JvmOverloads constructor(
   private fun startBouncyEffect() {
     with(bouncyAnimator) {
       cancel()
-      addBouncyBackEffect(currentGradientScale, coefficient = 1.3f, inTheMiddle = {
+      addBouncyBackEffect(currentGradientScale, coefficient = 0.3f, inTheMiddle = {
         changePaletteColors()
       })
       addUpdateListener {
@@ -221,6 +182,7 @@ class GradientPalette @JvmOverloads constructor(
         currentSwapperRotation = animatedValue as Float
         invalidate()
       }
+      interpolator = DecelerateInterpolator()
       doOnEnd { currentSwapperRotation = 0f }
       duration = SWAP_ANIMATION_DURATION
       start()
@@ -234,7 +196,7 @@ class GradientPalette @JvmOverloads constructor(
       gradientPaint.shader = rainbowGradient
     }
     swapperMode = swapperMode.swap()
-    drawGradient()
+    drawGradientBitmap()
     currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2,
       (currentY - gradientRect.top).i)
     onColorChanged(currentColor)
@@ -293,7 +255,38 @@ class GradientPalette @JvmOverloads constructor(
     }
   }
   
-  private fun drawGradient() {
+  private fun initRainbowShader() {
+    val colors = intArrayOf(
+      "#FFFFFF".color,
+      "#FF0000".color,
+      "#FFFF00".color,
+      "#FFFF00".color,
+      "#84FF00".color,
+      "#0BE024".color,
+      "#00FFFB".color,
+      "#0000FF".color,
+      "#FB00FF".color,
+      "#000000".color
+    )
+    val positions = floatArrayOf(0.00f, 0.08f, 0.11f, 0.16f, 0.20f, 0.25f, 0.42f, 0.64f, 0.74f, 0.91f)
+    rainbowGradient = LinearGradient(
+      gradientRect.width() / 2, 0f,
+      gradientRect.width() / 2, gradientRect.bottom,
+      colors, positions, Shader.TileMode.CLAMP
+    )
+  }
+  
+  private fun initBlackAndWhiteShader() {
+    val colors = intArrayOf("#FFFFFF".color, "#000000".color)
+    val positions = floatArrayOf(0f, 0.95f)
+    blackAndWhiteGradient = LinearGradient(
+      gradientRect.width() / 2, gradientRect.top,
+      gradientRect.width() / 2, gradientRect.bottom,
+      colors, positions, Shader.TileMode.CLAMP
+    )
+  }
+  
+  private fun drawGradientBitmap() {
     gradientBitmap = Bitmap.createBitmap(gradientRect.width().i, gradientRect.height().i,
       Bitmap.Config.ARGB_8888)
     val canvas = Canvas(gradientBitmap)

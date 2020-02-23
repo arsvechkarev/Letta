@@ -4,7 +4,6 @@ import android.animation.ValueAnimator
 import android.view.animation.Interpolator
 
 class BouncyBackInterpolator(
-  private val value: Float,
   private val coefficient: Float,
   private val inTheMiddle: () -> Unit
 ) : Interpolator {
@@ -12,13 +11,11 @@ class BouncyBackInterpolator(
   private var middleBlockExecuted = false
   
   override fun getInterpolation(input: Float): Float {
-    return if (input < value / coefficient) {
-      input
-    } else {
-      if (!middleBlockExecuted) inTheMiddle()
+    if (!middleBlockExecuted && input > 0.5f) {
+      inTheMiddle()
       middleBlockExecuted = true
-      1 - input
     }
+    return coefficient * (-4 * input * input + 4 * input)
   }
   
 }
@@ -28,6 +25,6 @@ fun ValueAnimator.addBouncyBackEffect(
   coefficient: Float = 2f,
   inTheMiddle: () -> Unit = {}
 ) {
-  setFloatValues(value, value * coefficient)
-  interpolator = BouncyBackInterpolator(value, coefficient, inTheMiddle)
+  setFloatValues(value, value * 2)
+  interpolator = BouncyBackInterpolator(coefficient, inTheMiddle)
 }

@@ -18,8 +18,8 @@ import com.arsvechkarev.letta.views.OutlinedImage
 import com.arsvechkarev.letta.views.ShowerCircle
 import com.arsvechkarev.letta.views.VerticalSeekbar
 
-// TODO: 2/22/2020 Add rainbow to white/black swapper
-// TODO: 2/22/2020 Add more colors to palette
+// TODO (2/23/2020): Add stroke and shadow to all elements
+// TODO (2/23/2020): Add gradient colors to swapper
 class PaintContainer(
   view: View,
   private val drawingCanvas: DrawingCanvas,

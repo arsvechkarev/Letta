@@ -59,7 +59,6 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
     buttonPaint.setOnClickListener { toggleMode(PAINT) }
     buttonStickers.setOnClickListener { toggleMode(STICKERS) }
     buttonCrop.setOnClickListener { toggleMode(CROP) }
-    toggleMode(PAINT)
   }
   
   @Suppress("NON_EXHAUSTIVE_WHEN")

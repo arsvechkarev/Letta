@@ -15,3 +15,12 @@ fun Drawable.toBitmap(): Bitmap {
   draw(canvas)
   return bitmap
 }
+
+inline fun Canvas.block(block: Canvas.() -> Unit) {
+  try {
+    save()
+    apply(block)
+  } finally {
+    restore()
+  }
+}

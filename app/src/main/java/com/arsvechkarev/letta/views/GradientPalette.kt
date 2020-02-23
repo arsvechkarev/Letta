@@ -26,6 +26,8 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.animations.addBouncyBackEffect
+import com.arsvechkarev.letta.utils.block
 import com.arsvechkarev.letta.utils.doOnEnd
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.f
@@ -41,7 +43,10 @@ class GradientPalette @JvmOverloads constructor(
   
   companion object {
     private val strokeWidthValue = 4.dp
-    private const val GRADIENT_SENSITIVITY = 3
+    private const val GRADIENT_SENSITIVITY = 2
+    
+    private const val CIRCLE_ANIMATION_DURATION = 150L
+    private const val SWAP_ANIMATION_DURATION = 200L
   }
   
   // Gradient palette
@@ -57,7 +62,6 @@ class GradientPalette @JvmOverloads constructor(
     "#FFFFFF".color,
     "#000000".color
   )
-  
   private val gradientStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     strokeWidth = 4.dp
     color = Color.WHITE
@@ -70,9 +74,8 @@ class GradientPalette @JvmOverloads constructor(
   private lateinit var rainbowGradient: LinearGradient
   private lateinit var blackAndWhiteGradient: LinearGradient
   private lateinit var gradientBitmap: Bitmap
-  private var swapperMode = SwapperMode.RAINBOW
   private var isTouchInPalette = false
-  private var currentSwapperRotation = 0f
+  private var currentGradientScale = 1f
   
   // Circle and animation
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -95,12 +98,15 @@ class GradientPalette @JvmOverloads constructor(
   private val radiusHolder = PropertyValuesHolder.ofFloat("radiusHolder", 0f) // Put 0 as a stub
   
   // Swapper
+  private var swapperMode = SwapperMode.RAINBOW
+  private var currentSwapperRotation = 0f
   private val swapperBitmap = ContextCompat.getDrawable(context, R.drawable.ic_swap)!!.toBitmap()
   private val swapperPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
   }
   private val swapperRect = RectF()
   private val swapperAnimator = ValueAnimator()
+  private val bouncyAnimator = ValueAnimator()
   
   // Other
   var onColorChanged: (Int) -> Unit = {}
@@ -145,18 +151,22 @@ class GradientPalette @JvmOverloads constructor(
   
   override fun onDraw(canvas: Canvas) {
     with(canvas) {
-      save()
-      rotate(currentSwapperRotation, swapperRect.centerX(), swapperRect.centerY())
-      drawBitmap(swapperBitmap, null, swapperRect, swapperPaint)
-      restore()
-      save()
-      translate(gradientRect.left, gradientRect.top)
-      drawPath(gradientPath, gradientStrokePaint)
-      restore()
-      drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
+      block {
+        rotate(currentSwapperRotation, swapperRect.centerX(), swapperRect.centerY())
+        drawBitmap(swapperBitmap, null, swapperRect, swapperPaint)
+      }
+      block {
+        canvas.scale(currentGradientScale, currentGradientScale, gradientRect.centerX(),
+          gradientRect.centerY())
+        block {
+          translate(gradientRect.left, gradientRect.top)
+          drawPath(gradientPath, gradientStrokePaint)
+        }
+        drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
+        currentCircle.draw(canvas, circlePaint)
+        currentCircle.draw(canvas, circleStrokePaint)
+      }
     }
-    currentCircle.draw(canvas, circlePaint)
-    currentCircle.draw(canvas, circleStrokePaint)
   }
   
   @SuppressLint("ClickableViewAccessibility")
@@ -182,13 +192,39 @@ class GradientPalette @JvmOverloads constructor(
           setupValues(event.y)
           updateCircleAnimation(true)
         } else {
-          changePaletteColors()
+          startBouncyEffect()
         }
         isTouchInPalette = false
         return true
       }
     }
     return false
+  }
+  
+  private fun startBouncyEffect() {
+    with(bouncyAnimator) {
+      cancel()
+      addBouncyBackEffect(currentGradientScale, coefficient = 1.3f, inTheMiddle = {
+        changePaletteColors()
+      })
+      addUpdateListener {
+        currentGradientScale = animatedValue as Float
+        invalidate()
+      }
+      duration = SWAP_ANIMATION_DURATION
+      start()
+    }
+    with(swapperAnimator) {
+      cancel()
+      setFloatValues(currentSwapperRotation, 180f)
+      addUpdateListener {
+        currentSwapperRotation = animatedValue as Float
+        invalidate()
+      }
+      doOnEnd { currentSwapperRotation = 0f }
+      duration = SWAP_ANIMATION_DURATION
+      start()
+    }
   }
   
   private fun changePaletteColors() {
@@ -203,18 +239,6 @@ class GradientPalette @JvmOverloads constructor(
       (currentY - gradientRect.top).i)
     onColorChanged(currentColor)
     circlePaint.color = currentColor
-    with(swapperAnimator) {
-      cancel()
-      setFloatValues(currentSwapperRotation, 180f)
-      addUpdateListener {
-        currentSwapperRotation = animatedValue as Float
-        invalidate()
-      }
-      doOnEnd { currentSwapperRotation = 0f }
-      interpolator = AccelerateDecelerateInterpolator()
-      duration = 300
-      start()
-    }
     invalidate()
   }
   
@@ -255,7 +279,7 @@ class GradientPalette @JvmOverloads constructor(
         invalidate()
       }
       interpolator = AccelerateDecelerateInterpolator()
-      duration = 150
+      duration = CIRCLE_ANIMATION_DURATION
       start()
     }
   }

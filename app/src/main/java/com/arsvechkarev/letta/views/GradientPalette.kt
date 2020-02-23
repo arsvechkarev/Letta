@@ -165,7 +165,7 @@ class GradientPalette @JvmOverloads constructor(
   private fun startBouncyEffect() {
     with(bouncyAnimator) {
       cancel()
-      addBouncyBackEffect(currentGradientScale, coefficient = 0.3f, inTheMiddle = {
+      addBouncyBackEffect(currentGradientScale, coefficient = 0.25f, inTheMiddle = {
         changePaletteColors()
       })
       addUpdateListener {

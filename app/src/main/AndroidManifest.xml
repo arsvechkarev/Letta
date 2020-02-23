@@ -12,8 +12,16 @@
     android:label="@string/app_name"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
+    android:name=".LettaApplication"
     android:theme="@style/Theme.AppCompat.NoActionBar">
-    <activity android:name="com.arsvechkarev.letta.MainActivity">
+
+    <meta-data
+      android:name="preloaded_fonts"
+      android:resource="@array/preloaded_fonts"/>
+
+    <activity
+      android:name="com.arsvechkarev.letta.MainActivity"
+      android:windowSoftInputMode="adjustResize">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <action android:name="android.intent.action.VIEW"/>

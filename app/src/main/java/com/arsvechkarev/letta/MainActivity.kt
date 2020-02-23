@@ -14,7 +14,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     LettaApplication.initResources(resources)
-    Timber.plant(Timber.DebugTree())
     ActivityCompat.requestPermissions(
       this,
       arrayOf(CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE),

@@ -41,7 +41,6 @@
     android:id="@+id/verticalSeekbar"
     android:layout_width="30dp"
     android:layout_height="240dp"
-    android:layout_gravity="center_vertical"
     android:visibility="invisible"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -51,12 +50,10 @@
     android:id="@+id/palette"
     android:layout_width="32dp"
     android:layout_height="230dp"
-    android:layout_gravity="center_vertical|end"
-    android:layout_marginEnd="16dp"
     android:padding="8dp"
     android:visibility="invisible"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintEnd_toEndOf="@+id/imageUndo"
     app:layout_constraintStart_toStartOf="@+id/imageUndo"
     app:layout_constraintTop_toTopOf="parent"/>
 

@@ -5,8 +5,8 @@ import android.view.View
 import android.view.View.TRANSLATION_X
 import android.view.View.TRANSLATION_Y
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.animations.animateFadeIn
-import com.arsvechkarev.letta.animations.animateFadeOut
+import com.arsvechkarev.letta.animations.fadeIn
+import com.arsvechkarev.letta.animations.fadeOut
 import com.arsvechkarev.letta.utils.animate
 import com.arsvechkarev.letta.utils.constraints
 import com.arsvechkarev.letta.utils.dmInt
@@ -64,26 +64,26 @@ class PaintContainer(
   override fun animateEnter() {
     post {
       drawingCanvas.isClickable = true
-      undoTool.animateFadeIn()
+      undoTool.fadeIn()
       undoTool.animate(TRANSLATION_Y, undoTool.height.f * 2, 0f)
-      eraserTool.animateFadeIn()
+      eraserTool.fadeIn()
       eraserTool.animate(TRANSLATION_Y, eraserTool.height.f * 2, 0f)
-      verticalSeekbar.animateFadeIn()
+      verticalSeekbar.fadeIn()
       verticalSeekbar.animate(TRANSLATION_X, -verticalSeekbar.width / 2f, 0f)
-      paletteTool.animateFadeIn()
+      paletteTool.fadeIn()
       paletteTool.animate(TRANSLATION_X, paletteTool.width / 2f, 0f)
     }
   }
   
   override fun animateExit(andThen: () -> Unit) {
     drawingCanvas.isClickable = false
-    undoTool.animateFadeOut()
+    undoTool.fadeOut()
     undoTool.animate(TRANSLATION_Y, undoTool.height.f * 2)
-    eraserTool.animateFadeOut()
+    eraserTool.fadeOut()
     eraserTool.animate(TRANSLATION_Y, eraserTool.height.f * 2)
-    verticalSeekbar.animateFadeOut()
+    verticalSeekbar.fadeOut()
     verticalSeekbar.animate(TRANSLATION_X, -verticalSeekbar.width / 2f)
-    paletteTool.animateFadeOut(andThen)
+    paletteTool.fadeOut(andThen)
     paletteTool.animate(TRANSLATION_X, paletteTool.width / 2f, onEnd = {
       andThen()
     })

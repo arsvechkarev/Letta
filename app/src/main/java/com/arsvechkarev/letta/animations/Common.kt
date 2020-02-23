@@ -4,7 +4,7 @@ import android.view.View
 import com.arsvechkarev.letta.utils.gone
 import com.arsvechkarev.letta.utils.visible
 
-fun View.animateFadeIn() {
+fun View.fadeIn() {
   alpha = 0f
   visible()
   animate()
@@ -14,7 +14,7 @@ fun View.animateFadeIn() {
       .start()
 }
 
-fun View.animateFadeOut(andThen: () -> Unit = {}) {
+fun View.fadeOut(andThen: () -> Unit = {}) {
   isClickable = false
   animate()
       .configure()

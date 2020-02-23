@@ -120,11 +120,11 @@ class OutlinedImage @JvmOverloads constructor(
   }
   
   private fun animate(down: Boolean = true) {
-    val endScale = if (down) 1.1f else 1.0f
+    val endScale = if (down) 1.2f else 1.0f
     with(animator) {
       cancel()
       setFloatValues(scaleFactor, endScale)
-      duration = 50
+      duration = 45
       addUpdateListener {
         scaleFactor = animatedValue as Float
         invalidate()

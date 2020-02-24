@@ -50,7 +50,7 @@ class DrawingCanvas @JvmOverloads constructor(
   var isEraserMode: Boolean = false
   
   init {
-    setBackgroundColor(INITIAL_BG_COLOR)
+    setBackgroundColor(Color.TRANSPARENT)
     latestPaint = createNewPaint()
   }
   
@@ -148,6 +148,7 @@ class DrawingCanvas @JvmOverloads constructor(
     strokeCap = Paint.Cap.ROUND
     strokeWidth = currentPaintWidth
     if (isEraserMode) {
+      color = Color.TRANSPARENT
       xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR);
     }
   }
@@ -181,7 +182,6 @@ class DrawingCanvas @JvmOverloads constructor(
     private const val TOUCH_TOLERANCE = 6f
     
     private const val INITIAL_PAINT_COLOR = Color.RED
-    private const val INITIAL_BG_COLOR = Color.BLACK
   }
   
 }

@@ -8,16 +8,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.TextVariant
 import com.arsvechkarev.letta.core.examplesTextList
+import com.arsvechkarev.letta.utils.constraints
 import com.arsvechkarev.letta.utils.inflate
+import com.arsvechkarev.letta.utils.layoutParams
 import com.arsvechkarev.letta.views.DrawingCanvas
 import com.arsvechkarev.letta.views.GradientPalette
+import com.arsvechkarev.letta.views.ListenableConstraintLayout
 import kotlinx.android.synthetic.main.item_example_text.view.textExample
 
 class TextContainer(
-  view: View,
+  view: ListenableConstraintLayout,
   private val drawingCanvas: DrawingCanvas,
   private val topControlView: View
-) : Container(view) {
+) : Container(view, animateOnAttach = false) {
   
   private var paletteTool: GradientPalette = findViewById(R.id.palette)
   private var editText: EditText = findViewById(R.id.editTextExample)
@@ -27,12 +30,17 @@ class TextContainer(
     recyclerExampleTexts.layoutManager =
       LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
     recyclerExampleTexts.adapter = ExampleTextsAdapter()
+    toggleKeyboard()
+    post {
+      paletteTool.constraints {
+        topMargin = topControlView.height * 2
+      }
+    }
   }
   
   override fun animateEnter() {
     post {
       editText.requestFocus()
-      toggleKeyboard()
     }
   }
   

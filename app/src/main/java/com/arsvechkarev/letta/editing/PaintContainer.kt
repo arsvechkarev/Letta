@@ -14,6 +14,7 @@ import com.arsvechkarev.letta.utils.exponentiate
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.views.DrawingCanvas
 import com.arsvechkarev.letta.views.GradientPalette
+import com.arsvechkarev.letta.views.ListenableConstraintLayout
 import com.arsvechkarev.letta.views.OutlinedImage
 import com.arsvechkarev.letta.views.ShowerCircle
 import com.arsvechkarev.letta.views.VerticalSeekbar
@@ -21,7 +22,7 @@ import com.arsvechkarev.letta.views.VerticalSeekbar
 // TODO (2/23/2020): Add stroke and shadow to all elements
 // TODO (2/23/2020): Add gradient colors to swapper
 class PaintContainer(
-  view: View,
+  view: ListenableConstraintLayout,
   private val drawingCanvas: DrawingCanvas,
   private val topControlView: View
 ) : Container(view) {

@@ -6,7 +6,10 @@ class Test {
   
   @Test
   fun test() {
-    println(0xFFCCCCCC.toInt())
+    val what: Parent = Parent()
+    println(what::class.java.simpleName)
   }
   
+  open class Parent
+  class Child : Parent()
 }

@@ -5,7 +5,6 @@ import android.net.Uri
 import android.provider.MediaStore
 import com.arsvechkarev.letta.core.Image
 
-
 fun getImagesList(contentResolver: ContentResolver): ArrayList<Image> {
   val allImagesUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
   val projection = arrayOf(MediaStore.Images.ImageColumns.DATA)

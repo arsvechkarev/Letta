@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
+import com.arsvechkarev.letta.views.ListenableConstraintLayout
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams as ConstraintParams
 
 fun View.visible() {
@@ -23,6 +24,10 @@ fun View.gone() {
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
   return LayoutInflater.from(context).inflate(layoutRes, this, false)
+}
+
+fun ViewGroup.inflateContainer(@LayoutRes layoutRes: Int): ListenableConstraintLayout {
+  return LayoutInflater.from(context).inflate(layoutRes, this, false) as ListenableConstraintLayout
 }
 
 fun View.constraints(block: ConstraintParams.() -> Unit) {

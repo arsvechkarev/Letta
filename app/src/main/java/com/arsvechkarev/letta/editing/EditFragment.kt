@@ -1,11 +1,13 @@
 package com.arsvechkarev.letta.editing
 
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import com.arsvechkarev.letta.CommonInjector
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.R.layout.container_edit_paint
 import com.arsvechkarev.letta.R.layout.container_edit_text
@@ -21,25 +23,26 @@ import com.arsvechkarev.letta.editing.EditFragment.Mode.STICKERS
 import com.arsvechkarev.letta.editing.EditFragment.Mode.TEXT
 import com.arsvechkarev.letta.utils.Group
 import com.arsvechkarev.letta.utils.dmFloat
-import com.arsvechkarev.letta.utils.inflate
+import com.arsvechkarev.letta.utils.inflateContainer
+import kotlinx.android.synthetic.main.fragment_edit.bgImage
 import kotlinx.android.synthetic.main.fragment_edit.buttonCrop
 import kotlinx.android.synthetic.main.fragment_edit.buttonDone
 import kotlinx.android.synthetic.main.fragment_edit.buttonPaint
 import kotlinx.android.synthetic.main.fragment_edit.buttonStickers
 import kotlinx.android.synthetic.main.fragment_edit.buttonText
 import kotlinx.android.synthetic.main.fragment_edit.drawingCanvas
-import kotlinx.android.synthetic.main.fragment_edit.editRootLayout
+import kotlinx.android.synthetic.main.fragment_edit.editRoot
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 class EditFragment : Fragment(R.layout.fragment_edit) {
+  
+  private val imagesLoader = CommonInjector.getImagesLoader(this)
   
   private lateinit var textContainer: TextContainer
   private lateinit var paintContainer: PaintContainer
   
-  private val stickersFragment by lazy { StickersContainer() }
-  private val cropFragment by lazy { CropContainer() }
-  
   private lateinit var toolsGroup: Group
-  
   private var currentMode: Mode = NONE
   
   private val backCallback: OnBackPressedCallback = object : OnBackPressedCallback(false) {
@@ -56,11 +59,15 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    val url = arguments!!.getString(KEY_IMAGE_URL)!!
+    imagesLoader.load(url).onSuccess {
+      bgImage.background = it
+    }.start()
     toolsGroup = Group(buttonPaint, buttonText, buttonStickers, buttonCrop)
     textContainer =
-      TextContainer(editRootLayout.inflate(container_edit_text), drawingCanvas, buttonText)
+      TextContainer(editRoot.inflateContainer(container_edit_text), drawingCanvas, buttonText)
     paintContainer =
-      PaintContainer(editRootLayout.inflate(container_edit_paint), drawingCanvas, buttonPaint)
+      PaintContainer(editRoot.inflateContainer(container_edit_paint), drawingCanvas, buttonPaint)
     buttonText.setOnClickListener { toggleMode(TEXT) }
     buttonPaint.setOnClickListener { toggleMode(PAINT) }
     buttonStickers.setOnClickListener { toggleMode(STICKERS) }
@@ -94,8 +101,7 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
     buttonDone.fadeOut()
     topTool.animateToolMoveToTop(dmFloat(R.dimen.img_tool_m_top))
     toolsGroup.animateHide(except = topTool)
-    editRootLayout.addView(container.view)
-    container.animateEnter()
+    editRoot.addView(container.view)
   }
   
   private fun performModeReturn(topTool: View, container: Container) {
@@ -103,7 +109,7 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
     topTool.animateToolMoveBack()
     toolsGroup.animateAppear(except = topTool)
     container.animateExit(andThen = {
-      editRootLayout.removeView(container.view)
+      editRoot.removeView(container.view)
     })
   }
   

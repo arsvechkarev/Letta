@@ -17,7 +17,7 @@ class ShowerCircle @JvmOverloads constructor(
   
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     strokeWidth = 2.dp
-    setShadowLayer(4.dp, 0f, 0f, Color.GRAY);
+    setShadowLayer(4.dp, 0f, 0f, Color.BLACK);
     setLayerType(LAYER_TYPE_SOFTWARE, this);
   }
   private var diameter = 0f

@@ -20,8 +20,7 @@
       android:resource="@array/preloaded_fonts"/>
 
     <activity
-      android:name="com.arsvechkarev.letta.MainActivity"
-      android:windowSoftInputMode="adjustResize">
+      android:name="com.arsvechkarev.letta.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <action android:name="android.intent.action.VIEW"/>

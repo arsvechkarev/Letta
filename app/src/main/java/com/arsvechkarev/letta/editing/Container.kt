@@ -3,8 +3,17 @@ package com.arsvechkarev.letta.editing
 import android.view.View
 import androidx.annotation.IdRes
 import com.arsvechkarev.letta.utils.toggleKeyboard
+import com.arsvechkarev.letta.views.ListenableConstraintLayout
 
-abstract class Container(val view: View) {
+abstract class Container(
+  val view: ListenableConstraintLayout,
+  private val animateOnAttach: Boolean = true
+) :
+  ListenableConstraintLayout.Listener {
+  
+  init {
+    view.listener = this
+  }
   
   protected fun post(block: () -> Unit) {
     view.post(block)
@@ -16,6 +25,12 @@ abstract class Container(val view: View) {
   
   protected fun toggleKeyboard() {
     view.toggleKeyboard()
+  }
+  
+  override fun onAttachedToWindow() {
+    if (animateOnAttach) {
+      animateEnter()
+    }
   }
   
   open fun animateEnter() {}

@@ -49,6 +49,7 @@ class TextVariantView @JvmOverloads constructor(
   
   override fun onDraw(canvas: Canvas) {
     textVariant?.let { textLayout!!.draw(canvas) }
+    drawBounds(canvas)
   }
   
 }

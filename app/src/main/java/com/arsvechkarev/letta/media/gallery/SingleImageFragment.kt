@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_single_image.imageSingleItem
 
 class SingleImageFragment : Fragment(R.layout.fragment_single_image) {
   
-  private val imageLoader = CommonInjector.getImageLoader(this)
+  private val imageLoader = CommonInjector.getImagesLoader(this)
   private lateinit var imageViewModel: ImagesViewModel
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

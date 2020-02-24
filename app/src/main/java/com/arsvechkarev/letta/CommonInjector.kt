@@ -6,7 +6,7 @@ import com.arsvechkarev.imagesloader.ImagesLoader
 
 object CommonInjector {
   
-  fun getImageLoader(fragment: Fragment): ImagesLoader {
+  fun getImagesLoader(fragment: Fragment): ImagesLoader {
     return GlideImagesLoader(fragment)
   }
   

@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.arsvechkarev.letta.editing.EditFragment
+import com.arsvechkarev.letta.media.ImagesListFragment
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     supportFragmentManager.beginTransaction()
-        .replace(R.id.fragmentContainer, EditFragment())
+        .replace(R.id.fragmentContainer, ImagesListFragment())
         .commit()
   }
 }

@@ -23,14 +23,14 @@ val STROKE_PAINT: Paint
 private var strokePaintLight: Paint? = null
 val STROKE_PAINT_LIGHT: Paint
   get() {
-    if (strokePaint == null) {
-      strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    if (strokePaintLight == null) {
+      strokePaintLight = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = LIGHT_GRAY
         style = Paint.Style.STROKE
-        strokeWidth = (0.3f).dp
+        strokeWidth = (0.2f).dp
       }
     }
-    return strokePaint!!
+    return strokePaintLight!!
   }
 
 fun View.drawBounds(canvas: Canvas, color: Int = Color.RED) {

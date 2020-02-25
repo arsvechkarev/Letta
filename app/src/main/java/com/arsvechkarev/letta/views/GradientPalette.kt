@@ -51,7 +51,7 @@ class GradientPalette @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
   
   companion object {
-    private val strokeWidthValue = 4.dp
+    private val circleStrokeWidth = 7.dp
     private const val GRADIENT_SENSITIVITY = 2
     
     private const val CIRCLE_ANIMATION_DURATION = 150L
@@ -76,13 +76,8 @@ class GradientPalette @JvmOverloads constructor(
   // Circle and animation
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Color.WHITE
-    this.strokeWidth = strokeWidthValue
+    this.strokeWidth = circleStrokeWidth
     style = Paint.Style.STROKE
-  }
-  private val outerStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    style = Paint.Style.STROKE
-    color = LIGHT_GRAY
-    strokeWidth = 0.5f.dp
   }
   private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private var rectRadius = 0f
@@ -120,7 +115,10 @@ class GradientPalette @JvmOverloads constructor(
   private var bezierSpotEnd = 0f
   private var bezierSpotValue = 0f
   private val bezierHolder = PropertyValuesHolder.ofFloat("bezierHolder", 0f) // Put 0 as a stub
-  private var bezierMaxOffset = 18.dp
+  private var bezierSpotOffset = 18.dp
+  private var bezierVerticalOffset = 10.dp
+  private var bezierHorizontalOffset = 3.2f.dp
+  private var bezierAngle = (PI / 6).toFloat()
   
   // Animated value from 0 to 1
   private var animatedFraction = 0f
@@ -139,9 +137,9 @@ class GradientPalette @JvmOverloads constructor(
     )
     gradientRect.set(
       paddingLeft.f,
-      paddingTop.f + strokeWidthValue * 2,
+      paddingTop.f + circleStrokeWidth * 2,
       w.f - paddingEnd,
-      h.f - paddingBottom - strokeWidthValue * 2 - swapperRect.height() * 1.2f
+      h.f - paddingBottom - circleStrokeWidth * 2 - swapperRect.height() * 1.2f
     )
     initRainbowShader()
     initBlackAndWhiteShader()
@@ -150,7 +148,7 @@ class GradientPalette @JvmOverloads constructor(
     startAnimX = w / 2f
     endAnimX = -w * 2.5f
     radiusFloating = w * 1.3f
-    radiusSelected = width / 2f - strokeWidthValue / 2
+    radiusSelected = width / 2f - circleStrokeWidth / 2
     currentAnimX = startAnimX
     currentAnimRadius = radiusSelected
     currentY = h / 2f
@@ -159,8 +157,9 @@ class GradientPalette @JvmOverloads constructor(
     currentColor = gradientBitmap.getPixel(gradientRect.width().i / 2, h / 2)
     circlePaint.color = currentColor
     bezierSpotStart = currentCircle.x + currentCircle.radius
-    bezierSpotEnd = -w / 1.7f
+    bezierSpotEnd = -w / 1.6f
     bezierSpotValue = bezierSpotStart
+    bezierShape.init(bezierAngle, bezierVerticalOffset, bezierHorizontalOffset)
   }
   
   override fun onDraw(canvas: Canvas) {
@@ -179,13 +178,15 @@ class GradientPalette @JvmOverloads constructor(
           drawPath(gradientPath, STROKE_PAINT)
         }
         drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
+        bezierShape.draw(canvas, currentCircle, bezierSpotValue,
+          bezierSpotOffset * animatedFraction)
         currentCircle.draw(canvas, circleStrokePaint)
-        bezierShape.draw(canvas, currentCircle, bezierSpotValue, bezierMaxOffset * animatedFraction)
+        val strokePaint = if (currentColor.isWhiterThan(0xDD)) STROKE_PAINT else STROKE_PAINT_LIGHT
         if (currentCircle.radius == radiusSelected) {
-          val paint = if (currentColor.isWhiterThan(0xDD)) STROKE_PAINT else STROKE_PAINT_LIGHT
-          currentCircle.drawStroke(canvas, circleStrokePaint.strokeWidth, paint)
+          currentCircle.drawStroke(canvas, circleStrokePaint.strokeWidth, strokePaint)
         }
         currentCircle.draw(canvas, circlePaint)
+        currentCircle.drawInnerStroke(canvas, STROKE_PAINT_LIGHT)
       }
     }
   }
@@ -367,21 +368,30 @@ class GradientPalette @JvmOverloads constructor(
     
     private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE }
     private val bezierPath = Path()
-    private val angleRadians = PI / 4
+    private var angleRadians = 0f
+    private var verticalOffset = 0f
+    private var horizontalOffset = 0f
+    
+    fun init(angle: Float, verticalOffset: Float, horizontalOffset: Float) {
+      angleRadians = angle
+      this.verticalOffset = verticalOffset
+      this.horizontalOffset = horizontalOffset
+    }
     
     fun draw(canvas: Canvas, circle: Circle, triangleEnd: Float, bezierOffset: Float) {
-      val x1 = (cos(angleRadians) * circle.radius + circle.x).toFloat()
-      val y1 = (sin(angleRadians) * circle.radius + circle.y).toFloat()
+      val x1 = (cos(angleRadians) * circle.radius + circle.x) - horizontalOffset
+      val y1 = (sin(angleRadians) * circle.radius + circle.y) + verticalOffset
       
-      val x2 = (cos(angleRadians) * circle.radius + circle.x).toFloat()
-      val y2 = (-sin(angleRadians) * circle.radius + circle.y).toFloat()
-      
-      val x3 = triangleEnd
-      val y3 = circle.y
+      val x3 = (cos(angleRadians) * circle.radius + circle.x) - horizontalOffset
+      val y3 = (-sin(angleRadians) * circle.radius + circle.y) - verticalOffset
       
       with(bezierPath) {
         moveTo(x1, y1)
-        cubicTo(x3 + bezierOffset, y3 - bezierOffset, x3 + bezierOffset, y3 + bezierOffset, x2, y2)
+        cubicTo(
+          triangleEnd + bezierOffset,
+          circle.y - bezierOffset,
+          triangleEnd + bezierOffset, circle.y + bezierOffset,
+          x3, y3)
         close()
       }
       
@@ -403,6 +413,10 @@ class GradientPalette @JvmOverloads constructor(
     
     fun draw(canvas: Canvas, paint: Paint) {
       canvas.drawCircle(x, y, radius, paint)
+    }
+    
+    fun drawInnerStroke(canvas: Canvas, strokePaint: Paint) {
+      canvas.drawCircle(x, y, radius, strokePaint)
     }
     
     fun drawStroke(canvas: Canvas, strokePaintWidth: Float, paint: Paint) {

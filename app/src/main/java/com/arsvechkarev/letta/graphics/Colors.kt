@@ -1,6 +1,4 @@
 package com.arsvechkarev.letta.graphics
 
-import android.graphics.Color
-
-val LIGHT_GRAY = Color.parseColor("#BBBBBB")
-val VERY_LIGHT_GRAY = Color.parseColor("#DDDDDD")
+const val LIGHT_GRAY = 0xFFBBBBBB.toInt()
+const val VERY_LIGHT_GRAY = 0xFFDDDDDD.toInt()

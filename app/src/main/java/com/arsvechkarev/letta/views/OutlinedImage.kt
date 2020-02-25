@@ -16,16 +16,16 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.graphics.LIGHT_GRAY
-import com.arsvechkarev.letta.utils.block
 import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.utils.execute
 import com.arsvechkarev.letta.utils.i
 import com.arsvechkarev.letta.utils.toBitmap
 
 class OutlinedImage @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : View(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
   
   companion object {
     const val DEFAULT_PRIMARY = Color.WHITE
@@ -35,13 +35,13 @@ class OutlinedImage @JvmOverloads constructor(
   private var primaryColor = DEFAULT_PRIMARY
   private var secondaryColor = DEFAULT_SECONDARY
   
+  private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    color = primaryColor
+    style = Paint.Style.STROKE
+  }
   private val outerStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     color = LIGHT_GRAY
     strokeWidth = 0.5f.dp
-    style = Paint.Style.STROKE
-  }
-  private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = primaryColor
     style = Paint.Style.STROKE
   }
   private val imagePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -54,7 +54,6 @@ class OutlinedImage @JvmOverloads constructor(
   private val imageStroke: Bitmap?
   private val imageRect = RectF()
   
-  private var imageSize = 0f
   private var innerPadding = 0f
   private var autoInverse = false
   
@@ -64,28 +63,24 @@ class OutlinedImage @JvmOverloads constructor(
   private val animator = ValueAnimator()
   
   init {
-    val typedArray = context.obtainStyledAttributes(attrs, R.styleable.OutlinedImage, 0, 0)
-    image = typedArray.getDrawable(R.styleable.OutlinedImage_image)?.toBitmap()
-    imageStroke = typedArray.getDrawable(R.styleable.OutlinedImage_imageStroke)?.toBitmap()
-    innerPadding = typedArray.getDimension(R.styleable.OutlinedImage_innerPadding, 5.dp)
-    strokePaint.strokeWidth = typedArray.getDimension(R.styleable.OutlinedImage_strokeWidth, 2.dp)
-    autoInverse = typedArray.getBoolean(
+    val arr = context.obtainStyledAttributes(attrs, R.styleable.OutlinedImage, 0, 0)
+    image = arr.getDrawable(R.styleable.OutlinedImage_image)?.toBitmap()
+    imageStroke = arr.getDrawable(R.styleable.OutlinedImage_imageStroke)?.toBitmap()
+    innerPadding = arr.getDimension(R.styleable.OutlinedImage_innerPadding, 5.dp)
+    strokePaint.strokeWidth = arr.getDimension(R.styleable.OutlinedImage_strokeWidth, 2.dp)
+    autoInverse = arr.getBoolean(
       R.styleable.OutlinedImage_autoInverse,
       false
     )
-    typedArray.recycle()
-    
-    imageSize = image?.width?.f ?: 0f
+    arr.recycle()
   }
   
   fun inverse() {
     val currentImageColor: Int
     if (colorsAreReversed) {
-      outerStrokePaint.color = LIGHT_GRAY
       currentImageColor = primaryColor
       strokePaint.style = Paint.Style.STROKE
     } else {
-      outerStrokePaint.color = primaryColor
       currentImageColor = secondaryColor
       strokePaint.style = Paint.Style.FILL_AND_STROKE
     }
@@ -99,7 +94,8 @@ class OutlinedImage @JvmOverloads constructor(
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    val size = imageSize + innerPadding * 2 + strokePaint.strokeWidth * 2 + paddingTop * 2
+    val width = image?.width ?: 0
+    val size = width + innerPadding * 2 + strokePaint.strokeWidth * 2 + paddingStart + paddingEnd
     setMeasuredDimension(
       resolveSize(size.i, widthMeasureSpec),
       resolveSize(size.i, widthMeasureSpec)
@@ -107,19 +103,20 @@ class OutlinedImage @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
-    canvas.block {
+    image ?: return
+    canvas.execute {
       val halfWidth = width / 2f
       val halfHeight = height / 2f
       scale(scaleFactor, scaleFactor, halfWidth, halfWidth)
       drawCircle(halfWidth, halfHeight, halfWidth - strokePaint.strokeWidth, strokePaint)
       drawCircle(halfWidth, halfHeight, halfWidth - strokePaint.strokeWidth / 2, outerStrokePaint)
-      drawCircle(halfWidth, halfHeight, halfWidth - strokePaint.strokeWidth * 1.6f,
-        outerStrokePaint)
-      if (image != null) {
-        drawBitmap(image, null, imageRect, imagePaint)
-        if (imageStroke != null) {
-          drawBitmap(imageStroke, null, imageRect, imageStrokePaint)
-        }
+      if (!colorsAreReversed) {
+        drawCircle(halfWidth, halfHeight, halfWidth - strokePaint.strokeWidth * 1.6f,
+          outerStrokePaint)
+      }
+      drawBitmap(image, null, imageRect, imagePaint)
+      if (imageStroke != null) {
+        drawBitmap(imageStroke, null, imageRect, imageStrokePaint)
       }
     }
   }
@@ -151,7 +148,7 @@ class OutlinedImage @JvmOverloads constructor(
     with(animator) {
       cancel()
       setFloatValues(scaleFactor, endScale)
-      duration = 45
+      duration = 40
       addUpdateListener {
         scaleFactor = animatedValue as Float
         invalidate()

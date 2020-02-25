@@ -9,8 +9,7 @@ fun View.animateToolMoveToTop(desiredTop: Float) {
   tag = translation
   isClickable = false
   this.animate()
-      .scaleX(1.15f)
-      .scaleY(1.15f)
+      .configure()
       .setDuration(DURATION_DEFAULT)
       .yBy(-translation)
       .withEndAction { isClickable = true }
@@ -22,8 +21,6 @@ fun View.animateToolMoveBack() {
   isClickable = false
   this.animate()
       .configure()
-      .scaleX(1f)
-      .scaleY(1f)
       .yBy(translation)
       .withEndAction { isClickable = true }
       .start()

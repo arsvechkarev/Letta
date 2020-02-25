@@ -4,25 +4,46 @@ import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.Region
+import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.MotionEvent.*
+import android.view.MotionEvent.ACTION_CANCEL
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.addBouncyBackEffect
+import com.arsvechkarev.letta.graphics.LIGHT_GRAY
 import com.arsvechkarev.letta.graphics.STROKE_PAINT
-import com.arsvechkarev.letta.utils.*
+import com.arsvechkarev.letta.utils.execute
+import com.arsvechkarev.letta.utils.doOnEnd
+import com.arsvechkarev.letta.utils.dp
+import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.utils.i
+import com.arsvechkarev.letta.utils.toBitmap
 
 // TODO (2/20/2020): add custom attrs
 @Suppress("MemberVisibilityCanBePrivate")
 class GradientPalette @JvmOverloads constructor(
   context: Context,
-  attributeSet: AttributeSet? = null
-) : View(context, attributeSet) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
   
   companion object {
     private val strokeWidthValue = 4.dp
@@ -71,8 +92,13 @@ class GradientPalette @JvmOverloads constructor(
   private var swapperMode = SwapperMode.RAINBOW
   private var currentSwapperRotation = 0f
   private val swapperBitmap = ContextCompat.getDrawable(context, R.drawable.ic_swap)!!.toBitmap()
+  private val swapperBitmapStroke = ContextCompat.getDrawable(context,
+    R.drawable.ic_swap_stroke)!!.toBitmap()
   private val swapperPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+  }
+  private val swapperPaintStroke = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    colorFilter = PorterDuffColorFilter(LIGHT_GRAY, PorterDuff.Mode.SRC_ATOP)
   }
   private val swapperRect = RectF()
   private val swapperAnimator = ValueAnimator()
@@ -113,14 +139,15 @@ class GradientPalette @JvmOverloads constructor(
   
   override fun onDraw(canvas: Canvas) {
     with(canvas) {
-      block {
+      execute {
         rotate(currentSwapperRotation, swapperRect.centerX(), swapperRect.centerY())
         drawBitmap(swapperBitmap, null, swapperRect, swapperPaint)
+        drawBitmap(swapperBitmapStroke, null, swapperRect, swapperPaintStroke)
       }
-      block {
+      execute {
         canvas.scale(currentGradientScale, currentGradientScale, gradientRect.centerX(),
           gradientRect.centerY())
-        block {
+        execute {
           translate(gradientRect.left, gradientRect.top)
           drawPath(gradientPath, gradientStrokePaint)
           drawPath(gradientPath, STROKE_PAINT)

@@ -1,6 +1,5 @@
 package com.arsvechkarev.letta.editing
 
-import android.graphics.Color
 import android.graphics.Color.WHITE
 import android.view.View
 import android.view.View.TRANSLATION_X
@@ -20,7 +19,6 @@ import com.arsvechkarev.letta.views.OutlinedImage
 import com.arsvechkarev.letta.views.ShowerCircle
 import com.arsvechkarev.letta.views.VerticalSeekbar
 
-// TODO (2/23/2020): Add stroke and shadow to all elements
 // TODO (2/23/2020): Add gradient colors to swapper
 class PaintContainer(
   view: ListenableConstraintLayout,

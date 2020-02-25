@@ -6,8 +6,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 
 class ListenableConstraintLayout @JvmOverloads constructor(
   context: Context,
-  attributeSet: AttributeSet? = null
-) : ConstraintLayout(context, attributeSet) {
+  attrs: AttributeSet? = null
+) : ConstraintLayout(context, attrs) {
   
   var listener: Listener? = null
   

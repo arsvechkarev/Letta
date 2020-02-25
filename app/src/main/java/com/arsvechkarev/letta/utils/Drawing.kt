@@ -16,7 +16,7 @@ fun Drawable.toBitmap(): Bitmap {
   return bitmap
 }
 
-inline fun Canvas.block(block: Canvas.() -> Unit) {
+inline fun Canvas.execute(block: Canvas.() -> Unit) {
   try {
     save()
     apply(block)

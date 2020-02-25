@@ -15,6 +15,8 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.annotation.FloatRange
+import com.arsvechkarev.letta.graphics.STROKE_PAINT
+import com.arsvechkarev.letta.graphics.VERY_LIGHT_GRAY
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.f
 import kotlin.math.abs
@@ -32,6 +34,9 @@ class VerticalSeekbar @JvmOverloads constructor(
     private val LINE_WIDTH = 4.dp
   }
   
+  private val colorThreshold = Color.parseColor("#999999")
+  private val colorThresholdChannel = 0x99
+  
   var onPercentChanged: (Float) -> Unit = {}
   var onUp: () -> Unit = {}
   
@@ -41,6 +46,7 @@ class VerticalSeekbar @JvmOverloads constructor(
     color = Color.WHITE
   }
   private var lineLength = 0f
+  private var color = Color.RED
   
   private var currentY = 0f
   private var circle = Circle()
@@ -50,6 +56,13 @@ class VerticalSeekbar @JvmOverloads constructor(
     val value = lineLength * percent
     currentY = height - value - LINE_OFFSET
     invalidate()
+  }
+  
+  fun updateColorIfAllowed(color: Int) {
+    if (colorChangeAllowed(color)) {
+      this.color = color
+      invalidate()
+    }
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -69,18 +82,22 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
-    paint.setRectStyle()
+    val halfWidth = width.f / 2
+    val endLine = height - LINE_OFFSET
+    
+    paint.setPathStyle()
     canvas.drawPath(path, paint)
-    
+    canvas.drawPath(path, STROKE_PAINT)
+  
     paint.setLineStyle()
-    canvas.drawLine(width.f / 2, LINE_OFFSET, width.f / 2, height - LINE_OFFSET, paint)
+    canvas.drawLine(halfWidth, LINE_OFFSET, halfWidth, endLine, paint)
     
-    paint.color = Color.RED
-    canvas.drawLine(width.f / 2, height - LINE_OFFSET, width.f / 2, currentY, paint)
+    paint.color = color
+    canvas.drawLine(halfWidth, endLine, halfWidth, currentY, paint)
     
     paint.setCircleStyle()
-    circle.set(width.f / 2, currentY, 20f)
-    canvas.drawCircle(width.f / 2, currentY, 20f, paint)
+    circle.set(halfWidth, currentY, 20f)
+    canvas.drawCircle(halfWidth, currentY, 20f, paint)
   }
   
   @SuppressLint("ClickableViewAccessibility")
@@ -109,20 +126,28 @@ class VerticalSeekbar @JvmOverloads constructor(
     invalidate()
   }
   
-  private fun Paint.setRectStyle() {
+  private fun Paint.setPathStyle() {
     color = Color.WHITE
     style = Paint.Style.FILL
   }
   
   private fun Paint.setLineStyle() {
-    color = -3355444 // #CCCCCC
+    color = VERY_LIGHT_GRAY
     strokeWidth = LINE_WIDTH
     strokeCap = Paint.Cap.ROUND
   }
   
   private fun Paint.setCircleStyle() {
-    color = Color.RED
+    this.color = color
     style = Paint.Style.FILL
+  }
+  
+  private fun colorChangeAllowed(color: Int): Boolean {
+    val r = color and 0b00000000_11111111_00000000_00000000 shr 16
+    val g = color and 0b00000000_00000000_11111111_00000000 shr 8
+    val b = color and 0b00000000_00000000_00000000_11111111
+    println("rgb = $r, $g, $b __ $colorThresholdChannel")
+    return !(r > colorThresholdChannel && g > colorThresholdChannel && b > colorThresholdChannel)
   }
   
   class Circle {

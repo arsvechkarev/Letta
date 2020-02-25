@@ -1,5 +1,6 @@
 package com.arsvechkarev.letta.editing
 
+import android.graphics.Color
 import android.graphics.Color.WHITE
 import android.view.View
 import android.view.View.TRANSLATION_X
@@ -36,6 +37,7 @@ class PaintContainer(
   init {
     post {
       drawingCanvas.setPaintColor(paletteTool.currentColor)
+      verticalSeekbar.updateColorIfAllowed(Color.parseColor("#999999"))
       verticalSeekbar.updatePercent(0.3f)
       drawingCanvas.setPaintWidth(0.3f.exponentiate())
       verticalSeekbar.onPercentChanged = {
@@ -49,6 +51,7 @@ class PaintContainer(
           drawingCanvas.isEraserMode = false
           eraserTool.inverse()
         }
+        verticalSeekbar.updateColorIfAllowed(it)
         drawingCanvas.setPaintColor(it)
       }
       verticalSeekbar.onUp = { showerCircle.clear() }

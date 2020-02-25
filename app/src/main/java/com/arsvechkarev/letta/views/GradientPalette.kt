@@ -14,6 +14,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.addBouncyBackEffect
+import com.arsvechkarev.letta.graphics.STROKE_PAINT
 import com.arsvechkarev.letta.utils.*
 
 // TODO (2/20/2020): add custom attrs
@@ -32,7 +33,7 @@ class GradientPalette @JvmOverloads constructor(
   }
   
   private val gradientStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    strokeWidth = 4.dp
+    strokeWidth = 7.dp
     color = Color.WHITE
     style = Paint.Style.STROKE
   }
@@ -122,10 +123,12 @@ class GradientPalette @JvmOverloads constructor(
         block {
           translate(gradientRect.left, gradientRect.top)
           drawPath(gradientPath, gradientStrokePaint)
+          drawPath(gradientPath, STROKE_PAINT)
         }
         drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
         currentCircle.draw(canvas, circlePaint)
         currentCircle.draw(canvas, circleStrokePaint)
+        currentCircle.drawBorder(canvas, circleStrokePaint.strokeWidth)
       }
     }
   }
@@ -312,6 +315,10 @@ class GradientPalette @JvmOverloads constructor(
     
     fun draw(canvas: Canvas, paint: Paint) {
       canvas.drawCircle(x, y, radius, paint)
+    }
+    
+    fun drawBorder(canvas: Canvas, strokePaintWidth: Float) {
+      canvas.drawCircle(x, y, radius + strokePaintWidth / 2, STROKE_PAINT)
     }
   }
   

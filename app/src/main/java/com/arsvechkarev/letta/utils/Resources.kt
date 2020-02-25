@@ -12,6 +12,12 @@ val Int.dp: Float
     return this * LettaApplication.density
   }
 
+val Float.dp: Float
+  get() {
+    check(LettaApplication.density != -1f) { "Density is not initialized yet" }
+    return this * LettaApplication.density
+  }
+
 val Int.sp: Float
   get() {
     check(LettaApplication.scaledDensity != -1f) { "Density is not initialized yet" }

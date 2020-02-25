@@ -30,7 +30,6 @@ class TextContainer(
     recyclerExampleTexts.layoutManager =
       LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
     recyclerExampleTexts.adapter = ExampleTextsAdapter()
-    toggleKeyboard()
     post {
       paletteTool.constraints {
         topMargin = topControlView.height * 2

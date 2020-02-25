@@ -32,8 +32,6 @@ import kotlinx.android.synthetic.main.fragment_edit.buttonStickers
 import kotlinx.android.synthetic.main.fragment_edit.buttonText
 import kotlinx.android.synthetic.main.fragment_edit.drawingCanvas
 import kotlinx.android.synthetic.main.fragment_edit.editRoot
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 class EditFragment : Fragment(R.layout.fragment_edit) {
   

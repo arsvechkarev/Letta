@@ -17,6 +17,7 @@ import android.view.View
 import androidx.annotation.FloatRange
 import com.arsvechkarev.letta.graphics.STROKE_PAINT
 import com.arsvechkarev.letta.graphics.VERY_LIGHT_GRAY
+import com.arsvechkarev.letta.graphics.isWhiterThan
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.f
 import kotlin.math.abs
@@ -148,11 +149,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   private fun colorChangeAllowed(color: Int): Boolean {
-    val r = color and 0xFF0000 shr 16
-    val g = color and 0x00FF00 shr 8
-    val b = color and 0x0000FF
-    // if color is too white, do not allow change
-    return !(r > COLOR_THRESHOLD_CHANNEL && g > COLOR_THRESHOLD_CHANNEL && b > COLOR_THRESHOLD_CHANNEL)
+    return !color.isWhiterThan(COLOR_THRESHOLD_CHANNEL)
   }
   
   class Circle {

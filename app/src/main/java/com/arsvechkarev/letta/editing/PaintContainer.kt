@@ -19,7 +19,6 @@ import com.arsvechkarev.letta.views.OutlinedImage
 import com.arsvechkarev.letta.views.ShowerCircle
 import com.arsvechkarev.letta.views.VerticalSeekbar
 
-// TODO (2/23/2020): Add gradient colors to swapper
 class PaintContainer(
   view: ListenableConstraintLayout,
   private val drawingCanvas: DrawingCanvas,

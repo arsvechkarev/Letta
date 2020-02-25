@@ -31,12 +31,12 @@ import com.arsvechkarev.letta.animations.addBouncyBackEffect
 import com.arsvechkarev.letta.graphics.LIGHT_GRAY
 import com.arsvechkarev.letta.graphics.STROKE_PAINT
 import com.arsvechkarev.letta.graphics.STROKE_PAINT_LIGHT
-import com.arsvechkarev.letta.graphics.isWhiterThan
 import com.arsvechkarev.letta.utils.doOnEnd
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.execute
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.utils.i
+import com.arsvechkarev.letta.utils.isWhiterThan
 import com.arsvechkarev.letta.utils.toBitmap
 import kotlin.math.PI
 import kotlin.math.cos
@@ -115,7 +115,7 @@ class GradientPalette @JvmOverloads constructor(
   private var bezierSpotEnd = 0f
   private var bezierSpotValue = 0f
   private val bezierHolder = PropertyValuesHolder.ofFloat("bezierHolder", 0f) // Put 0 as a stub
-  private var bezierSpotOffset = 18.dp
+  private var bezierSpotOffset = 22.dp
   private var bezierVerticalOffset = 10.dp
   private var bezierHorizontalOffset = 3.2f.dp
   private var bezierAngle = (PI / 6).toFloat()

@@ -17,9 +17,9 @@ import android.view.View
 import androidx.annotation.FloatRange
 import com.arsvechkarev.letta.graphics.STROKE_PAINT
 import com.arsvechkarev.letta.graphics.VERY_LIGHT_GRAY
-import com.arsvechkarev.letta.graphics.isWhiterThan
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.utils.isWhiterThan
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -33,14 +33,6 @@ class VerticalSeekbar @JvmOverloads constructor(
     private val CORNER_RADIUS = 16.dp
     private val LINE_OFFSET = 30.dp
     private val LINE_WIDTH = 4.dp
-    
-    /**
-     * Since color on vertical bar might be changed, we don't want to draw the thumb and the progress
-     * line that has the same color as the background. For that we have to restrict some of input colors
-     *
-     * @see colorChangeAllowed
-     */
-    private const val COLOR_THRESHOLD_CHANNEL = 0x99
   }
   
   var onPercentChanged: (Float) -> Unit = {}
@@ -65,6 +57,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   fun updateColorIfAllowed(color: Int) {
+    println("[${Color.red(color)}, ${Color.green(color)}, ${Color.blue(color)}]")
     if (colorChangeAllowed(color)) {
       this.color = color
       invalidate()
@@ -149,7 +142,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   private fun colorChangeAllowed(color: Int): Boolean {
-    return !color.isWhiterThan(COLOR_THRESHOLD_CHANNEL)
+    return !color.isWhiterThan(0xAA)
   }
   
   class Circle {

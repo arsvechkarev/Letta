@@ -32,10 +32,15 @@ class VerticalSeekbar @JvmOverloads constructor(
     private val CORNER_RADIUS = 16.dp
     private val LINE_OFFSET = 30.dp
     private val LINE_WIDTH = 4.dp
+    
+    /**
+     * Since color on vertical bar might be changed, we don't want to draw the thumb and the progress
+     * line that has the same color as the background. For that we have to restrict some of input colors
+     *
+     * @see colorChangeAllowed
+     */
+    private const val COLOR_THRESHOLD_CHANNEL = 0x99
   }
-  
-  private val colorThreshold = Color.parseColor("#999999")
-  private val colorThresholdChannel = 0x99
   
   var onPercentChanged: (Float) -> Unit = {}
   var onUp: () -> Unit = {}
@@ -88,7 +93,7 @@ class VerticalSeekbar @JvmOverloads constructor(
     paint.setPathStyle()
     canvas.drawPath(path, paint)
     canvas.drawPath(path, STROKE_PAINT)
-  
+    
     paint.setLineStyle()
     canvas.drawLine(halfWidth, LINE_OFFSET, halfWidth, endLine, paint)
     
@@ -143,11 +148,11 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   private fun colorChangeAllowed(color: Int): Boolean {
-    val r = color and 0b00000000_11111111_00000000_00000000 shr 16
-    val g = color and 0b00000000_00000000_11111111_00000000 shr 8
-    val b = color and 0b00000000_00000000_00000000_11111111
-    println("rgb = $r, $g, $b __ $colorThresholdChannel")
-    return !(r > colorThresholdChannel && g > colorThresholdChannel && b > colorThresholdChannel)
+    val r = color and 0xFF0000 shr 16
+    val g = color and 0x00FF00 shr 8
+    val b = color and 0x0000FF
+    // if color is too white, do not allow change
+    return !(r > COLOR_THRESHOLD_CHANNEL && g > COLOR_THRESHOLD_CHANNEL && b > COLOR_THRESHOLD_CHANNEL)
   }
   
   class Circle {

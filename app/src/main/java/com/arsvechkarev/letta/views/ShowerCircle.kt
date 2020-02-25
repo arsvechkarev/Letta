@@ -1,6 +1,7 @@
 package com.arsvechkarev.letta.views
 
 import android.content.Context
+import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -15,10 +16,12 @@ class ShowerCircle @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
   
-  private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    strokeWidth = 2.dp
-    setShadowLayer(4.dp, 0f, 0f, Color.BLACK);
-    setLayerType(LAYER_TYPE_SOFTWARE, this);
+  private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+  private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    color = 0xFF888888.toInt()
+    style = Paint.Style.STROKE
+    strokeWidth = 1.dp
+    maskFilter = BlurMaskFilter(2.dp, BlurMaskFilter.Blur.NORMAL)
   }
   private var diameter = 0f
   private var isDrawing = true
@@ -26,7 +29,7 @@ class ShowerCircle @JvmOverloads constructor(
   fun draw(color: Int, diameter: Float) {
     isDrawing = true
     this.diameter = diameter
-    paint.color = color
+    circlePaint.color = color
     invalidate()
   }
   
@@ -37,7 +40,11 @@ class ShowerCircle @JvmOverloads constructor(
   
   override fun onDraw(canvas: Canvas) {
     if (isDrawing) {
-      canvas.drawCircle(width.f / 2, height.f / 4, diameter / 2, paint)
+      val x = width.f / 2
+      val y = height.f / 4
+      val radius = diameter / 2
+      canvas.drawCircle(x, y, radius, circlePaint)
+      canvas.drawCircle(x, y, radius, strokePaint)
     }
   }
   

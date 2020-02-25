@@ -37,7 +37,7 @@ class PaintContainer(
   init {
     post {
       drawingCanvas.setPaintColor(paletteTool.currentColor)
-      verticalSeekbar.updateColorIfAllowed(Color.parseColor("#999999"))
+      verticalSeekbar.updateColorIfAllowed(paletteTool.currentColor)
       verticalSeekbar.updatePercent(0.3f)
       drawingCanvas.setPaintWidth(0.3f.exponentiate())
       verticalSeekbar.onPercentChanged = {

@@ -2,7 +2,7 @@ package com.arsvechkarev.letta
 
 import android.app.Application
 import android.content.res.Resources
-import com.arsvechkarev.letta.core.FontManager
+import com.arsvechkarev.letta.graphics.FontManager
 import timber.log.Timber
 
 class LettaApplication : Application() {

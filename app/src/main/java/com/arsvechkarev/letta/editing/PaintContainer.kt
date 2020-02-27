@@ -25,11 +25,11 @@ class PaintContainer(
   private val topControlView: View
 ) : Container(view) {
   
-  private var paletteTool: GradientPalette = findViewById(R.id.palette)
-  private var verticalSeekbar: VerticalSeekbar = findViewById(R.id.verticalSeekbar)
-  private var undoTool: OutlinedImage = findViewById(R.id.imageUndo)
-  private var eraserTool: OutlinedImage = findViewById(R.id.imageEraser)
-  private var showerCircle: ShowerCircle = findViewById(R.id.showCircle)
+  private val paletteTool: GradientPalette = findViewById(R.id.palette)
+  private val verticalSeekbar: VerticalSeekbar = findViewById(R.id.verticalSeekbar)
+  private val undoTool: OutlinedImage = findViewById(R.id.imageUndo)
+  private val eraserTool: OutlinedImage = findViewById(R.id.imageEraser)
+  private val showerCircle: ShowerCircle = findViewById(R.id.showCircle)
   
   init {
     post {

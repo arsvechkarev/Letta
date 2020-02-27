@@ -311,6 +311,29 @@ class GradientPalette @JvmOverloads constructor(
     }
   }
   
+  private val COLORS = intArrayOf(
+    -0x15d8c7,
+    -0x24c52e,
+    -0xcfae1d,
+    -0xb63a13,
+    -0x7f379c,
+    -0x3219b,
+    -0x369b3,
+    -0x1000000,
+    -0x1
+  )
+  
+  private val LOCATIONS = floatArrayOf(
+    0.0f,
+    0.14f,
+    0.24f,
+    0.39f,
+    0.49f,
+    0.62f,
+    0.73f
+  )
+  
+  
   private fun initRainbowShader() {
     val colorsMap = mapOf(
       "#FFBFBF".c to 0.01f,

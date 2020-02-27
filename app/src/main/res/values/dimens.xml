@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <!-- Text sizes -->
-  <dimen name="text_variant_default">20sp</dimen>
+  <dimen name="text_variant_default">28sp</dimen>
 
   <dimen name="ic_size_default">24dp</dimen>
   <dimen name="ic_size_big">40dp</dimen>

@@ -8,7 +8,7 @@ import android.text.Layout
 import android.util.AttributeSet
 import android.view.View
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.TextVariant
+import com.arsvechkarev.letta.graphics.TextVariant
 import com.arsvechkarev.letta.graphics.drawBounds
 
 class TextVariantView @JvmOverloads constructor(

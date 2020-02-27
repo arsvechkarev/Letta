@@ -1,15 +1,16 @@
-package com.arsvechkarev.letta.core
+package com.arsvechkarev.letta.graphics
 
 import android.content.Context
 import android.graphics.Typeface
-import com.arsvechkarev.letta.core.Font.MONTSERRAT
-import com.arsvechkarev.letta.core.Font.RUBIK
-import com.arsvechkarev.letta.core.Font.SCRIPT
+import com.arsvechkarev.letta.graphics.Font.MONTSERRAT
+import com.arsvechkarev.letta.graphics.Font.RUBIK
+import com.arsvechkarev.letta.graphics.Font.SCRIPT
 import java.util.EnumMap
 
 object FontManager {
   
-  private var _fonts = EnumMap<Font, Typeface>(Font::class.java)
+  private var _fonts = EnumMap<Font, Typeface>(
+    Font::class.java)
   val fonts: Map<Font, Typeface> = _fonts
   
   fun loadFonts(context: Context) {

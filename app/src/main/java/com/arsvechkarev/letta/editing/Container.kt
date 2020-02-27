@@ -33,6 +33,8 @@ abstract class Container(
     }
   }
   
+  open fun onBackPressed() {}
+  
   open fun animateEnter() {}
   open fun animateExit(andThen: () -> Unit) {
     andThen()

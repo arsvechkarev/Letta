@@ -1,7 +1,6 @@
 package com.arsvechkarev.letta.editing
 
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -21,6 +20,7 @@ import com.arsvechkarev.letta.editing.EditFragment.Mode.NONE
 import com.arsvechkarev.letta.editing.EditFragment.Mode.PAINT
 import com.arsvechkarev.letta.editing.EditFragment.Mode.STICKERS
 import com.arsvechkarev.letta.editing.EditFragment.Mode.TEXT
+import com.arsvechkarev.letta.graphics.TextVariant
 import com.arsvechkarev.letta.utils.Group
 import com.arsvechkarev.letta.utils.dmFloat
 import com.arsvechkarev.letta.utils.inflateContainer
@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.fragment_edit.buttonStickers
 import kotlinx.android.synthetic.main.fragment_edit.buttonText
 import kotlinx.android.synthetic.main.fragment_edit.drawingCanvas
 import kotlinx.android.synthetic.main.fragment_edit.editRoot
+import kotlinx.android.synthetic.main.fragment_edit.viewPort
 
 class EditFragment : Fragment(R.layout.fragment_edit) {
   
@@ -59,13 +60,13 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     val url = arguments!!.getString(KEY_IMAGE_URL)!!
     imagesLoader.load(url).onSuccess {
-      bgImage.background = it
+      bgImage.setImageDrawable(it)
     }.start()
     toolsGroup = Group(buttonPaint, buttonText, buttonStickers, buttonCrop)
     textContainer =
-      TextContainer(editRoot.inflateContainer(container_edit_text), drawingCanvas, buttonText)
+        TextContainer(editRoot.inflateContainer(container_edit_text), buttonText, ::onTextEntered)
     paintContainer =
-      PaintContainer(editRoot.inflateContainer(container_edit_paint), drawingCanvas, buttonPaint)
+        PaintContainer(editRoot.inflateContainer(container_edit_paint), drawingCanvas, buttonPaint)
     buttonText.setOnClickListener { toggleMode(TEXT) }
     buttonPaint.setOnClickListener { toggleMode(PAINT) }
     buttonStickers.setOnClickListener { toggleMode(STICKERS) }
@@ -106,9 +107,15 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
     buttonDone.fadeIn()
     topTool.animateToolMoveBack()
     toolsGroup.animateAppear(except = topTool)
+    container.onBackPressed()
     container.animateExit(andThen = {
       editRoot.removeView(container.view)
     })
+  }
+  
+  private fun onTextEntered(text: CharSequence, textVariant: TextVariant) {
+    viewPort.addText(text, textVariant.paint)
+    toggleMode(TEXT)
   }
   
   private enum class Mode {

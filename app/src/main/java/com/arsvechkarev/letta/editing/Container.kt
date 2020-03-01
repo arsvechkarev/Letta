@@ -6,8 +6,7 @@ import com.arsvechkarev.letta.utils.toggleKeyboard
 import com.arsvechkarev.letta.views.ListenableConstraintLayout
 
 abstract class Container(
-  val view: ListenableConstraintLayout,
-  private val animateOnAttach: Boolean = true
+  val view: ListenableConstraintLayout
 ) :
   ListenableConstraintLayout.Listener {
   
@@ -28,15 +27,13 @@ abstract class Container(
   }
   
   override fun onAttachedToWindow() {
-    if (animateOnAttach) {
-      animateEnter()
-    }
+    onEnter()
   }
   
   open fun onBackPressed() {}
   
-  open fun animateEnter() {}
-  open fun animateExit(andThen: () -> Unit) {
+  open fun onEnter() {}
+  open fun onExit(andThen: () -> Unit = {}) {
     andThen()
   }
 }

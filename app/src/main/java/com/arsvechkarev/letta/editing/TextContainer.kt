@@ -1,11 +1,9 @@
 package com.arsvechkarev.letta.editing
 
 import android.graphics.Color
-import android.view.KeyEvent.ACTION_DOWN
-import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
@@ -14,6 +12,7 @@ import com.arsvechkarev.letta.graphics.TextVariant
 import com.arsvechkarev.letta.graphics.textVariantsList
 import com.arsvechkarev.letta.utils.constraints
 import com.arsvechkarev.letta.utils.inflate
+import com.arsvechkarev.letta.views.ExtendedEditText
 import com.arsvechkarev.letta.views.GradientPalette
 import com.arsvechkarev.letta.views.ListenableConstraintLayout
 import kotlinx.android.synthetic.main.item_example_text.view.textExample
@@ -22,10 +21,10 @@ class TextContainer(
   view: ListenableConstraintLayout,
   private val topControlView: View,
   private val onTextEntered: (CharSequence, TextVariant) -> Unit
-) : Container(view, animateOnAttach = false) {
+) : Container(view) {
   
   private var paletteTool: GradientPalette = findViewById(R.id.palette)
-  private var editText: EditText = findViewById(R.id.editTextExample)
+  private var editText: ExtendedEditText = findViewById(R.id.editTextExample)
   private var recyclerTextVariants: RecyclerView = findViewById(R.id.recyclerTextVariants)
   private var currentTextVariant: TextVariant = textVariantsList[0]
   
@@ -40,34 +39,22 @@ class TextContainer(
       textVariantsAdapter.setHasStableIds(true)
       adapter = textVariantsAdapter
     }
+    editText.onBackPressed = { onTextEntered(it, currentTextVariant) }
     post {
       paletteTool.constraints {
         topMargin = topControlView.height * 2
       }
     }
-    editText.setOnKeyListener { v, keyCode, event ->
-      if (event.action == ACTION_DOWN && keyCode == KEYCODE_ENTER) {
-        notifyTextEntered()
-        return@setOnKeyListener true
-      }
-      return@setOnKeyListener false
-    }
   }
   
-  override fun animateEnter() {
-    post {
-      editText.requestFocus()
-    }
+  override fun onEnter() {
+    editText.requestFocus()
+    toggleKeyboard()
   }
   
-  override fun onBackPressed() {
-    notifyTextEntered()
-  }
-
-  private fun notifyTextEntered() {
-    if (editText.text.isNotBlank()) {
-      onTextEntered(editText.text, currentTextVariant)
-    }
+  override fun onExit(andThen: () -> Unit) {
+    editText.clearFocus()
+    andThen()
   }
   
   class ExampleTextsAdapter(private val onClick: (TextVariant) -> Unit) :

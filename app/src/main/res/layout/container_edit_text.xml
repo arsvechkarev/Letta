@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   android:clipChildren="false">
 
-  <EditText
+  <com.arsvechkarev.letta.views.ExtendedEditText
     android:id="@+id/editTextExample"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

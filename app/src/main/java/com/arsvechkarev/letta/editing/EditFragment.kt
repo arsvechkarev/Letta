@@ -86,10 +86,10 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
       backCallback.isEnabled = true
     } else {
       when (currentMode) {
-        TEXT -> performModeReturn(buttonText, textContainer)
-        PAINT -> performModeReturn(buttonPaint, paintContainer)
-        STICKERS -> performModeReturn(buttonStickers, paintContainer)
-        CROP -> performModeReturn(buttonCrop, paintContainer)
+        TEXT -> performModeExit(buttonText, textContainer)
+        PAINT -> performModeExit(buttonPaint, paintContainer)
+        STICKERS -> performModeExit(buttonStickers, paintContainer)
+        CROP -> performModeExit(buttonCrop, paintContainer)
       }
       currentMode = NONE
       backCallback.isEnabled = false
@@ -103,12 +103,11 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
     editRoot.addView(container.view)
   }
   
-  private fun performModeReturn(topTool: View, container: Container) {
+  private fun performModeExit(topTool: View, container: Container) {
     buttonDone.fadeIn()
     topTool.animateToolMoveBack()
     toolsGroup.animateAppear(except = topTool)
-    container.onBackPressed()
-    container.animateExit(andThen = {
+    container.onExit(andThen = {
       editRoot.removeView(container.view)
     })
   }

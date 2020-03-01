@@ -4,6 +4,7 @@ import android.Manifest.permission.CAMERA
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.arsvechkarev.letta.editing.EditFragment
@@ -31,5 +32,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     supportFragmentManager.beginTransaction()
         .replace(R.id.fragmentContainer, ImagesListFragment())
         .commit()
+  }
+
+  override fun onBackPressed() {
+    super.onBackPressed()
+    Toast.makeText(this, "BackPressed", Toast.LENGTH_SHORT).show()
   }
 }

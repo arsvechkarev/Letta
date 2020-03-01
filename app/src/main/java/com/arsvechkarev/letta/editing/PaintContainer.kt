@@ -62,7 +62,7 @@ class PaintContainer(
     }
   }
   
-  override fun animateEnter() {
+  override fun onEnter() {
     post {
       drawingCanvas.isClickable = true
       undoTool.fadeIn()
@@ -76,7 +76,7 @@ class PaintContainer(
     }
   }
   
-  override fun animateExit(andThen: () -> Unit) {
+  override fun onExit(andThen: () -> Unit) {
     drawingCanvas.isClickable = false
     undoTool.fadeOut()
     undoTool.animate(TRANSLATION_Y, undoTool.height.f * 2)

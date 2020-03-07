@@ -7,7 +7,7 @@ import com.arsvechkarev.imagesloader.ImagesLoader
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.Image
 import com.arsvechkarev.letta.media.common.ImagesViewModel
-import com.arsvechkarev.letta.utils.inflate
+import com.arsvechkarev.letta.utils.extenstions.inflate
 import kotlinx.android.synthetic.main.item_image.view.imageInRecycler
 
 class ImagesListAdapter(

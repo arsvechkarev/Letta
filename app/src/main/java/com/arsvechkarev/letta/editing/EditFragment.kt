@@ -22,8 +22,9 @@ import com.arsvechkarev.letta.editing.EditFragment.Mode.STICKERS
 import com.arsvechkarev.letta.editing.EditFragment.Mode.TEXT
 import com.arsvechkarev.letta.graphics.TextVariant
 import com.arsvechkarev.letta.utils.Group
-import com.arsvechkarev.letta.utils.dmFloat
-import com.arsvechkarev.letta.utils.inflateContainer
+import com.arsvechkarev.letta.utils.addKeyboardObserver
+import com.arsvechkarev.letta.utils.extenstions.dmFloat
+import com.arsvechkarev.letta.utils.extenstions.inflateContainer
 import kotlinx.android.synthetic.main.fragment_edit.bgImage
 import kotlinx.android.synthetic.main.fragment_edit.buttonCrop
 import kotlinx.android.synthetic.main.fragment_edit.buttonDone
@@ -71,6 +72,11 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
     buttonPaint.setOnClickListener { toggleMode(PAINT) }
     buttonStickers.setOnClickListener { toggleMode(STICKERS) }
     buttonCrop.setOnClickListener { toggleMode(CROP) }
+    addKeyboardObserver(view, onOpened = {
+      if (currentMode == TEXT) {
+        textContainer.onKeyboardOpened()
+      }
+    })
   }
   
   @Suppress("NON_EXHAUSTIVE_WHEN")

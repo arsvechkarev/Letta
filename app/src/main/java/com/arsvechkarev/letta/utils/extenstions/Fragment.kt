@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.utils
+package com.arsvechkarev.letta.utils.extenstions
 
 import android.widget.Toast
 import androidx.fragment.app.Fragment

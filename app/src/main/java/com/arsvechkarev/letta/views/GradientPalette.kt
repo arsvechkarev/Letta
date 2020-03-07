@@ -31,13 +31,13 @@ import com.arsvechkarev.letta.animations.addBouncyBackEffect
 import com.arsvechkarev.letta.graphics.LIGHT_GRAY
 import com.arsvechkarev.letta.graphics.STROKE_PAINT
 import com.arsvechkarev.letta.graphics.STROKE_PAINT_LIGHT
-import com.arsvechkarev.letta.utils.doOnEnd
-import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.execute
-import com.arsvechkarev.letta.utils.f
-import com.arsvechkarev.letta.utils.i
-import com.arsvechkarev.letta.utils.isWhiterThan
-import com.arsvechkarev.letta.utils.toBitmap
+import com.arsvechkarev.letta.utils.extenstions.doOnEnd
+import com.arsvechkarev.letta.utils.extenstions.dp
+import com.arsvechkarev.letta.utils.extenstions.execute
+import com.arsvechkarev.letta.utils.extenstions.f
+import com.arsvechkarev.letta.utils.extenstions.i
+import com.arsvechkarev.letta.utils.extenstions.isWhiterThan
+import com.arsvechkarev.letta.utils.extenstions.toBitmap
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -310,29 +310,6 @@ class GradientPalette @JvmOverloads constructor(
       start()
     }
   }
-  
-  private val COLORS = intArrayOf(
-    -0x15d8c7,
-    -0x24c52e,
-    -0xcfae1d,
-    -0xb63a13,
-    -0x7f379c,
-    -0x3219b,
-    -0x369b3,
-    -0x1000000,
-    -0x1
-  )
-  
-  private val LOCATIONS = floatArrayOf(
-    0.0f,
-    0.14f,
-    0.24f,
-    0.39f,
-    0.49f,
-    0.62f,
-    0.73f
-  )
-  
   
   private fun initRainbowShader() {
     val colorsMap = mapOf(

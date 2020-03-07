@@ -17,9 +17,9 @@ import android.view.View
 import androidx.annotation.FloatRange
 import com.arsvechkarev.letta.graphics.STROKE_PAINT
 import com.arsvechkarev.letta.graphics.VERY_LIGHT_GRAY
-import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.f
-import com.arsvechkarev.letta.utils.isWhiterThan
+import com.arsvechkarev.letta.utils.extenstions.dp
+import com.arsvechkarev.letta.utils.extenstions.f
+import com.arsvechkarev.letta.utils.extenstions.isWhiterThan
 import kotlin.math.abs
 import kotlin.math.sqrt
 

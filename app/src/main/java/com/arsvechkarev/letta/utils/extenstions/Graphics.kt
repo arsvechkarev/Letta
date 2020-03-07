@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.utils
+package com.arsvechkarev.letta.utils.extenstions
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -17,12 +17,9 @@ fun Drawable.toBitmap(): Bitmap {
 }
 
 inline fun Canvas.execute(block: Canvas.() -> Unit) {
-  try {
-    save()
-    apply(block)
-  } finally {
-    restore()
-  }
+  save()
+  apply(block)
+  restore()
 }
 
 /* ------------------------------------------- */

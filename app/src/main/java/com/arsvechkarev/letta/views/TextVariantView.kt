@@ -10,6 +10,7 @@ import android.view.View
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.graphics.TextVariant
 import com.arsvechkarev.letta.graphics.drawBounds
+import timber.log.Timber
 
 class TextVariantView @JvmOverloads constructor(
   context: Context,
@@ -24,7 +25,11 @@ class TextVariantView @JvmOverloads constructor(
   fun draw(textVariant: TextVariant) {
     this.textVariant = textVariant
     this.textVariant!!.paint.textSize = textSize
-    invalidate()
+    requestLayout()
+  }
+  
+  override fun layout(l: Int, t: Int, r: Int, b: Int) {
+    super.layout(l, t, r, b)
   }
   
   @SuppressLint("DrawAllocation")

@@ -3,12 +3,11 @@ package com.arsvechkarev.letta.views
 import android.content.Context
 import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.utils.extenstions.dp
+import com.arsvechkarev.letta.utils.extenstions.f
 
 class ShowerCircle @JvmOverloads constructor(
   context: Context,

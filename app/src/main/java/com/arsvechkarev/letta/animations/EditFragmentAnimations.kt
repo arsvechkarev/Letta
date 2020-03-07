@@ -2,7 +2,7 @@ package com.arsvechkarev.letta.animations
 
 import android.view.View
 import com.arsvechkarev.letta.constants.DURATION_DEFAULT
-import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.utils.extenstions.f
 
 fun View.animateToolMoveToTop(desiredTop: Float) {
   val translation = top - desiredTop

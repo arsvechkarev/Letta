@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.utils
+package com.arsvechkarev.letta.utils.extenstions
 
 import android.graphics.PointF
 import android.view.MotionEvent

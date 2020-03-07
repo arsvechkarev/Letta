@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.utils
+package com.arsvechkarev.letta.utils.extenstions
 
 import android.content.Context
 import android.view.LayoutInflater

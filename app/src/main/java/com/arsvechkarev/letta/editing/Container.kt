@@ -2,7 +2,7 @@ package com.arsvechkarev.letta.editing
 
 import android.view.View
 import androidx.annotation.IdRes
-import com.arsvechkarev.letta.utils.toggleKeyboard
+import com.arsvechkarev.letta.utils.extenstions.toggleKeyboard
 import com.arsvechkarev.letta.views.ListenableConstraintLayout
 
 abstract class Container(

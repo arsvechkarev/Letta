@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewPropertyAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.constants.DURATION_DEFAULT
-import com.arsvechkarev.letta.utils.gone
-import com.arsvechkarev.letta.utils.visible
+import com.arsvechkarev.letta.utils.extenstions.gone
+import com.arsvechkarev.letta.utils.extenstions.visible
 
 fun ViewPropertyAnimator.configure(): ViewPropertyAnimator {
   duration = DURATION_DEFAULT

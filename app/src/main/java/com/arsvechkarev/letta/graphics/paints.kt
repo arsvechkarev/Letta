@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.view.View
-import com.arsvechkarev.letta.utils.dp
+import com.arsvechkarev.letta.utils.extenstions.dp
 
 private var strokePaint: Paint? = null
 val STROKE_PAINT: Paint

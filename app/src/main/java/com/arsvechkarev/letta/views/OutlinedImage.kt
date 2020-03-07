@@ -16,10 +16,10 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.graphics.LIGHT_GRAY
-import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.execute
-import com.arsvechkarev.letta.utils.i
-import com.arsvechkarev.letta.utils.toBitmap
+import com.arsvechkarev.letta.utils.extenstions.dp
+import com.arsvechkarev.letta.utils.extenstions.execute
+import com.arsvechkarev.letta.utils.extenstions.i
+import com.arsvechkarev.letta.utils.extenstions.toBitmap
 
 class OutlinedImage @JvmOverloads constructor(
   context: Context,

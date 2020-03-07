@@ -14,9 +14,9 @@ import android.view.MotionEvent
 import android.view.View
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.graphics.LIGHT_GRAY
-import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.execute
-import com.arsvechkarev.letta.utils.toBitmap
+import com.arsvechkarev.letta.utils.extenstions.dp
+import com.arsvechkarev.letta.utils.extenstions.execute
+import com.arsvechkarev.letta.utils.extenstions.toBitmap
 
 class SimpleImage @JvmOverloads constructor(
   context: Context,

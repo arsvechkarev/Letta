@@ -7,11 +7,11 @@ import android.view.View.TRANSLATION_Y
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.fadeIn
 import com.arsvechkarev.letta.animations.fadeOut
-import com.arsvechkarev.letta.utils.animate
-import com.arsvechkarev.letta.utils.constraints
-import com.arsvechkarev.letta.utils.dmInt
-import com.arsvechkarev.letta.utils.exponentiate
-import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.utils.extenstions.animate
+import com.arsvechkarev.letta.utils.extenstions.constraints
+import com.arsvechkarev.letta.utils.extenstions.dmInt
+import com.arsvechkarev.letta.utils.extenstions.exponentiate
+import com.arsvechkarev.letta.utils.extenstions.f
 import com.arsvechkarev.letta.views.DrawingCanvas
 import com.arsvechkarev.letta.views.GradientPalette
 import com.arsvechkarev.letta.views.ListenableConstraintLayout

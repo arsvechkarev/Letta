@@ -19,7 +19,7 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.View
 import androidx.annotation.ColorInt
-import com.arsvechkarev.letta.utils.toBitmap
+import com.arsvechkarev.letta.utils.extenstions.toBitmap
 import java.io.File
 import java.io.File.separator
 import java.io.FileOutputStream

@@ -37,7 +37,7 @@ class DrawingCanvas @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
   
   private var latestPath = Path()
-  private var latestPaint = Paint(ANTI_ALIAS_FLAG and DITHER_FLAG)
+  private var latestPaint = createNewPaint()
   private var lastX = 0f
   private var lastY = 0f
   private var currentPaintWidth = 0f
@@ -48,11 +48,6 @@ class DrawingCanvas @JvmOverloads constructor(
   private val bitmaps = ArrayList<Bitmap>()
   
   var isEraserMode: Boolean = false
-  
-  init {
-    setBackgroundColor(Color.TRANSPARENT)
-    latestPaint = createNewPaint()
-  }
   
   var onDown: () -> Unit = {}
   var onUp: () -> Unit = {}
@@ -144,11 +139,9 @@ class DrawingCanvas @JvmOverloads constructor(
   private fun createNewPaint() = Paint(ANTI_ALIAS_FLAG).apply {
     color = currentPaintColor
     style = Paint.Style.STROKE
-    strokeJoin = Paint.Join.ROUND
     strokeCap = Paint.Cap.ROUND
     strokeWidth = currentPaintWidth
     if (isEraserMode) {
-      color = Color.TRANSPARENT
       xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR);
     }
   }

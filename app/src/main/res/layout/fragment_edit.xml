@@ -13,16 +13,16 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"/>
+
   <com.arsvechkarev.letta.views.DrawingCanvas
     android:id="@+id/drawingCanvas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="false"/>
-
-  <com.arsvechkarev.letta.views.ViewPort
-    android:id="@+id/viewPort"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
 
   <LinearLayout
     android:layout_width="wrap_content"

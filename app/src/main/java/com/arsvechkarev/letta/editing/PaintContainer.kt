@@ -32,6 +32,7 @@ class PaintContainer(
   private val showerCircle: ShowerCircle = findViewById(R.id.showCircle)
   
   init {
+    drawingCanvas.isClickable = true
     post {
       drawingCanvas.setPaintColor(paletteTool.currentColor)
       verticalSeekbar.updateColorIfAllowed(paletteTool.currentColor)
@@ -64,7 +65,6 @@ class PaintContainer(
   
   override fun onEnter() {
     post {
-      drawingCanvas.isClickable = true
       undoTool.fadeIn()
       undoTool.animate(TRANSLATION_Y, undoTool.height.f * 2, 0f)
       eraserTool.fadeIn()

@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.fragment_edit.buttonStickers
 import kotlinx.android.synthetic.main.fragment_edit.buttonText
 import kotlinx.android.synthetic.main.fragment_edit.drawingCanvas
 import kotlinx.android.synthetic.main.fragment_edit.editRoot
-import kotlinx.android.synthetic.main.fragment_edit.viewPort
 
 class EditFragment : Fragment(R.layout.fragment_edit) {
   
@@ -115,7 +114,6 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
   }
   
   private fun onTextEntered(text: CharSequence, textVariant: TextVariant) {
-    viewPort.addText(text, textVariant.paint)
     toggleMode(TEXT)
   }
   

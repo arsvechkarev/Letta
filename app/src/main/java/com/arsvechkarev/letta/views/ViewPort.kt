@@ -27,8 +27,6 @@ class ViewPort @JvmOverloads constructor(
   
   init {
     setBackgroundColor(Color.BLACK)
-    val layer = Layer(this, BitmapFactory.decodeResource(resources, R.drawable.placeholder))
-    layers.add(layer)
   }
   
   @Suppress("DEPRECATION")
@@ -96,17 +94,16 @@ class Layer(private val parentView: View, var bitmap: Bitmap) {
 
 class MatrixGestureDetector(
   private val matrix: Matrix,
-  private val listener: (Matrix) -> Unit
+  private val onMatrixChanged: (Matrix) -> Unit
 ) {
   private val tempMatrix = Matrix()
   private val srcArr = FloatArray(4)
   private val dstArr = FloatArray(4)
   
-  private val LOG_TAG = "Matrix"
-  
   fun onTouchEvent(event: MotionEvent): Boolean {
     val index = event.actionIndex
-    
+
+    if (event.pointerCount > 2) return true
     when (event.actionMasked) {
       ACTION_DOWN, ACTION_POINTER_DOWN -> {
         val indexX2 = index * 2
@@ -117,7 +114,7 @@ class MatrixGestureDetector(
       ACTION_MOVE -> {
         val pointerId = event.getPointerId(index)
         val pointerIdX2 = pointerId * 2
-        val maxEvents = event.pointerCount.coerceAtMost(2)
+        val maxEvents = event.pointerCount
         for (i in 0 until maxEvents) {
           val idx = pointerIdX2 + i * 2
           dstArr[idx] = event.getX(i)
@@ -125,7 +122,7 @@ class MatrixGestureDetector(
         }
         tempMatrix.setPolyToPoly(srcArr, pointerIdX2, dstArr, pointerIdX2, maxEvents)
         matrix.postConcat(tempMatrix)
-        listener(matrix)
+        onMatrixChanged(matrix)
         System.arraycopy(dstArr, 0, srcArr, 0, dstArr.size)
         return true
       }

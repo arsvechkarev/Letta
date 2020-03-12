@@ -59,10 +59,6 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    val url = arguments!!.getString(KEY_IMAGE_URL)!!
-    imagesLoader.load(url).onSuccess {
-      bgImage.setImageDrawable(it)
-    }.start()
     toolsGroup = Group(buttonPaint, buttonText, buttonStickers, buttonCrop)
     textContainer =
         TextContainer(editRoot.inflateContainer(container_edit_text), buttonText, ::onTextEntered)

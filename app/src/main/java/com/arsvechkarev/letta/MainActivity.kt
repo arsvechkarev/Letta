@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     supportFragmentManager.beginTransaction()
-        .replace(R.id.fragmentContainer, ImagesListFragment())
+        .replace(R.id.fragmentContainer, EditFragment())
         .commit()
   }
 

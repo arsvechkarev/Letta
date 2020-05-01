@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorRippleDark">#2C2C2C</color>
-  <color name="colorRippleLight">#DADADA</color>
-  <color name="colorIcon">#000000</color>
-  <color name="colorIconOpposite">#FFFFFF</color>
-  <color name="colorIconDone">#FFF</color>
-  <color name="colorImgToolCircle">#FFFFFF</color>
-  <color name="colorImgToolDone">#F00</color>
+  <color name="icon_default">#000000</color>
+  <color name="icon_opposite">#FFFFFF</color>
 </resources>

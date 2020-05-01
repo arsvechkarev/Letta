@@ -17,7 +17,6 @@ class BouncyBackInterpolator(
     }
     return coefficient * (-4 * input * input + 4 * input)
   }
-  
 }
 
 fun ValueAnimator.addBouncyBackEffect(

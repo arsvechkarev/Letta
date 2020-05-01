@@ -1,3 +1,2 @@
-include ':imagesloader'
-include ':app'
 rootProject.name='Letta'
+include ':app'

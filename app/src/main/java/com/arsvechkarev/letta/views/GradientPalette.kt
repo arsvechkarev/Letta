@@ -28,16 +28,13 @@ import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.addBouncyBackEffect
-import com.arsvechkarev.letta.graphics.LIGHT_GRAY
-import com.arsvechkarev.letta.graphics.STROKE_PAINT
-import com.arsvechkarev.letta.graphics.STROKE_PAINT_LIGHT
-import com.arsvechkarev.letta.utils.extenstions.doOnEnd
-import com.arsvechkarev.letta.utils.extenstions.dp
-import com.arsvechkarev.letta.utils.extenstions.execute
-import com.arsvechkarev.letta.utils.extenstions.f
-import com.arsvechkarev.letta.utils.extenstions.i
-import com.arsvechkarev.letta.utils.extenstions.isWhiterThan
-import com.arsvechkarev.letta.utils.extenstions.toBitmap
+import com.arsvechkarev.letta.animations.doOnEnd
+import com.arsvechkarev.letta.utils.dp
+import com.arsvechkarev.letta.utils.execute
+import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.utils.i
+import com.arsvechkarev.letta.utils.LIGHT_GRAY
+import com.arsvechkarev.letta.utils.STROKE_PAINT
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -58,6 +55,11 @@ class GradientPalette @JvmOverloads constructor(
     private const val SWAP_ANIMATION_DURATION = 200L
   }
   
+  private val gradientOuterPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    color = LIGHT_GRAY
+    style = Paint.Style.STROKE
+    strokeWidth = (8.2f).dp
+  }
   private val gradientStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     strokeWidth = 7.dp
     color = Color.WHITE
@@ -90,22 +92,20 @@ class GradientPalette @JvmOverloads constructor(
   private var currentAnimX = 0f
   private var currentAnimRadius = 0f
   private val circleAnimator = ValueAnimator()
-  private val xHolder = PropertyValuesHolder.ofFloat("xHolder", 0f) // Put 0 as a stub
-  private val radiusHolder = PropertyValuesHolder.ofFloat("radiusHolder", 0f) // Put 0 as a stub
+  private val xHolder = PropertyValuesHolder.ofFloat("x", 0f) // Put 0 as a stub
+  private val radiusHolder = PropertyValuesHolder.ofFloat("radius", 0f) // Put 0 as a stub
   
   // Swapper
   private var swapperMode = SwapperMode.RAINBOW
   private var currentSwapperRotation = 0f
-  private val swapperBitmap = ContextCompat.getDrawable(context, R.drawable.ic_swap)!!.toBitmap()
-  private val swapperBitmapStroke = ContextCompat.getDrawable(context,
-    R.drawable.ic_swap_stroke)!!.toBitmap()
-  private val swapperPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+  private val swapper = ContextCompat.getDrawable(context, R.drawable.ic_swap)!!.apply {
     colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
   }
-  private val swapperPaintStroke = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    colorFilter = PorterDuffColorFilter(LIGHT_GRAY, PorterDuff.Mode.SRC_ATOP)
-  }
-  private val swapperRect = RectF()
+  private val swapperStroke = ContextCompat.getDrawable(context, R.drawable.ic_swap_stroke)!!
+      .apply {
+        colorFilter = PorterDuffColorFilter(
+          LIGHT_GRAY, PorterDuff.Mode.SRC_ATOP)
+      }
   private val swapperAnimator = ValueAnimator()
   private val bouncyAnimator = ValueAnimator()
   
@@ -114,7 +114,7 @@ class GradientPalette @JvmOverloads constructor(
   private var bezierSpotStart = 0f
   private var bezierSpotEnd = 0f
   private var bezierSpotValue = 0f
-  private val bezierHolder = PropertyValuesHolder.ofFloat("bezierHolder", 0f) // Put 0 as a stub
+  private val bezierHolder = PropertyValuesHolder.ofFloat("bezier", 0f) // Put 0 as a stub
   private var bezierSpotOffset = 22.dp
   private var bezierVerticalOffset = 10.dp
   private var bezierHorizontalOffset = 3.2f.dp
@@ -122,7 +122,7 @@ class GradientPalette @JvmOverloads constructor(
   
   // Animated value from 0 to 1
   private var animatedFraction = 0f
-  private var animatedFractionHolder = PropertyValuesHolder.ofFloat("animatedFractionHolder",
+  private var animatedFractionHolder = PropertyValuesHolder.ofFloat("fraction",
     0f) // Put 0 as a stub
   
   // Public properties
@@ -131,15 +131,19 @@ class GradientPalette @JvmOverloads constructor(
     private set
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    swapperRect.set(
-      w / 2f - swapperBitmap.width / 2, h.f - swapperBitmap.height,
-      w / 2f + swapperBitmap.width / 2, h.f
+    swapper.setBounds(
+      w / 2 - swapper.intrinsicWidth / 2, h - swapper.intrinsicHeight,
+      w / 2 + swapper.intrinsicWidth / 2, h
+    )
+    swapperStroke.setBounds(
+      w / 2 - swapperStroke.intrinsicWidth / 2, h - swapperStroke.intrinsicHeight,
+      w / 2 + swapperStroke.intrinsicWidth / 2, h
     )
     gradientRect.set(
       paddingLeft.f,
       paddingTop.f + circleStrokeWidth * 2,
       w.f - paddingEnd,
-      h.f - paddingBottom - circleStrokeWidth * 2 - swapperRect.height() * 1.2f
+      h.f - paddingBottom - circleStrokeWidth * 2 - swapper.bounds.height() * 1.2f
     )
     initRainbowShader()
     initBlackAndWhiteShader()
@@ -165,28 +169,30 @@ class GradientPalette @JvmOverloads constructor(
   override fun onDraw(canvas: Canvas) {
     with(canvas) {
       execute {
-        rotate(currentSwapperRotation, swapperRect.centerX(), swapperRect.centerY())
-        drawBitmap(swapperBitmap, null, swapperRect, swapperPaint)
-        drawBitmap(swapperBitmapStroke, null, swapperRect, swapperPaintStroke)
+        rotate(currentSwapperRotation, swapper.bounds.exactCenterX(), swapper.bounds.exactCenterY())
+        swapper.draw(canvas)
+        swapperStroke.draw(canvas)
       }
       execute {
         canvas.scale(currentGradientScale, currentGradientScale, gradientRect.centerX(),
           gradientRect.centerY())
         execute {
           translate(gradientRect.left, gradientRect.top)
+          drawRoundRect(0f, 0f, gradientRect.width(), gradientRect.height(),
+            gradientRect.width() / 2, gradientRect.width() / 2, gradientOuterPaint)
           drawPath(gradientPath, gradientStrokePaint)
-          drawPath(gradientPath, STROKE_PAINT)
         }
         drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
         bezierShape.draw(canvas, currentCircle, bezierSpotValue,
           bezierSpotOffset * animatedFraction)
         currentCircle.draw(canvas, circleStrokePaint)
-        val strokePaint = if (currentColor.isWhiterThan(0xDD)) STROKE_PAINT else STROKE_PAINT_LIGHT
         if (currentCircle.radius == radiusSelected) {
-          currentCircle.drawStroke(canvas, circleStrokePaint.strokeWidth, strokePaint)
+          currentCircle.drawStroke(canvas, circleStrokePaint.strokeWidth,
+            STROKE_PAINT)
         }
         currentCircle.draw(canvas, circlePaint)
-        currentCircle.drawInnerStroke(canvas, STROKE_PAINT_LIGHT)
+        currentCircle.drawInnerStroke(canvas,
+          STROKE_PAINT)
       }
     }
   }
@@ -195,23 +201,23 @@ class GradientPalette @JvmOverloads constructor(
   override fun onTouchEvent(event: MotionEvent): Boolean {
     when (event.action) {
       ACTION_DOWN -> {
-        if (event.y <= height - swapperBitmap.height) {
+        if (event.y <= height - swapper.bounds.height()) {
           isTouchInPalette = true
-          setupValues(event.y)
+          updateValues(event.y)
           updateCircleAnimation()
         }
         return true
       }
       ACTION_MOVE -> {
         if (isTouchInPalette) {
-          setupValues(event.y)
+          updateValues(event.y)
           invalidate()
           return true
         }
       }
       ACTION_UP, ACTION_CANCEL -> {
         if (isTouchInPalette) {
-          setupValues(event.y)
+          updateValues(event.y)
           updateCircleAnimation(true)
         } else {
           startBouncyEffect()
@@ -265,7 +271,7 @@ class GradientPalette @JvmOverloads constructor(
     invalidate()
   }
   
-  private fun setupValues(y: Float) {
+  private fun updateValues(y: Float) {
     currentY = y.coerceIn(gradientRect.top + GRADIENT_SENSITIVITY,
       gradientRect.bottom - GRADIENT_SENSITIVITY)
     currentCircle.y = currentY
@@ -298,10 +304,10 @@ class GradientPalette @JvmOverloads constructor(
       cancel()
       addUpdateListener {
         this@GradientPalette.animatedFraction = animatedFraction
-        currentAnimX = getAnimatedValue("xHolder") as Float
-        currentAnimRadius = getAnimatedValue("radiusHolder") as Float
-        bezierSpotValue = getAnimatedValue("bezierHolder") as Float
-        this@GradientPalette.animatedFraction = getAnimatedValue("animatedFractionHolder") as Float
+        currentAnimX = getAnimatedValue("x") as Float
+        currentAnimRadius = getAnimatedValue("radius") as Float
+        bezierSpotValue = getAnimatedValue("bezier") as Float
+        this@GradientPalette.animatedFraction = getAnimatedValue("fraction") as Float
         currentCircle.set(currentAnimX, currentY, currentAnimRadius)
         invalidate()
       }

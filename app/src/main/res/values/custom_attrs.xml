@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-  <declare-styleable name="OutlinedImage">
-    <attr name="image" format="reference"/>
-    <attr name="imageStroke" format="reference"/>
-    <attr name="strokeWidth" format="dimension"/>
-    <attr name="innerPadding" format="dimension"/>
-    <attr name="autoInverse" format="boolean"/>
-  </declare-styleable>
-
-
   <declare-styleable name="SimpleImage">
     <attr name="imageSrc" format="reference"/>
   </declare-styleable>
-
 </resources>

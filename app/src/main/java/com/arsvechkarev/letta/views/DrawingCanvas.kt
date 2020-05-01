@@ -7,10 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
-import android.graphics.Paint.DITHER_FLAG
 import android.graphics.Path
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.os.Environment.getExternalStorageDirectory
 import android.util.AttributeSet
 import android.view.KeyEvent.ACTION_UP
@@ -19,7 +16,7 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.View
 import androidx.annotation.ColorInt
-import com.arsvechkarev.letta.utils.extenstions.toBitmap
+import com.arsvechkarev.letta.utils.toBitmap
 import java.io.File
 import java.io.File.separator
 import java.io.FileOutputStream
@@ -28,7 +25,6 @@ import java.util.Date
 import java.util.Locale
 import kotlin.concurrent.thread
 import kotlin.math.abs
-
 
 class DrawingCanvas @JvmOverloads constructor(
   context: Context,
@@ -47,8 +43,6 @@ class DrawingCanvas @JvmOverloads constructor(
   private val paints = ArrayList<Paint>()
   private val bitmaps = ArrayList<Bitmap>()
   
-  var isEraserMode: Boolean = false
-  
   var onDown: () -> Unit = {}
   var onUp: () -> Unit = {}
   
@@ -59,7 +53,6 @@ class DrawingCanvas @JvmOverloads constructor(
   }
   
   fun setPaintColor(@ColorInt color: Int) {
-    isEraserMode = false
     currentPaintColor = color
   }
   
@@ -141,9 +134,6 @@ class DrawingCanvas @JvmOverloads constructor(
     style = Paint.Style.STROKE
     strokeCap = Paint.Cap.ROUND
     strokeWidth = currentPaintWidth
-    if (isEraserMode) {
-      xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR);
-    }
   }
   
   private fun handleTouchDown(x: Float, y: Float) {
@@ -173,8 +163,6 @@ class DrawingCanvas @JvmOverloads constructor(
   
   companion object {
     private const val TOUCH_TOLERANCE = 6f
-    
     private const val INITIAL_PAINT_COLOR = Color.RED
   }
-  
 }

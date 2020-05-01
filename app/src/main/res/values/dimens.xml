@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!-- Text sizes -->
-  <dimen name="text_variant_default">28sp</dimen>
-
   <dimen name="ic_size_default">24dp</dimen>
   <dimen name="ic_size_big">40dp</dimen>
   <dimen name="img_swapper">32dp</dimen>
 
   <dimen name="img_tool_size">40dp</dimen>
-  <dimen name="img_tool_m_top_big">40dp</dimen>
-  <dimen name="img_tool_m_top">16dp</dimen>
-  <dimen name="img_tool_m_top2">20dp</dimen>
-  <dimen name="img_tool_m_end">16dp</dimen>
+  <dimen name="img_tool_m_top">8dp</dimen>
+  <dimen name="img_tool_m_horizontal">8dp</dimen>
+  <dimen name="img_undo_m_end">16dp</dimen>
   <dimen name="img_tool_padding">8dp</dimen>
-  <dimen name="img_undo_m_start">16dp</dimen>
-  <dimen name="img_done_size">60dp</dimen>
-  <dimen name="img_done_m_bottom">24dp</dimen>
+  <dimen name="img_done_size">50dp</dimen>
   <dimen name="img_done_margin">16dp</dimen>
-  <dimen name="img_tool_stroke_width">2dp</dimen>
-
-  <!-- Animations -->
-  <dimen name="img_tool_active">50dp</dimen>
-
 </resources>

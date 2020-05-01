@@ -2,25 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.arsvechkarev.letta">
 
-  <uses-permission android:name="android.permission.CAMERA"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-  <application
-    android:allowBackup="true"
+  <application android:name=".LettaApplication"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
-    android:name=".LettaApplication"
     android:theme="@style/Theme.AppCompat.NoActionBar">
-
-    <meta-data
-      android:name="preloaded_fonts"
-      android:resource="@array/preloaded_fonts"/>
-
-    <activity
-      android:name="com.arsvechkarev.letta.MainActivity">
+    <activity android:name="com.arsvechkarev.letta.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <action android:name="android.intent.action.VIEW"/>
@@ -29,5 +20,4 @@
       </intent-filter>
     </activity>
   </application>
-
 </manifest>

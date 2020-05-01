@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/editRoot"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:clipChildren="false">
+
+  <ImageView
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scaleType="centerCrop"
+    android:src="@drawable/bg_for_png"/>
+
+  <com.arsvechkarev.letta.views.DrawingCanvas
+    android:id="@+id/drawingCanvas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+  <com.arsvechkarev.letta.views.PaintDisplayer
+    android:id="@+id/paintDisplayer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+  <com.arsvechkarev.letta.views.SimpleImage
+    android:id="@+id/imageDone"
+    android:layout_width="@dimen/img_done_size"
+    android:layout_height="@dimen/img_done_size"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:layout_marginEnd="@dimen/img_done_margin"
+    android:padding="@dimen/img_tool_padding"
+    app:imageSrc="@drawable/ic_checkmark"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <com.arsvechkarev.letta.views.SimpleImage
+    android:id="@+id/imageUndo"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:layout_marginEnd="@dimen/img_undo_m_end"
+    android:padding="@dimen/img_tool_padding"
+    app:imageSrc="@drawable/ic_undo"
+    app:layout_constraintBottom_toBottomOf="@id/imageDone"
+    app:layout_constraintEnd_toStartOf="@id/imageDone"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <com.arsvechkarev.letta.views.SimpleImage
+    android:id="@+id/imageBackground"
+    android:layout_width="@dimen/img_tool_size"
+    android:layout_height="@dimen/img_tool_size"
+    android:layout_marginStart="@dimen/img_tool_m_horizontal"
+    android:layout_marginTop="@dimen/img_tool_m_top"
+    android:padding="@dimen/img_tool_padding"
+    app:imageSrc="@drawable/ic_background"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <com.arsvechkarev.letta.views.VerticalSeekbar
+    android:id="@+id/verticalSeekbar"
+    android:layout_width="30dp"
+    android:layout_height="280dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <com.arsvechkarev.letta.views.GradientPalette
+    android:id="@+id/palette"
+    android:layout_width="32dp"
+    android:layout_height="280dp"
+    android:padding="8dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="@id/imageDone"
+    app:layout_constraintStart_toStartOf="@id/imageDone"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recyclerBrushes"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

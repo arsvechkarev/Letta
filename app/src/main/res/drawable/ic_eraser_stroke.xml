@@ -9,5 +9,5 @@
     android:strokeWidth="0.5"
     android:strokeLineCap="round"
     android:strokeLineJoin="round"
-    android:strokeColor="@color/colorIconOpposite"/>
+    android:strokeColor="@color/icon_opposite"/>
 </vector>

@@ -13,12 +13,12 @@
     android:scaleType="centerCrop"
     android:src="@drawable/bg_for_png"/>
 
-  <com.arsvechkarev.letta.views.DrawingCanvas
+  <com.arsvechkarev.letta.views.DrawingView
     android:id="@+id/drawingCanvas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
-  <com.arsvechkarev.letta.views.PaintDisplayer
+  <com.arsvechkarev.letta.views.BrushDisplayer
     android:id="@+id/paintDisplayer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>

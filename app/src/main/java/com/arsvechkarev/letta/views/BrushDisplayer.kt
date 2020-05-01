@@ -9,7 +9,7 @@ import android.view.View
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.f
 
-class PaintDisplayer @JvmOverloads constructor(
+class BrushDisplayer @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
@@ -17,7 +17,6 @@ class PaintDisplayer @JvmOverloads constructor(
   
   private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = 0xFF888888.toInt()
     style = Paint.Style.STROKE
     strokeWidth = 1.dp
     maskFilter = BlurMaskFilter(2.dp, BlurMaskFilter.Blur.NORMAL)
@@ -46,5 +45,4 @@ class PaintDisplayer @JvmOverloads constructor(
       canvas.drawCircle(x, y, radius, strokePaint)
     }
   }
-  
 }

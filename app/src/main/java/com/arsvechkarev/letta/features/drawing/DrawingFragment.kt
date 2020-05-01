@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.drawing
+package com.arsvechkarev.letta.features.drawing
 
 
 import android.os.Bundle

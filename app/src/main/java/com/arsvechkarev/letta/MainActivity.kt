@@ -2,7 +2,7 @@ package com.arsvechkarev.letta
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.arsvechkarev.letta.drawing.DrawingFragment
+import com.arsvechkarev.letta.features.drawing.DrawingFragment
 
 class MainActivity : AppCompatActivity() {
   

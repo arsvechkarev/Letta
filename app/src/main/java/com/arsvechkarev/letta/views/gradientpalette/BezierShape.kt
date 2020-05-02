@@ -28,16 +28,13 @@ class BezierShape {
     val x3 = (cos(angleRadians) * circle.radius + circleX) - horizontalOffset
     val y3 = (-sin(angleRadians) * circle.radius + circleY) - verticalOffset
     
-    with(bezierPath) {
-      moveTo(x1, y1)
-      cubicTo(
-        triangleEnd + bezierOffset, circleY - bezierOffset,
-        triangleEnd + bezierOffset, circleY + bezierOffset,
-        x3, y3
-      )
-      close()
-    }
-    
+    bezierPath.moveTo(x1, y1)
+    bezierPath.cubicTo(
+      triangleEnd + bezierOffset, circleY - bezierOffset,
+      triangleEnd + bezierOffset, circleY + bezierOffset,
+      x3, y3
+    )
+    bezierPath.close()
     canvas.drawPath(bezierPath, bgPaint)
     bezierPath.reset()
   }

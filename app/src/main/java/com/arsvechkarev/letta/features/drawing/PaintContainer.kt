@@ -5,9 +5,9 @@ import com.arsvechkarev.letta.core.brushes.BrushType
 import com.arsvechkarev.letta.utils.exponentiate
 import com.arsvechkarev.letta.views.BrushDisplayer
 import com.arsvechkarev.letta.views.DrawingView
-import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 import com.arsvechkarev.letta.views.SimpleImage
 import com.arsvechkarev.letta.views.VerticalSeekbar
+import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 
 class PaintContainer(
   undoImage: SimpleImage,

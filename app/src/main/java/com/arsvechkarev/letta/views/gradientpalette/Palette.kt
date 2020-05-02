@@ -10,10 +10,15 @@ import android.graphics.Region
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 
+/**
+ * Palette with gradient and animated circle
+ *
+ * @see VerticalPalette
+ * @see HorizontalPalette
+ */
 interface Palette {
   fun initHolder(width: Int, height: Int, swapper: Drawable, swapperStroke: Drawable, padding: Padding, circleStrokeWidth: Float): ValuesHolder
   fun drawGradientRect(canvas: Canvas, gradientRect: RectF, gradientOuterPaint: Paint)
-  fun drawBezierShape(bezierShape: BezierShape, canvas: Canvas, circle: Circle, bezierSpotValue: Float, bezierOffset: Float, circleX: Float, circleY: Float)
   fun getCircleX(circle: Circle): Float
   fun getCircleY(circle: Circle): Float
   fun drawCircle(circle: Circle, canvas: Canvas, circleStrokePaint: Paint)

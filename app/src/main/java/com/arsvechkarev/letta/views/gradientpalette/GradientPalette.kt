@@ -23,8 +23,6 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import android.widget.LinearLayout.HORIZONTAL
-import androidx.appcompat.widget.LinearLayoutCompat.OrientationMode
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.addBouncyBackEffect
@@ -43,11 +41,12 @@ import kotlin.math.PI
  * Gradient palette for choosing colors
  *
  * Note: `axis` means value alongside the longest axis (X if orientation is vertical, Y otherwise)
+ *
  * @see Palette
  * @see VerticalPalette
  * @see HorizontalPalette
  */
-open class GradientPalette @JvmOverloads constructor(
+class GradientPalette @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
@@ -84,7 +83,7 @@ open class GradientPalette @JvmOverloads constructor(
   
   private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private var rectRadius = 0f
-  private var currentCircle = Circle()
+  private var circle = Circle()
   private var radiusSelected = 0f
   private var radiusFloating = 0f
   private var startAnimAxis = 0f
@@ -119,7 +118,7 @@ open class GradientPalette @JvmOverloads constructor(
   private var bezierAngle = (PI / 6).toFloat()
   
   private var animatedFraction = 0f
-  private var animatedFractionHolder = PropertyValuesHolder.ofFloat("fraction",
+  private val animatedFractionHolder = PropertyValuesHolder.ofFloat("fraction",
     0f) // Put 0 as a stub
   
   var onColorChanged: (Int) -> Unit = {}
@@ -130,7 +129,7 @@ open class GradientPalette @JvmOverloads constructor(
     val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.GradientPalette,
       defStyleAttr, 0)
     palette = when (attributes.getInt(R.styleable.GradientPalette_android_orientation, 0)) {
-      0 -> VerticalPalette()
+      0 -> HorizontalPalette()
       1 -> VerticalPalette()
       else -> throw IllegalStateException("Unknown default state")
     }
@@ -146,7 +145,7 @@ open class GradientPalette @JvmOverloads constructor(
     initRainbowShader()
     initBlackAndWhiteShader()
     gradientPaint.shader = rainbowGradient
-    rectRadius = holder.rectRadius
+    rectRadius = holder.roundRectRadius
     startAnimAxis = holder.startAnimAxis
     endAnimAxis = holder.endAnimAxis
     radiusFloating = holder.radiusFloating
@@ -154,7 +153,7 @@ open class GradientPalette @JvmOverloads constructor(
     currentAnimAxis = holder.currentAnimAxis
     currentAnimRadius = holder.currentAnimRadius
     currentAxisValue = holder.currentAxisValue
-    currentCircle.set(holder.minSizeHalf, currentAxisValue, radiusSelected)
+    circle.set(holder.minSizeHalf, currentAxisValue, radiusSelected)
     drawGradientBitmap()
     currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentAxisValue)
     circlePaint.color = currentColor
@@ -172,9 +171,7 @@ open class GradientPalette @JvmOverloads constructor(
         swapperStroke.draw(canvas)
       }
       execute {
-        println("graScale = $gradientScale")
-        canvas.scale(gradientScale, gradientScale, gradientRect.centerX(),
-          gradientRect.centerY())
+        canvas.scale(gradientScale, gradientScale, gradientRect.centerX(), gradientRect.centerY())
         execute {
           translate(gradientRect.left, gradientRect.top)
           palette.drawGradientRect(canvas, gradientRect, gradientOuterPaint)
@@ -182,17 +179,16 @@ open class GradientPalette @JvmOverloads constructor(
         }
         drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
         val bezierOffset = bezierSpotOffset * animatedFraction
-        palette.drawBezierShape(bezierShape, canvas, currentCircle, bezierSpotValue,
-          bezierOffset, palette.getCircleX(currentCircle),
-          palette.getCircleY(currentCircle)
-        )
-        palette.drawCircle(currentCircle, canvas, circleStrokePaint)
-        if (currentCircle.radius == radiusSelected) {
-          palette.drawCircleStroke(currentCircle, canvas, circleStrokePaint.strokeWidth,
+        println("spotValue = $bezierSpotValue")
+        bezierShape.draw(canvas, circle, bezierSpotValue, bezierOffset, palette.getCircleX(circle),
+          palette.getCircleY(circle))
+        palette.drawCircle(circle, canvas, circleStrokePaint)
+        if (circle.radius == radiusSelected) {
+          palette.drawCircleStroke(circle, canvas, circleStrokePaint.strokeWidth,
             STROKE_PAINT)
         }
-        palette.drawCircle(currentCircle, canvas, circlePaint)
-        palette.drawCircleInnerStroke(currentCircle, canvas, STROKE_PAINT)
+        palette.drawCircle(circle, canvas, circlePaint)
+        palette.drawCircleInnerStroke(circle, canvas, STROKE_PAINT)
       }
       drawBounds(canvas)
     }
@@ -206,7 +202,7 @@ open class GradientPalette @JvmOverloads constructor(
         if (palette.isNotInSwapper(event, swapper)) {
           touchInPalette = true
           updateValues(axis)
-          updateCircleAnimation()
+          updateCircleAnimation(animateBack = false)
         }
         return true
       }
@@ -220,7 +216,7 @@ open class GradientPalette @JvmOverloads constructor(
       ACTION_UP, ACTION_CANCEL -> {
         if (touchInPalette) {
           updateValues(axis)
-          updateCircleAnimation(true)
+          updateCircleAnimation(animateBack = true)
         } else {
           if (gradientScale == 1f) { // If scale is 1 => gradient isn't being animated now
             startBouncyEffect()
@@ -277,40 +273,38 @@ open class GradientPalette @JvmOverloads constructor(
   private fun updateValues(axisValue: Float) {
     currentAxisValue = palette.getCoercedCurrentAxisValue(axisValue, gradientRect,
       GRADIENT_SENSITIVITY)
-    palette.updateCircleAxis(currentCircle, currentAxisValue)
+    palette.updateCircleAxis(circle, currentAxisValue)
     currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentAxisValue)
     onColorChanged(currentColor)
     circlePaint.color = currentColor
   }
   
-  private fun updateCircleAnimation(animateBack: Boolean = false) {
-    palette.updateCircleAnimation(currentCircle, currentAxisValue, radiusSelected)
-    circleAnimator.cancel()
+  private fun updateCircleAnimation(animateBack: Boolean) {
+    palette.updateCircleAnimation(circle, currentAxisValue, radiusSelected)
     if (animateBack) {
       axisHolder.setFloatValues(currentAnimAxis, startAnimAxis)
       radiusHolder.setFloatValues(currentAnimRadius, radiusSelected)
-      bezierHolder.setFloatValues(bezierSpotEnd, bezierSpotStart)
-      animatedFractionHolder.setFloatValues(1f, 0f)
+      bezierHolder.setFloatValues(bezierSpotValue, bezierSpotStart)
+      animatedFractionHolder.setFloatValues(animatedFraction, 0f)
     } else {
       axisHolder.setFloatValues(currentAnimAxis, endAnimAxis)
       radiusHolder.setFloatValues(currentAnimRadius, radiusFloating)
-      bezierHolder.setFloatValues(bezierSpotStart, bezierSpotEnd)
-      animatedFractionHolder.setFloatValues(0f, 1f)
+      bezierHolder.setFloatValues(bezierSpotValue, bezierSpotEnd)
+      animatedFractionHolder.setFloatValues(animatedFraction, 1f)
     }
-    circleAnimator.setValues(axisHolder, radiusHolder, bezierHolder, animatedFractionHolder)
     kickInCircleAnimator()
   }
   
   private fun kickInCircleAnimator() {
     circleAnimator.apply {
       cancel()
+      setValues(axisHolder, radiusHolder, bezierHolder, animatedFractionHolder)
       addUpdateListener {
-        this@GradientPalette.animatedFraction = animatedFraction
+        this@GradientPalette.animatedFraction = getAnimatedValue("fraction") as Float
         currentAnimAxis = getAnimatedValue("axis") as Float
         currentAnimRadius = getAnimatedValue("radius") as Float
         bezierSpotValue = getAnimatedValue("bezier") as Float
-        this@GradientPalette.animatedFraction = getAnimatedValue("fraction") as Float
-        currentCircle.set(currentAnimAxis, currentAxisValue, currentAnimRadius)
+        circle.set(currentAnimAxis, currentAxisValue, currentAnimRadius)
         invalidate()
       }
       interpolator = AccelerateDecelerateInterpolator()

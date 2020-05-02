@@ -11,7 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType="centerCrop"
-    android:src="@drawable/bg_for_png"/>
+    android:src="@android:color/black"/>
 
   <com.arsvechkarev.letta.views.DrawingView
     android:id="@+id/drawingCanvas"
@@ -92,7 +92,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
-      android:background="@android:color/white"
+      android:background="@android:color/holo_green_dark"
       android:clipChildren="false"
       android:gravity="center"
       android:orientation="vertical">
@@ -110,7 +110,9 @@
       <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:layout_margin="40dp"/>
+        android:layout_margin="40dp"
+        android:orientation="horizontal"
+        android:padding="8dp"/>
 
     </LinearLayout>
 

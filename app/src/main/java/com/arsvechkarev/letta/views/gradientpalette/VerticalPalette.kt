@@ -57,7 +57,7 @@ class VerticalPalette : Palette {
       swapperBounds = swapperBounds,
       swapperStrokeBounds = swapperStrokeBounds,
       gradientRectBounds = gradientRectBounds,
-      rectRadius = rectRadius,
+      roundRectRadius = rectRadius,
       startAnimAxis = startAnimAxis,
       endAnimAxis = endAnimAxis,
       radiusFloating = radiusFloating,
@@ -74,18 +74,6 @@ class VerticalPalette : Palette {
   override fun drawGradientRect(canvas: Canvas, gradientRect: RectF, gradientOuterPaint: Paint) {
     canvas.drawRoundRect(0f, 0f, gradientRect.width(), gradientRect.height(),
       gradientRect.width() / 2, gradientRect.width() / 2, gradientOuterPaint)
-  }
-  
-  override fun drawBezierShape(
-    bezierShape: BezierShape,
-    canvas: Canvas,
-    circle: Circle,
-    bezierSpotValue: Float,
-    bezierOffset: Float,
-    circleX: Float,
-    circleY: Float
-  ) {
-    bezierShape.draw(canvas, circle, bezierSpotValue, bezierOffset, circleX, circleY)
   }
   
   override fun getCircleX(circle: Circle) = circle.x
@@ -122,6 +110,7 @@ class VerticalPalette : Palette {
         (currentAxisValue - gradientRect.top).i)
   
   override fun updateCircleAnimation(currentCircle: Circle, currentAxisValue: Float, radiusSelected: Float) {
+    currentCircle.set(width / 2f, currentAxisValue, radiusSelected)
   }
   
   override fun createBlackAndWhiteGradient(
@@ -129,8 +118,8 @@ class VerticalPalette : Palette {
     colors: IntArray,
     positions: FloatArray
   ) = LinearGradient(
-    gradientRect.width() / 2, gradientRect.top,
-    gradientRect.width() / 2, gradientRect.bottom,
+    gradientRect.width() / 2, 0f,
+    gradientRect.width() / 2, gradientRect.height(),
     colors, positions, Shader.TileMode.CLAMP
   )
   
@@ -151,9 +140,8 @@ class VerticalPalette : Palette {
     gradientRegion: Region
   ) {
     gradientPath.addRoundRect(0f, 0f, gradientRect.width(), gradientRect.height(),
-      gradientRect.width() / 2, gradientRect.width() / 2, Path.Direction.CCW)
+      gradientRect.width() / 2, gradientRect.width() / 2, Path.Direction.CW)
     gradientRegion.setPath(gradientPath, Region(gradientRect.toRect()))
     canvas.drawPath(gradientPath, gradientPaint)
   }
-  
 }

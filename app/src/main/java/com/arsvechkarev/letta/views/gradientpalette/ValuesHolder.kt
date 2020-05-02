@@ -7,7 +7,7 @@ class ValuesHolder(
   val swapperBounds: Rect,
   val swapperStrokeBounds: Rect,
   val gradientRectBounds: RectF,
-  val rectRadius: Float,
+  val roundRectRadius: Float,
   val startAnimAxis: Float,
   val endAnimAxis: Float,
   val radiusFloating: Float,

@@ -31,7 +31,6 @@ import com.arsvechkarev.letta.utils.LIGHT_GRAY
 import com.arsvechkarev.letta.utils.STROKE_PAINT
 import com.arsvechkarev.letta.utils.c
 import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.drawBounds
 import com.arsvechkarev.letta.utils.execute
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.utils.i
@@ -88,7 +87,7 @@ class GradientPalette @JvmOverloads constructor(
   private var radiusFloating = 0f
   private var startAnimAxis = 0f
   private var endAnimAxis = 0f
-  private var currentAxisValue = 0f // Value of Y if orientation is vertical, X otherwise
+  private var currentMovingAxis = 0f // Value of Y if orientation is vertical, X otherwise
   private var currentAnimAxis = 0f
   private var currentAnimRadius = 0f
   private val circleAnimator = ValueAnimator()
@@ -113,7 +112,7 @@ class GradientPalette @JvmOverloads constructor(
   private var bezierSpotValue = 0f
   private val bezierHolder = PropertyValuesHolder.ofFloat("bezier", 0f) // Put 0 as a stub
   private var bezierSpotOffset = 22.dp
-  private var bezierVerticalOffset = 10.dp
+  private var bezierVerticalOffset = 9.dp
   private var bezierHorizontalOffset = 3.2f.dp
   private var bezierAngle = (PI / 6).toFloat()
   
@@ -122,8 +121,7 @@ class GradientPalette @JvmOverloads constructor(
     0f) // Put 0 as a stub
   
   var onColorChanged: (Int) -> Unit = {}
-  var currentColor = 0
-    private set
+  private var currentColor = 0
   
   init {
     val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.GradientPalette,
@@ -152,10 +150,10 @@ class GradientPalette @JvmOverloads constructor(
     radiusSelected = holder.radiusSelected
     currentAnimAxis = holder.currentAnimAxis
     currentAnimRadius = holder.currentAnimRadius
-    currentAxisValue = holder.currentAxisValue
-    circle.set(holder.minSizeHalf, currentAxisValue, radiusSelected)
+    currentMovingAxis = holder.currentAxisValue
+    palette.updateCircle(circle, currentMovingAxis, currentAnimAxis, radiusSelected)
     drawGradientBitmap()
-    currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentAxisValue)
+    currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentMovingAxis)
     circlePaint.color = currentColor
     bezierSpotStart = holder.bezierSpotStart
     bezierSpotEnd = holder.bezierSpotEnd
@@ -179,43 +177,40 @@ class GradientPalette @JvmOverloads constructor(
         }
         drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
         val bezierOffset = bezierSpotOffset * animatedFraction
-        println("spotValue = $bezierSpotValue")
-        bezierShape.draw(canvas, circle, bezierSpotValue, bezierOffset, palette.getCircleX(circle),
-          palette.getCircleY(circle))
-        palette.drawCircle(circle, canvas, circleStrokePaint)
+        val bezierDistance = bezierSpotValue + bezierOffset
+        palette.drawBezierShape(bezierShape, canvas, circle, bezierDistance, bezierOffset)
+        palette.drawCircle(canvas, circle.radius, circle.x, circle.y, circleStrokePaint)
         if (circle.radius == radiusSelected) {
-          palette.drawCircleStroke(circle, canvas, circleStrokePaint.strokeWidth,
-            STROKE_PAINT)
+          palette.drawCircleStroke(canvas, circle.radius, circle.x, circle.y,
+            circleStrokePaint.strokeWidth, STROKE_PAINT)
         }
-        palette.drawCircle(circle, canvas, circlePaint)
-        palette.drawCircleInnerStroke(circle, canvas, STROKE_PAINT)
+        palette.drawCircle(canvas, circle.radius, circle.x, circle.y, circlePaint)
+        palette.drawCircle(canvas, circle.radius, circle.x, circle.y, STROKE_PAINT)
       }
-      drawBounds(canvas)
     }
   }
   
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    val axis = palette.getActiveAxis(event)
     when (event.action) {
       ACTION_DOWN -> {
         if (palette.isNotInSwapper(event, swapper)) {
           touchInPalette = true
-          updateValues(axis)
+          updateValues(event)
           updateCircleAnimation(animateBack = false)
         }
         return true
       }
       ACTION_MOVE -> {
         if (touchInPalette) {
-          updateValues(axis)
+          updateValues(event)
           invalidate()
           return true
         }
       }
       ACTION_UP, ACTION_CANCEL -> {
         if (touchInPalette) {
-          updateValues(axis)
+          updateValues(event)
           updateCircleAnimation(animateBack = true)
         } else {
           if (gradientScale == 1f) { // If scale is 1 => gradient isn't being animated now
@@ -264,23 +259,21 @@ class GradientPalette @JvmOverloads constructor(
     }
     swapperMode = swapperMode.swap()
     drawGradientBitmap()
-    currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentAxisValue)
+    currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentMovingAxis)
     onColorChanged(currentColor)
     circlePaint.color = currentColor
     invalidate()
   }
   
-  private fun updateValues(axisValue: Float) {
-    currentAxisValue = palette.getCoercedCurrentAxisValue(axisValue, gradientRect,
-      GRADIENT_SENSITIVITY)
-    palette.updateCircleAxis(circle, currentAxisValue)
-    currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentAxisValue)
+  private fun updateValues(event: MotionEvent) {
+    currentMovingAxis = palette.updateAxisValue(event, circle, gradientRect, GRADIENT_SENSITIVITY)
+    currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentMovingAxis)
     onColorChanged(currentColor)
     circlePaint.color = currentColor
   }
   
   private fun updateCircleAnimation(animateBack: Boolean) {
-    palette.updateCircleAnimation(circle, currentAxisValue, radiusSelected)
+    palette.updateCircle(circle, currentMovingAxis, currentAnimAxis, radiusSelected)
     if (animateBack) {
       axisHolder.setFloatValues(currentAnimAxis, startAnimAxis)
       radiusHolder.setFloatValues(currentAnimRadius, radiusSelected)
@@ -302,9 +295,10 @@ class GradientPalette @JvmOverloads constructor(
       addUpdateListener {
         this@GradientPalette.animatedFraction = getAnimatedValue("fraction") as Float
         currentAnimAxis = getAnimatedValue("axis") as Float
+        println("animAxis = $currentAnimAxis")
         currentAnimRadius = getAnimatedValue("radius") as Float
         bezierSpotValue = getAnimatedValue("bezier") as Float
-        circle.set(currentAnimAxis, currentAxisValue, currentAnimRadius)
+        palette.updateCircle(circle, currentMovingAxis, currentAnimAxis, currentAnimRadius)
         invalidate()
       }
       interpolator = AccelerateDecelerateInterpolator()

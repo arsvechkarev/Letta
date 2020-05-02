@@ -11,7 +11,6 @@ import android.graphics.Region
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
-import com.arsvechkarev.letta.utils.STROKE_PAINT
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.utils.i
 import com.arsvechkarev.letta.utils.toRect
@@ -65,7 +64,6 @@ class VerticalPalette : Palette {
       currentAnimAxis = startAnimAxis,
       currentAnimRadius = radiusSelected,
       currentAxisValue = currentAxisValue,
-      minSizeHalf = width / 2f,
       bezierSpotStart = bezierSpotStart,
       bezierSpotEnd = bezierSpotEnd
     )
@@ -80,37 +78,35 @@ class VerticalPalette : Palette {
   
   override fun getCircleY(circle: Circle) = circle.y
   
-  override fun drawCircle(circle: Circle, canvas: Canvas, circleStrokePaint: Paint) {
-    circle.draw(canvas, circleStrokePaint)
+  override fun drawCircle(canvas: Canvas, radius: Float, x: Float, y: Float, circleStrokePaint: Paint) {
+    canvas.drawCircle(x, y, radius, circleStrokePaint)
   }
   
-  override fun drawCircleStroke(circle: Circle, canvas: Canvas, strokeWidth: Float, strokePaint: Paint) {
-    circle.drawStroke(canvas, strokeWidth, STROKE_PAINT)
-  }
-  
-  override fun drawCircleInnerStroke(circle: Circle, canvas: Canvas, circlePaint: Paint) {
-    circle.drawInnerStroke(canvas, STROKE_PAINT)
+  override fun drawCircleStroke(canvas: Canvas, radius: Float, x: Float, y: Float, strokeWidth: Float, strokePaint: Paint) {
+    canvas.drawCircle(x, y, radius + strokeWidth / 2, strokePaint)
   }
   
   override fun isNotInSwapper(event: MotionEvent, swapper: Drawable) =
       event.y <= height - swapper.bounds.height()
   
-  override fun getActiveAxis(event: MotionEvent) = event.y
-  
-  override fun getCoercedCurrentAxisValue(axisValue: Float, gradientRect: RectF, gradientSensitivity: Int) =
-      axisValue.coerceIn(gradientRect.top + gradientSensitivity,
-        gradientRect.bottom - gradientSensitivity)
-  
-  override fun updateCircleAxis(circle: Circle, axisValue: Float) {
-    circle.y = axisValue
+  override fun updateAxisValue(event: MotionEvent, circle: Circle, gradientRect: RectF, gradientSensitivity: Int): Float {
+    val value = event.y.coerceIn(gradientRect.top + gradientSensitivity,
+      gradientRect.bottom - gradientSensitivity)
+    circle.y = value
+    return value
   }
   
   override fun getColorFromBitmap(gradientBitmap: Bitmap, gradientRect: RectF, currentAxisValue: Float) =
       gradientBitmap.getPixel(gradientRect.width().i / 2,
         (currentAxisValue - gradientRect.top).i)
   
-  override fun updateCircleAnimation(currentCircle: Circle, currentAxisValue: Float, radiusSelected: Float) {
-    currentCircle.set(width / 2f, currentAxisValue, radiusSelected)
+  override fun updateCircle(
+    currentCircle: Circle,
+    currentAxisValue: Float,
+    currentAnimAxis: Float,
+    radius: Float
+  ) {
+    currentCircle.set(currentAnimAxis, currentAxisValue, radius)
   }
   
   override fun createBlackAndWhiteGradient(
@@ -143,5 +139,15 @@ class VerticalPalette : Palette {
       gradientRect.width() / 2, gradientRect.width() / 2, Path.Direction.CW)
     gradientRegion.setPath(gradientPath, Region(gradientRect.toRect()))
     canvas.drawPath(gradientPath, gradientPaint)
+  }
+  
+  override fun drawBezierShape(
+    bezierShape: BezierShape,
+    canvas: Canvas,
+    circle: Circle,
+    bezierDistance: Float,
+    bezierOffset: Float
+  ) {
+    bezierShape.drawVertical(canvas, circle, bezierDistance, bezierOffset)
   }
 }

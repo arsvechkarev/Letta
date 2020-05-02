@@ -21,19 +21,41 @@ class BezierShape {
     this.horizontalOffset = horizontalOffset
   }
   
-  fun draw(canvas: Canvas, circle: Circle, triangleEnd: Float, bezierOffset: Float, circleX: Float, circleY: Float) {
-    val x1 = (cos(angleRadians) * circle.radius + circleX) - horizontalOffset
-    val y1 = (sin(angleRadians) * circle.radius + circleY) + verticalOffset
+  fun drawVertical(canvas: Canvas, circle: Circle, bezierDistance: Float, bezierOffset: Float) {
+    val x0 = circle.x + cos(angleRadians) * circle.radius - horizontalOffset
+    val y0 = circle.y + sin(angleRadians) * circle.radius + verticalOffset
     
-    val x3 = (cos(angleRadians) * circle.radius + circleX) - horizontalOffset
-    val y3 = (-sin(angleRadians) * circle.radius + circleY) - verticalOffset
+    val x1 = bezierDistance
+    val y1 = circle.y - bezierOffset
     
-    bezierPath.moveTo(x1, y1)
-    bezierPath.cubicTo(
-      triangleEnd + bezierOffset, circleY - bezierOffset,
-      triangleEnd + bezierOffset, circleY + bezierOffset,
-      x3, y3
-    )
+    val x2 = bezierDistance
+    val y2 = circle.y + bezierOffset
+    
+    val x3 = circle.x + cos(angleRadians) * circle.radius - horizontalOffset
+    val y3 = circle.y - sin(angleRadians) * circle.radius - verticalOffset
+    
+    bezierPath.moveTo(x0, y0)
+    bezierPath.cubicTo(x1, y1, x2, y2, x3, y3)
+    bezierPath.close()
+    canvas.drawPath(bezierPath, bgPaint)
+    bezierPath.reset()
+  }
+  
+  fun drawHorizontal(canvas: Canvas, circle: Circle, bezierDistance: Float, bezierOffset: Float) {
+    val x0 = circle.x - cos(angleRadians) * circle.radius + horizontalOffset
+    val y0 = circle.y + sin(angleRadians) * circle.radius + verticalOffset
+    
+    val x1 = circle.x + bezierOffset
+    val y1 = bezierDistance
+    
+    val x2 = circle.x - bezierOffset
+    val y2 = bezierDistance
+    
+    val x3 = circle.x + cos(angleRadians) * circle.radius - horizontalOffset
+    val y3 = circle.y + sin(angleRadians) * circle.radius + verticalOffset
+    
+    bezierPath.moveTo(x0, y0)
+    bezierPath.cubicTo(x1, y1, x2, y2, x3, y3)
     bezierPath.close()
     canvas.drawPath(bezierPath, bgPaint)
     bezierPath.reset()

@@ -17,20 +17,36 @@ import android.view.MotionEvent
  * @see HorizontalPalette
  */
 interface Palette {
-  fun initHolder(width: Int, height: Int, swapper: Drawable, swapperStroke: Drawable, padding: Padding, circleStrokeWidth: Float): ValuesHolder
+  fun initHolder(width: Int, height: Int, swapper: Drawable, swapperStroke: Drawable,
+                 padding: Padding, circleStrokeWidth: Float): ValuesHolder
+  
   fun drawGradientRect(canvas: Canvas, gradientRect: RectF, gradientOuterPaint: Paint)
+  
   fun getCircleX(circle: Circle): Float
+  
   fun getCircleY(circle: Circle): Float
-  fun drawCircle(circle: Circle, canvas: Canvas, circleStrokePaint: Paint)
-  fun drawCircleStroke(circle: Circle, canvas: Canvas, strokeWidth: Float, strokePaint: Paint)
-  fun drawCircleInnerStroke(circle: Circle, canvas: Canvas, circlePaint: Paint)
+  
+  fun drawCircle(canvas: Canvas, radius: Float, x: Float, y: Float, circleStrokePaint: Paint)
+  
+  fun drawCircleStroke(canvas: Canvas, radius: Float, x: Float, y: Float,
+                       strokeWidth: Float, strokePaint: Paint)
+  
   fun isNotInSwapper(event: MotionEvent, swapper: Drawable): Boolean
-  fun getActiveAxis(event: MotionEvent): Float
-  fun getCoercedCurrentAxisValue(axisValue: Float, gradientRect: RectF, gradientSensitivity: Int): Float
-  fun updateCircleAxis(circle: Circle, axisValue: Float)
+  
+  fun updateAxisValue(event: MotionEvent, circle: Circle, gradientRect: RectF, gradientSensitivity: Int): Float
+  
   fun getColorFromBitmap(gradientBitmap: Bitmap, gradientRect: RectF, currentAxisValue: Float): Int
-  fun updateCircleAnimation(currentCircle: Circle, currentAxisValue: Float, radiusSelected: Float)
-  fun createBlackAndWhiteGradient(gradientRect: RectF, colors: IntArray, positions: FloatArray): LinearGradient
+  
+  fun updateCircle(currentCircle: Circle, currentAxisValue: Float, currentAnimAxis: Float, radius: Float)
+  
+  fun createBlackAndWhiteGradient(gradientRect: RectF, colors: IntArray,
+                                  positions: FloatArray): LinearGradient
+  
   fun createRainbowGradient(gradientRect: RectF, colors: Map<Int, Float>): LinearGradient
-  fun drawGradientPath(canvas: Canvas, gradientRect: RectF, gradientPath: Path, gradientPaint: Paint, gradientRegion: Region)
+  
+  fun drawGradientPath(canvas: Canvas, gradientRect: RectF, gradientPath: Path,
+                       gradientPaint: Paint, gradientRegion: Region)
+  
+  fun drawBezierShape(bezierShape: BezierShape, canvas: Canvas, circle: Circle,
+                      bezierDistance: Float, bezierOffset: Float)
 }

@@ -15,7 +15,6 @@ class ValuesHolder(
   val currentAnimAxis: Float,
   val currentAnimRadius: Float,
   val currentAxisValue: Float,
-  val minSizeHalf: Float,
   val bezierSpotStart: Float,
   val bezierSpotEnd: Float
 )

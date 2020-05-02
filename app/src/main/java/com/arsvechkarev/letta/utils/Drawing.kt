@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PointF
 import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import android.view.View
@@ -43,6 +44,10 @@ inline fun Canvas.execute(block: Canvas.() -> Unit) {
   restore()
 }
 
+fun RectF.toRect(): Rect {
+  return Rect(left.i, top.i, right.i, bottom.i)
+}
+
 // Only in debug
 fun View.drawBounds(canvas: Canvas, color: Int = Color.RED) {
   if (!BuildConfig.DEBUG) {
@@ -54,6 +59,8 @@ fun View.drawBounds(canvas: Canvas, color: Int = Color.RED) {
     strokeWidth = 5f
   })
 }
+
+val String.c get() = Color.parseColor(this)
 
 fun Int.isWhiterThan(limitChannel: Int): Boolean {
   val r = this and 0x00FF0000 shr 16

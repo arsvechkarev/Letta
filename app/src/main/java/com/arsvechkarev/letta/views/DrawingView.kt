@@ -10,7 +10,8 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.View
 import com.arsvechkarev.letta.core.brushes.Brush
-import com.arsvechkarev.letta.core.brushes.SprayBrush
+import com.arsvechkarev.letta.core.brushes.BrushFactory
+import com.arsvechkarev.letta.core.brushes.BrushType
 
 class DrawingView @JvmOverloads constructor(
   context: Context,
@@ -22,11 +23,12 @@ class DrawingView @JvmOverloads constructor(
   private var latestX = 0f
   private var latestY = 0f
   
-  lateinit var currentBrush: Brush
+  var brushType: BrushType = BrushType.CIRCLE
+  private lateinit var brush: Brush
   
   var brushColor = 0
   
-  var brushWidth = 0f
+  var brushSize = 0f
     set(value) {
       if (value > 0f)
         field = value
@@ -57,15 +59,15 @@ class DrawingView @JvmOverloads constructor(
     when (event.action) {
       ACTION_DOWN -> {
         onDown()
-        currentBrush = createNewBrush()
-        currentBrush.onDown(event.x, event.y)
+        brush = createNewBrush()
+        brush.onDown(event.x, event.y)
         latestX = event.x
         latestY = event.y
         invalidate()
         return true
       }
       ACTION_MOVE -> {
-        currentBrush.onMove(latestX, latestY, event.x, event.y)
+        brush.onMove(latestX, latestY, event.x, event.y)
         latestX = event.x
         latestY = event.y
         invalidate()
@@ -73,7 +75,7 @@ class DrawingView @JvmOverloads constructor(
       }
       ACTION_UP -> {
         onUp()
-        currentBrush.onUp(event.x, event.y)
+        brush.onUp(event.x, event.y)
         invalidate()
         return true
       }
@@ -82,8 +84,10 @@ class DrawingView @JvmOverloads constructor(
   }
   
   private fun createNewBrush(): Brush {
-    currentBrush = SprayBrush(brushColor, brushWidth)
-    records.add(currentBrush)
-    return currentBrush
+    brush = BrushFactory.createBrush(brushType, brushColor, brushSize)
+    brush.brushSize = brushSize
+    brush.color = brushColor
+    records.add(brush)
+    return brush
   }
 }

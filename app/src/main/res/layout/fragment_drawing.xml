@@ -65,10 +65,11 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
-  <com.arsvechkarev.letta.views.GradientPalette
+  <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
     android:id="@+id/palette"
     android:layout_width="32dp"
     android:layout_height="280dp"
+    android:orientation="vertical"
     android:padding="8dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="@id/imageDone"
@@ -80,5 +81,39 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintBottom_toBottomOf="parent"/>
+
+  <com.arsvechkarev.letta.views.SimpleDialog
+    android:id="@+id/chooseBackgroundDialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:background="@android:color/white"
+      android:clipChildren="false"
+      android:gravity="center"
+      android:orientation="vertical">
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:text="Choose background"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+      <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_margin="40dp"/>
+
+    </LinearLayout>
+
+  </com.arsvechkarev.letta.views.SimpleDialog>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

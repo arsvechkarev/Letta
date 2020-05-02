@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import com.arsvechkarev.letta.utils.LIGHT_GRAY
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.f
 
@@ -19,6 +20,7 @@ class BrushDisplayer @JvmOverloads constructor(
   private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.STROKE
     strokeWidth = 1.dp
+    color = LIGHT_GRAY
     maskFilter = BlurMaskFilter(2.dp, BlurMaskFilter.Blur.NORMAL)
   }
   private var diameter = 0f

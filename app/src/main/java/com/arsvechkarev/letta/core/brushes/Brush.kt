@@ -3,9 +3,19 @@ package com.arsvechkarev.letta.core.brushes
 import android.graphics.Canvas
 
 abstract class Brush(
-  val color: Int,
-  val width: Float
-) : ExampleDrawable {
+  var color: Int,
+  brushSize: Float
+) {
+  
+  var brushSize: Float = brushSize
+    set(value) {
+      field = value
+      onBrushSizeChanged(value)
+    }
+  
+  open fun onBrushSizeChanged(brushSize: Float) {}
+  
+  abstract val type: BrushType
   
   abstract fun onDown(x: Float, y: Float)
   
@@ -14,4 +24,6 @@ abstract class Brush(
   abstract fun onUp(x: Float, y: Float)
   
   abstract fun draw(canvas: Canvas)
+  
+  abstract fun onExampleDraw(canvas: Canvas, x: Float, y: Float, brushSize: Float)
 }

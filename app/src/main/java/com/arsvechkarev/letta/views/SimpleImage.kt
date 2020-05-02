@@ -79,7 +79,7 @@ class SimpleImage @JvmOverloads constructor(
   }
   
   private fun animate(down: Boolean = true) {
-    val endScale = if (down) 1.2f else 1.0f
+    val endScale = if (down) 0.9f else 1.0f
     with(animator) {
       cancel()
       setFloatValues(scaleFactor, endScale)

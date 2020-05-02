@@ -13,6 +13,8 @@ class LettaApplication : Application() {
   
   companion object {
     
+    lateinit var resources: Resources
+    
     var density: Float = -1f
       private set
     
@@ -20,6 +22,7 @@ class LettaApplication : Application() {
       private set
     
     fun initResources(resources: Resources) {
+      this.resources = resources
       density = resources.displayMetrics.density
       scaledDensity = resources.displayMetrics.scaledDensity
     }

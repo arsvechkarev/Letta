@@ -26,7 +26,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.addBouncyBackEffect
-import com.arsvechkarev.letta.animations.doOnEnd
+import com.arsvechkarev.letta.utils.doOnEnd
 import com.arsvechkarev.letta.utils.LIGHT_GRAY
 import com.arsvechkarev.letta.utils.STROKE_PAINT
 import com.arsvechkarev.letta.utils.c
@@ -112,7 +112,7 @@ class GradientPalette @JvmOverloads constructor(
   private var bezierSpotValue = 0f
   private val bezierHolder = PropertyValuesHolder.ofFloat("bezier", 0f) // Put 0 as a stub
   private var bezierSpotOffset = 22.dp
-  private var bezierVerticalOffset = 9.dp
+  private var bezierVerticalOffset = 9.1f.dp
   private var bezierHorizontalOffset = 3.2f.dp
   private var bezierAngle = (PI / 6).toFloat()
   

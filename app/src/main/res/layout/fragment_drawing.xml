@@ -7,11 +7,18 @@
   android:clipChildren="false">
 
   <ImageView
-    android:id="@+id/background"
+    android:id="@+id/backgroundImage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType="centerCrop"
-    android:src="@android:color/black"/>
+    android:src="@drawable/bg_0_for_png"/>
+
+  <View
+    android:id="@+id/backgroundColor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#42FF0000"
+    android:scaleType="centerCrop"/>
 
   <com.arsvechkarev.letta.views.DrawingView
     android:id="@+id/drawingCanvas"
@@ -92,10 +99,14 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
-      android:background="@android:color/holo_green_dark"
+      android:background="@drawable/bg_choose_background_dialog"
       android:clipChildren="false"
       android:gravity="center"
       android:orientation="vertical">
+
+      <com.arsvechkarev.letta.views.CheckmarkView
+        android:layout_width="60dp"
+        android:layout_height="60dp"/>
 
       <TextView
         android:layout_width="match_parent"
@@ -108,11 +119,18 @@
         android:textStyle="bold"/>
 
       <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
+        android:id="@+id/chooseBgGradientPalette"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_margin="40dp"
         android:orientation="horizontal"
         android:padding="8dp"/>
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/backgroundImageRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"/>
 
     </LinearLayout>
 

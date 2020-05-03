@@ -11,4 +11,5 @@
   <dimen name="img_tool_padding">8dp</dimen>
   <dimen name="img_done_size">50dp</dimen>
   <dimen name="img_done_margin">16dp</dimen>
+  <dimen name="choose_bg_dialog_radius">12dp</dimen>
 </resources>

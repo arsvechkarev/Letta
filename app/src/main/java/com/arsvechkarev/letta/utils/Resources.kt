@@ -4,17 +4,13 @@ import android.view.View
 import androidx.annotation.DimenRes
 import com.arsvechkarev.letta.LettaApplication
 
-val Int.dp: Float
-  get() {
-    check(LettaApplication.density != -1f) { "Density is not initialized yet" }
-    return this * LettaApplication.density
-  }
+val Int.dp get() = this * LettaApplication.density
 
-val Float.dp: Float
-  get() {
-    check(LettaApplication.density != -1f) { "Density is not initialized yet" }
-    return this * LettaApplication.density
-  }
+val Float.dp get() = this * LettaApplication.density
+
+val Int.dpInt get() = (this * LettaApplication.density).toInt()
+
+val Float.dpInt get() = (this * LettaApplication.density).toInt()
 
 val Int.sp: Float
   get() {

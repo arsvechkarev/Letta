@@ -2,4 +2,5 @@
 <resources>
   <color name="icon_default">#000000</color>
   <color name="icon_opposite">#FFFFFF</color>
+  <color name="background">#FFFFFF</color>
 </resources>

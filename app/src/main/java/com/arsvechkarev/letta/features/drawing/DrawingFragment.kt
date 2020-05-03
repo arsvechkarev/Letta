@@ -1,11 +1,14 @@
 package com.arsvechkarev.letta.features.drawing
 
-
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.letta.R
+import kotlinx.android.synthetic.main.fragment_drawing.backgroundColor
+import kotlinx.android.synthetic.main.fragment_drawing.backgroundImage
+import kotlinx.android.synthetic.main.fragment_drawing.backgroundImageRecyclerView
 import kotlinx.android.synthetic.main.fragment_drawing.chooseBackgroundDialog
+import kotlinx.android.synthetic.main.fragment_drawing.chooseBgGradientPalette
 import kotlinx.android.synthetic.main.fragment_drawing.drawingCanvas
 import kotlinx.android.synthetic.main.fragment_drawing.imageBackground
 import kotlinx.android.synthetic.main.fragment_drawing.imageUndo
@@ -20,6 +23,8 @@ class DrawingFragment : Fragment(R.layout.fragment_drawing) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     paintContainer = PaintContainer(imageUndo, drawingCanvas, palette,
       verticalSeekbar, paintDisplayer)
+    val bgContainer = ChooseBackgroundContainer(backgroundImage, backgroundColor, chooseBgGradientPalette,
+      backgroundImageRecyclerView)
     imageBackground.setOnClickListener {
       chooseBackgroundDialog.show()
     }

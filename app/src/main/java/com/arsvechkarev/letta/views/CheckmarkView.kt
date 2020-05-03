@@ -13,11 +13,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.animations.DURATION_DEFAULT
 import com.arsvechkarev.letta.animations.DURATION_SMALL
 import com.arsvechkarev.letta.utils.cancelIfRunning
-import com.arsvechkarev.letta.utils.doOnEnd
-import com.arsvechkarev.letta.utils.drawBounds
 import com.arsvechkarev.letta.utils.i
 import com.arsvechkarev.letta.utils.stopIfRunning
 
@@ -31,23 +28,44 @@ class CheckmarkView @JvmOverloads constructor(
     color = 0xFF00CC2C.toInt()
     style = Paint.Style.STROKE
   }
-  
   private val checkmarkAppear = context.getDrawable(
     R.drawable.avd_chechmark_appear) as AnimatedVectorDrawable
   
   private val checkmarkDisappear = context.getDrawable(
     R.drawable.avd_chechmark_disappear) as AnimatedVectorDrawable
   
+  private val imageSize: Float
   private var currentDrawable = checkmarkDisappear
   
+  private var maxStrokeWidth = -1f
+  private var circleRadius = -1f
+  
+  private var _isChecked = false
+  
+  var isChecked: Boolean
+    get() = _isChecked
+    set(value) {
+      if (_isChecked == value) return
+      if (maxStrokeWidth == -1f) { // Is not initialized yet
+        post {
+          _isChecked = value
+          updateCheckedState()
+        }
+      } else {
+        _isChecked = value
+        updateCheckedState()
+      }
+    }
+  
   init {
+    val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.CheckmarkView,
+      defStyleAttr, 0)
+    imageSize = attributes.getDimension(R.styleable.CheckmarkView_imageSize, -1f)
+    attributes.recycle()
     val colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
     checkmarkAppear.colorFilter = colorFilter
     checkmarkDisappear.colorFilter = colorFilter
   }
-  
-  private var maxStrokeWidth = -1f
-  private var isClicked = true
   
   private val animator = ValueAnimator().apply {
     duration = DURATION_SMALL
@@ -58,19 +76,51 @@ class CheckmarkView @JvmOverloads constructor(
     }
   }
   
-  init {
-    isClickable = true
+  fun updateWithoutAnimation(isChecked: Boolean) {
+    if (isChecked == _isChecked) return
+    _isChecked = isChecked
+    if (maxStrokeWidth == -1f) {
+      post {
+        updateCheckedStateWithoutAnimation()
+      }
+    } else {
+      updateCheckedStateWithoutAnimation()
+    }
+  }
+  
+  override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    if (imageSize == -1f) {
+      super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    } else {
+      setMeasuredDimension(
+        resolveSize(imageSize.i, widthMeasureSpec),
+        resolveSize(imageSize.i, heightMeasureSpec)
+      )
+    }
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    maxStrokeWidth = maxOf(w, h) / 2f
-    circlePaint.strokeWidth = maxStrokeWidth
-    val bounds = Rect(
-      (w / 2f - w * 0.4f).i,
-      (h / 2f - h * 0.4f).i,
-      (w / 2f + w * 0.4f).i,
-      (h / 2f + h * 0.4f).i
-    )
+    val bounds: Rect
+    if (imageSize == -1f) {
+      circleRadius = maxOf(w / 2f, h / 2f)
+      maxStrokeWidth = maxOf(w, h) / 2f
+      bounds = Rect(
+        (w / 2f - w * 0.4f).i,
+        (h / 2f - h * 0.4f).i,
+        (w / 2f + w * 0.4f).i,
+        (h / 2f + h * 0.4f).i
+      )
+    } else {
+      maxStrokeWidth = imageSize / 2f
+      circleRadius = imageSize / 2f
+      bounds = Rect(
+        (w / 2f - imageSize * 0.4f).i,
+        (h / 2f - imageSize * 0.4f).i,
+        (w / 2f + imageSize * 0.4f).i,
+        (h / 2f + imageSize * 0.4f).i
+      )
+    }
+    circlePaint.strokeWidth = if (isChecked) maxStrokeWidth else 0f
     checkmarkAppear.bounds = bounds
     checkmarkDisappear.bounds = bounds
   }
@@ -78,31 +128,40 @@ class CheckmarkView @JvmOverloads constructor(
   override fun onDraw(canvas: Canvas) {
     if (circlePaint.strokeWidth != 0f) {
       canvas.drawCircle(width / 2f, height / 2f,
-        maxOf(width / 2f, height / 2f) - circlePaint.strokeWidth / 2, circlePaint)
+        circleRadius - circlePaint.strokeWidth / 2, circlePaint)
+      currentDrawable.draw(canvas)
     }
-    currentDrawable.draw(canvas)
-  }
-  
-  override fun performClick(): Boolean {
-    if (animator.isRunning) {
-      return false
-    }
-    if (isClicked) {
-      currentDrawable = checkmarkDisappear
-      animator.setFloatValues(circlePaint.strokeWidth, 0f)
-    } else {
-      currentDrawable = checkmarkAppear
-      animator.setFloatValues(circlePaint.strokeWidth, maxStrokeWidth)
-    }
-    isClicked = !isClicked
-    currentDrawable.start()
-    animator.start()
-    return super.performClick()
   }
   
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
     animator.cancelIfRunning()
     currentDrawable.stopIfRunning()
+  }
+  
+  private fun updateCheckedState() {
+    if (animator.isRunning) {
+      return
+    }
+    if (_isChecked) {
+      currentDrawable = checkmarkAppear
+      animator.setFloatValues(circlePaint.strokeWidth, maxStrokeWidth)
+    } else {
+      currentDrawable = checkmarkDisappear
+      animator.setFloatValues(circlePaint.strokeWidth, 0f)
+    }
+    currentDrawable.start()
+    animator.start()
+  }
+  
+  private fun updateCheckedStateWithoutAnimation() {
+    if (_isChecked) {
+      circlePaint.strokeWidth = maxStrokeWidth
+      currentDrawable = checkmarkAppear
+    } else {
+      circlePaint.strokeWidth = 0f
+      currentDrawable = checkmarkDisappear
+    }
+    invalidate()
   }
 }

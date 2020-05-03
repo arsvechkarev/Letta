@@ -16,9 +16,7 @@
   <View
     android:id="@+id/backgroundColor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#42FF0000"
-    android:scaleType="centerCrop"/>
+    android:layout_height="match_parent"/>
 
   <com.arsvechkarev.letta.views.DrawingView
     android:id="@+id/drawingCanvas"
@@ -30,7 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
-  <com.arsvechkarev.letta.views.SimpleImage
+  <com.arsvechkarev.letta.views.Image
     android:id="@+id/imageDone"
     android:layout_width="@dimen/img_done_size"
     android:layout_height="@dimen/img_done_size"
@@ -41,7 +39,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
-  <com.arsvechkarev.letta.views.SimpleImage
+  <com.arsvechkarev.letta.views.Image
     android:id="@+id/imageUndo"
     android:layout_width="@dimen/img_tool_size"
     android:layout_height="@dimen/img_tool_size"
@@ -53,14 +51,13 @@
     app:layout_constraintEnd_toStartOf="@id/imageDone"
     app:layout_constraintTop_toTopOf="parent"/>
 
-  <com.arsvechkarev.letta.views.SimpleImage
-    android:id="@+id/imageBackground"
+  <com.arsvechkarev.letta.views.Image
+    android:id="@+id/imageCurrentBackground"
     android:layout_width="@dimen/img_tool_size"
     android:layout_height="@dimen/img_tool_size"
     android:layout_marginStart="@dimen/img_tool_m_horizontal"
     android:layout_marginTop="@dimen/img_tool_m_top"
     android:padding="@dimen/img_tool_padding"
-    app:imageSrc="@drawable/ic_background"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
@@ -104,10 +101,6 @@
       android:gravity="center"
       android:orientation="vertical">
 
-      <com.arsvechkarev.letta.views.CheckmarkView
-        android:layout_width="60dp"
-        android:layout_height="60dp"/>
-
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -130,7 +123,8 @@
         android:id="@+id/backgroundImageRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="24dp"
+        android:overScrollMode="never"/>
 
     </LinearLayout>
 

@@ -69,3 +69,9 @@ fun Int.isWhiterThan(limitChannel: Int): Boolean {
   return r > limitChannel && g > limitChannel && b > limitChannel
       && r == g && r == b && g == b
 }
+
+fun Int.withAlpha(alpha: Int): Int {
+  assertThat(alpha in 0..255) { "Incorrect alpha" }
+  val a = alpha shl 16
+  return this and 0xFF000000.toInt() or a
+}

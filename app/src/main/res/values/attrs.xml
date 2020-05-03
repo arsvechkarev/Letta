@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <declare-styleable name="SimpleImage">
-    <attr name="imageSrc" format="reference"/>
+
+  <declare-styleable name="CheckmarkView">
+    <attr name="imageSize" format="dimension"/>
   </declare-styleable>
 
   <declare-styleable name="GradientPalette">
@@ -10,4 +11,9 @@
       <enum name="vertical" value="1"/>
     </attr>
   </declare-styleable>
+
+  <declare-styleable name="Image">
+    <attr name="imageSrc" format="reference"/>
+  </declare-styleable>
+
 </resources>

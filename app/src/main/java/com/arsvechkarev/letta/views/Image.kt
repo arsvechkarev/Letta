@@ -12,11 +12,11 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.utils.STROKE_PAINT
 import com.arsvechkarev.letta.utils.contains
 import com.arsvechkarev.letta.utils.execute
-import com.arsvechkarev.letta.utils.STROKE_PAINT
 
-class SimpleImage @JvmOverloads constructor(
+open class Image @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
@@ -25,39 +25,44 @@ class SimpleImage @JvmOverloads constructor(
   private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Color.WHITE
   }
-  private val image: Drawable
-  private var scaleFactor = 1f
+  private var image: Drawable?
   private val animator = ValueAnimator()
   
+  protected var scaleFactor = 1f
+    private set
+  
   init {
-    val arr = context.obtainStyledAttributes(attrs, R.styleable.SimpleImage, 0, 0)
-    image = arr.getDrawable(R.styleable.SimpleImage_imageSrc)!!.mutate()
-    image.colorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+    val arr = context.obtainStyledAttributes(attrs, R.styleable.Image, 0, 0)
+    image = arr.getDrawable(R.styleable.Image_imageSrc)?.mutate()
+    image?.colorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
     arr.recycle()
   }
   
-  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    image.setBounds(paddingLeft, paddingTop, w - paddingRight, h - paddingBottom)
+  fun setImage(drawable: Drawable) {
+    image = drawable
+    requestLayout()
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    val max = maxOf(image.intrinsicWidth, image.intrinsicHeight)
+    val max = maxOf(image?.intrinsicWidth ?: 0, image?.intrinsicHeight ?: 0)
     val size = max + paddingStart + paddingEnd
     setMeasuredDimension(
       resolveSize(size, widthMeasureSpec),
-      resolveSize(size, widthMeasureSpec)
+      resolveSize(size, heightMeasureSpec)
     )
   }
   
   override fun onDraw(canvas: Canvas) {
+    if (image?.bounds?.width() == 0) {
+      image?.setBounds(paddingLeft, paddingTop, width - paddingRight, height - paddingBottom)
+    }
     canvas.execute {
       val halfWidth = width / 2f
       val halfHeight = height / 2f
       scale(scaleFactor, scaleFactor, halfWidth, halfHeight)
       drawCircle(halfWidth, halfHeight, halfWidth, backgroundPaint)
-      image.draw(canvas)
-      drawCircle(halfWidth, halfHeight, halfWidth,
-        STROKE_PAINT)
+      image?.draw(canvas)
+      drawCircle(halfWidth, halfHeight, halfWidth, STROKE_PAINT)
     }
   }
   

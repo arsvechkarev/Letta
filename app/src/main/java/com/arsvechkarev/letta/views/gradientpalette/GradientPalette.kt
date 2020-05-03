@@ -26,10 +26,10 @@ import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.animations.addBouncyBackEffect
-import com.arsvechkarev.letta.utils.doOnEnd
 import com.arsvechkarev.letta.utils.LIGHT_GRAY
 import com.arsvechkarev.letta.utils.STROKE_PAINT
 import com.arsvechkarev.letta.utils.c
+import com.arsvechkarev.letta.utils.doOnEnd
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.execute
 import com.arsvechkarev.letta.utils.f
@@ -73,7 +73,7 @@ class GradientPalette @JvmOverloads constructor(
   private var touchInPalette = false
   private var gradientScale = 1f
   
-  // Circle and animation
+  // Circle
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Color.WHITE
     this.strokeWidth = circleStrokeWidth
@@ -121,7 +121,8 @@ class GradientPalette @JvmOverloads constructor(
     0f) // Put 0 as a stub
   
   var onColorChanged: (Int) -> Unit = {}
-  private var currentColor = 0
+  var currentColor = 0
+    private set
   
   init {
     val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.GradientPalette,

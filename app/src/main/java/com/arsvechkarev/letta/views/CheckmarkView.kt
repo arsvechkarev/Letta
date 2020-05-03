@@ -13,7 +13,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.animations.DURATION_SMALL
+import com.arsvechkarev.letta.core.DURATION_SMALL
 import com.arsvechkarev.letta.utils.cancelIfRunning
 import com.arsvechkarev.letta.utils.i
 import com.arsvechkarev.letta.utils.stopIfRunning
@@ -25,7 +25,7 @@ class CheckmarkView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
   
   private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = 0xFF00CC2C.toInt()
+    color = context.getColor(R.color.checkmark)
     style = Paint.Style.STROKE
   }
   private val checkmarkAppear = context.getDrawable(

@@ -12,11 +12,11 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.utils.STROKE_PAINT
+import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.utils.contains
 import com.arsvechkarev.letta.utils.execute
 
-open class Image @JvmOverloads constructor(
+class Image @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
@@ -28,11 +28,10 @@ open class Image @JvmOverloads constructor(
   private var image: Drawable?
   private val animator = ValueAnimator()
   
-  protected var scaleFactor = 1f
-    private set
+  private var scaleFactor = 1f
   
   init {
-    val arr = context.obtainStyledAttributes(attrs, R.styleable.Image, 0, 0)
+    val arr = context.obtainStyledAttributes(attrs, R.styleable.Image, defStyleAttr, 0)
     image = arr.getDrawable(R.styleable.Image_imageSrc)?.mutate()
     image?.colorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
     arr.recycle()
@@ -62,7 +61,8 @@ open class Image @JvmOverloads constructor(
       scale(scaleFactor, scaleFactor, halfWidth, halfHeight)
       drawCircle(halfWidth, halfHeight, halfWidth, backgroundPaint)
       image?.draw(canvas)
-      drawCircle(halfWidth, halfHeight, halfWidth, STROKE_PAINT)
+      drawCircle(halfWidth, halfHeight, halfWidth,
+        STROKE_PAINT)
     }
   }
   

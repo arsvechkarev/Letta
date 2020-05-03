@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.arsvechkarev.letta.R
 import kotlinx.android.synthetic.main.fragment_drawing.backgroundColor
 import kotlinx.android.synthetic.main.fragment_drawing.backgroundImage
-import kotlinx.android.synthetic.main.fragment_drawing.backgroundImageRecyclerView
+import kotlinx.android.synthetic.main.fragment_drawing.backgroundImagesRecyclerView
 import kotlinx.android.synthetic.main.fragment_drawing.chooseBackgroundDialog
 import kotlinx.android.synthetic.main.fragment_drawing.chooseBgGradientPalette
 import kotlinx.android.synthetic.main.fragment_drawing.drawingCanvas
@@ -23,12 +23,12 @@ class DrawingFragment : Fragment(R.layout.fragment_drawing) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     paintContainer = PaintContainer(imageUndo, drawingCanvas, palette,
       verticalSeekbar, paintDisplayer)
-    val bgContainer = ChooseBackgroundContainer(
+    ChooseBackgroundContainer(
       backgroundImage,
       backgroundColor,
       imageCurrentBackground,
       chooseBgGradientPalette,
-      backgroundImageRecyclerView
+      backgroundImagesRecyclerView
     )
     imageCurrentBackground.setOnClickListener {
       chooseBackgroundDialog.show()

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/editRoot"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:clipChildren="false">
@@ -63,18 +62,21 @@
 
   <com.arsvechkarev.letta.views.VerticalSeekbar
     android:id="@+id/verticalSeekbar"
-    android:layout_width="30dp"
-    android:layout_height="280dp"
+    android:layout_width="@dimen/vertical_seekbar_width"
+    android:layout_height="@dimen/vertical_seekbar_height"
+    app:cornersRadius="@dimen/vertical_seekbar_corners_radius"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+    app:layout_constraintTop_toTopOf="parent"
+    app:lineVerticalOffset="@dimen/vertical_seekbar_offset"
+    app:lineWidth="@dimen/vertical_seekbar_line_width"/>
 
   <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
     android:id="@+id/palette"
-    android:layout_width="32dp"
-    android:layout_height="280dp"
+    android:layout_width="@dimen/palette_smallest_size"
+    android:layout_height="@dimen/palette_biggest_size"
     android:orientation="vertical"
-    android:padding="8dp"
+    android:padding="@dimen/palette_padding"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="@id/imageDone"
     app:layout_constraintStart_toStartOf="@id/imageDone"
@@ -104,26 +106,26 @@
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="@dimen/text_choose_background_m_top"
         android:gravity="center"
-        android:text="Choose background"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
+        android:text="@string/text_choose_background"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_h3"
         android:textStyle="bold"/>
 
       <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
         android:id="@+id/chooseBgGradientPalette"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_margin="40dp"
+        android:layout_height="@dimen/palette_smallest_size"
+        android:layout_margin="@dimen/horizontal_palette_margin"
         android:orientation="horizontal"
-        android:padding="8dp"/>
+        android:padding="@dimen/palette_padding"/>
 
       <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/backgroundImageRecyclerView"
+        android:id="@+id/backgroundImagesRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/bg_images_recycler_m_bottom"
         android:overScrollMode="never"/>
 
     </LinearLayout>

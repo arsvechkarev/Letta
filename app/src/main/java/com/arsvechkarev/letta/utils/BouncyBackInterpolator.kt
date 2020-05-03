@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.animations
+package com.arsvechkarev.letta.utils
 
 import android.animation.ValueAnimator
 import android.view.animation.Interpolator
@@ -25,5 +25,6 @@ fun ValueAnimator.addBouncyBackEffect(
   inTheMiddle: () -> Unit = {}
 ) {
   setFloatValues(value, value * 2)
-  interpolator = BouncyBackInterpolator(coefficient, inTheMiddle)
+  interpolator = BouncyBackInterpolator(
+    coefficient, inTheMiddle)
 }

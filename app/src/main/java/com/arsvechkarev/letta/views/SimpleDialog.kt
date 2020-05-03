@@ -8,9 +8,9 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.widget.FrameLayout
-import com.arsvechkarev.letta.animations.DURATION_DEFAULT
-import com.arsvechkarev.letta.animations.animateColor
-import com.arsvechkarev.letta.utils.assertThat
+import com.arsvechkarev.letta.core.DURATION_DEFAULT
+import com.arsvechkarev.letta.core.animateColor
+import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.utils.gone
 import com.arsvechkarev.letta.utils.visible
 

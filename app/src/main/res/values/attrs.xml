@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
   <declare-styleable name="CheckmarkView">
     <attr name="imageSize" format="dimension"/>
   </declare-styleable>
@@ -16,4 +15,9 @@
     <attr name="imageSrc" format="reference"/>
   </declare-styleable>
 
+  <declare-styleable name="VerticalSeekbar">
+    <attr name="cornersRadius" format="dimension"/>
+    <attr name="lineVerticalOffset" format="dimension"/>
+    <attr name="lineWidth" format="dimension"/>
+  </declare-styleable>
 </resources>

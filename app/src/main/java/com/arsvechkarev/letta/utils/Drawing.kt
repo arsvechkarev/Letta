@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import android.view.View
 import com.arsvechkarev.letta.BuildConfig
+import com.arsvechkarev.letta.core.assertThat
 
 
 val Int.f get() = this.toFloat()

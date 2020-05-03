@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="img_swapper">32dp</dimen>
+  <dimen name="img_tool_size">40dp</dimen>
+  <dimen name="img_tool_padding">8dp</dimen>
+  <dimen name="img_tool_m_top">8dp</dimen>
+  <dimen name="img_tool_m_horizontal">8dp</dimen>
+  <dimen name="img_undo_m_end">16dp</dimen>
+  <dimen name="img_done_size">50dp</dimen>
+  <dimen name="img_done_margin">16dp</dimen>
+  <dimen name="choose_bg_dialog_radius">12dp</dimen>
+  <dimen name="palette_smallest_size">32dp</dimen>
+  <dimen name="palette_biggest_size">280dp</dimen>
+  <dimen name="palette_padding">8dp</dimen>
+  <dimen name="horizontal_palette_margin">32dp</dimen>
+  <dimen name="bg_images_recycler_m_bottom">24dp</dimen>
+  <dimen name="text_choose_background_m_top">16dp</dimen>
+  <dimen name="vertical_seekbar_width">30dp</dimen>
+  <dimen name="vertical_seekbar_height">280dp</dimen>
+  <dimen name="vertical_seekbar_corners_radius">16dp</dimen>
+  <dimen name="vertical_seekbar_offset">30dp</dimen>
+  <dimen name="vertical_seekbar_line_width">4dp</dimen>
+</resources>

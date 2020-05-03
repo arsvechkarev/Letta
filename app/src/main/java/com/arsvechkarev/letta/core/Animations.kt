@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.animations
+package com.arsvechkarev.letta.core
 
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
@@ -9,9 +9,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.arsvechkarev.letta.utils.doOnEnd
 import com.arsvechkarev.letta.utils.gone
 import com.arsvechkarev.letta.utils.visible
-
-const val DURATION_SMALL = 170L
-const val DURATION_DEFAULT = 250L
 
 fun View.fadeIn() {
   alpha = 0f

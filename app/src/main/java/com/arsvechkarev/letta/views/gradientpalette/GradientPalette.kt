@@ -25,9 +25,9 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.animations.addBouncyBackEffect
-import com.arsvechkarev.letta.utils.LIGHT_GRAY
-import com.arsvechkarev.letta.utils.STROKE_PAINT
+import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.core.STROKE_PAINT
+import com.arsvechkarev.letta.utils.addBouncyBackEffect
 import com.arsvechkarev.letta.utils.c
 import com.arsvechkarev.letta.utils.doOnEnd
 import com.arsvechkarev.letta.utils.dp
@@ -54,9 +54,9 @@ class GradientPalette @JvmOverloads constructor(
   private val palette: Palette
   
   private val gradientOuterPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = LIGHT_GRAY
+    color = COLOR_BORDER_LIGHT
     style = Paint.Style.STROKE
-    strokeWidth = (8.2f).dp
+    strokeWidth = 10.dp
   }
   private val gradientStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     strokeWidth = 7.dp
@@ -75,7 +75,7 @@ class GradientPalette @JvmOverloads constructor(
   
   // Circle
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = Color.WHITE
+    color = context.getColor(R.color.background)
     this.strokeWidth = circleStrokeWidth
     style = Paint.Style.STROKE
   }
@@ -101,7 +101,10 @@ class GradientPalette @JvmOverloads constructor(
     colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
   }
   private val swapperStroke = ContextCompat.getDrawable(context, R.drawable.ic_swap_stroke)!!
-      .apply { colorFilter = PorterDuffColorFilter(LIGHT_GRAY, PorterDuff.Mode.SRC_ATOP) }
+      .apply {
+        colorFilter = PorterDuffColorFilter(
+          COLOR_BORDER_LIGHT, PorterDuff.Mode.SRC_ATOP)
+      }
   private val swapperAnimator = ValueAnimator()
   private val bouncyAnimator = ValueAnimator()
   
@@ -183,10 +186,12 @@ class GradientPalette @JvmOverloads constructor(
         palette.drawCircle(canvas, circle.radius, circle.x, circle.y, circleStrokePaint)
         if (circle.radius == radiusSelected) {
           palette.drawCircleStroke(canvas, circle.radius, circle.x, circle.y,
-            circleStrokePaint.strokeWidth, STROKE_PAINT)
+            circleStrokePaint.strokeWidth,
+            STROKE_PAINT)
         }
         palette.drawCircle(canvas, circle.radius, circle.x, circle.y, circlePaint)
-        palette.drawCircle(canvas, circle.radius, circle.x, circle.y, STROKE_PAINT)
+        palette.drawCircle(canvas, circle.radius, circle.x, circle.y,
+          STROKE_PAINT)
       }
     }
   }

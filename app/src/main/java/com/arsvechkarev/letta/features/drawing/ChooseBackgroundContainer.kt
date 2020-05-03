@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.model.ImageModel
 import com.arsvechkarev.letta.features.drawing.list.BackgroundImageAdapter
-import com.arsvechkarev.letta.utils.LIGHT_GRAY
+import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.views.Image
 import com.arsvechkarev.letta.views.RoundedCornersColorDrawable
@@ -85,7 +85,8 @@ class ChooseBackgroundContainer(
       val bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
       val canvas = Canvas(bitmap)
       canvas.drawColor(color)
-      roundedCornersColorDrawable = RoundedCornersColorDrawable(bitmap, LIGHT_GRAY, 1.dp,
+      roundedCornersColorDrawable = RoundedCornersColorDrawable(bitmap,
+        COLOR_BORDER_LIGHT, 1.dp,
         currentBgCorners)
     }
     roundedCornersColorDrawable!!.setColor(color)

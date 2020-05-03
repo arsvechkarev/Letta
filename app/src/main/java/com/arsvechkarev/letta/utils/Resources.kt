@@ -1,5 +1,7 @@
 package com.arsvechkarev.letta.utils
 
+import android.content.Context
+import android.view.ContextMenu
 import android.view.View
 import androidx.annotation.DimenRes
 import com.arsvechkarev.letta.LettaApplication
@@ -20,4 +22,8 @@ val Int.sp: Float
 
 fun View.dmInt(@DimenRes resId: Int): Int {
   return resources.getDimensionPixelSize(resId)
+}
+
+fun Context.dimen(@DimenRes resId: Int): Float {
+  return resources.getDimension(resId)
 }

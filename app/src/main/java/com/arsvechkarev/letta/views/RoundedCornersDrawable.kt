@@ -12,8 +12,9 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
-import com.arsvechkarev.letta.utils.LIGHT_GRAY
-import com.arsvechkarev.letta.utils.dp
+import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.utils.dimen
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.utils.toBitmap
 
@@ -84,7 +85,17 @@ open class RoundedCornersDrawable(
   
   companion object {
     
-    fun ofResource(context: Context, resId: Int, corners: Float = 8.dp): RoundedCornersDrawable =
-        RoundedCornersDrawable(context.getDrawable(resId)!!.toBitmap(), LIGHT_GRAY, 1.dp, corners)
+    fun ofResource(
+      context: Context,
+      resId: Int,
+      corners: Float = context.dimen(R.dimen.corners_radius_default)
+    ): RoundedCornersDrawable {
+      return RoundedCornersDrawable(
+        context.getDrawable(resId)!!.toBitmap(),
+        COLOR_BORDER_LIGHT,
+        context.dimen(R.dimen.border_width),
+        corners
+      )
+    }
   }
 }

@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.utils
+package com.arsvechkarev.letta.core
 
 import com.arsvechkarev.letta.BuildConfig
 import kotlin.contracts.ExperimentalContracts

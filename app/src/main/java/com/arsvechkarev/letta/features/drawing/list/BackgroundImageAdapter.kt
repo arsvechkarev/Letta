@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.model.ImageModel
 import com.arsvechkarev.letta.features.drawing.list.BackgroundImageAdapter.BackgroundImageViewHolder
-import com.arsvechkarev.letta.utils.assertThat
+import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.utils.inflate
 import com.arsvechkarev.letta.views.RoundedCornersDrawable
 import kotlinx.android.synthetic.main.item_bg_image.view.checkmark
@@ -60,7 +60,8 @@ class BackgroundImageAdapter(
         }
         if (previousViewHolder == this) {
           // Deselecting this view holder
-          assertThat(previousViewHolder.itemView.checkmark.isChecked)
+          assertThat(
+            previousViewHolder.itemView.checkmark.isChecked)
           previousViewHolder.itemView.checkmark.isChecked = false
           currentCheckedImagePosition = RecyclerView.NO_POSITION
           onImageSelected(null)

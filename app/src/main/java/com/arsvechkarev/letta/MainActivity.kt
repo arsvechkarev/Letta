@@ -1,6 +1,7 @@
 package com.arsvechkarev.letta
 
 import android.os.Bundle
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.arsvechkarev.letta.features.drawing.DrawingFragment
 

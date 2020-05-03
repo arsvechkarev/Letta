@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="item_bg_image_margin">12dp</dimen>
+  <dimen name="item_bg_image_size">70dp</dimen>
+  <dimen name="item_bg_image_checkmark_size">50dp</dimen>
+  <dimen name="item_bg_image_checkmark_icon_size">30dp</dimen>
+</resources>

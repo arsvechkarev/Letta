@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.features.drawing
+package com.arsvechkarev.letta.features.drawing.presentation
 
 import android.graphics.Color
 import com.arsvechkarev.letta.core.brushes.BrushType

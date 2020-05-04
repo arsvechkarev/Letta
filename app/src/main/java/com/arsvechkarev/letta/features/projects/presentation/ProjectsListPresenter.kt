@@ -1,0 +1,22 @@
+package com.arsvechkarev.letta.features.projects.presentation
+
+import com.arsvechkarev.letta.core.MvpPresenter
+import com.arsvechkarev.letta.core.async.Threader
+import com.arsvechkarev.letta.features.projects.domain.ProjectsListRepository
+
+class ProjectsListPresenter(
+  private val repository: ProjectsListRepository,
+  threader: Threader = Threader
+) : MvpPresenter<ProjectsListView>(threader) {
+  
+  fun startLoadingProjects() {
+    onIoThread {
+      val projects = repository.getAllProjects()
+      if (projects.isEmpty()) {
+        updateView { onLoadedProjects(projects) }
+      } else {
+        updateView { projectsAreEmpty() }
+      }
+    }
+  }
+}

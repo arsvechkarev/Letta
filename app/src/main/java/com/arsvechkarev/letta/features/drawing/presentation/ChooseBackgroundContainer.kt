@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.features.drawing
+package com.arsvechkarev.letta.features.drawing.presentation
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -7,9 +7,10 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
 import com.arsvechkarev.letta.core.model.ImageModel
 import com.arsvechkarev.letta.features.drawing.list.BackgroundImageAdapter
-import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.utils.dimen
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.views.Image
 import com.arsvechkarev.letta.views.RoundedCornersColorDrawable
@@ -28,6 +29,7 @@ class ChooseBackgroundContainer(
   
   // To avoid creation of drawables
   private var roundedCornersColorDrawable: RoundedCornersColorDrawable? = null
+  private var isBackgroundTransparent = true
   
   init {
     val adapter = initializeAdapter()
@@ -39,6 +41,16 @@ class ChooseBackgroundContainer(
     currentBackgroundImage.setImage(RoundedCornersDrawable.ofResource(
       currentBackgroundImage.context, R.drawable.bg_0_for_png, currentBgCorners
     ))
+  }
+  
+  fun getImageBackground(): View? {
+    if (isBackgroundTransparent) {
+      return null
+    }
+    if (backgroundImage.drawable != null) {
+      return backgroundImage
+    }
+    return backgroundColorView
   }
   
   private fun initializeAdapter(): BackgroundImageAdapter {
@@ -62,6 +74,7 @@ class ChooseBackgroundContainer(
         updateCurrentBackgroundColor()
       }
       else -> {
+        isBackgroundTransparent = image.drawableRes == R.drawable.bg_0_for_png
         val drawable = RoundedCornersDrawable.ofResource(
           backgroundImage.context, image.drawableRes, currentBgCorners
         )
@@ -73,6 +86,7 @@ class ChooseBackgroundContainer(
   }
   
   private fun updateCurrentBackgroundColor() {
+    isBackgroundTransparent = false
     backgroundImage.setImageDrawable(null)
     backgroundColorView.setBackgroundColor(gradientPalette.currentColor)
     currentBackgroundImage.setImage(
@@ -86,8 +100,9 @@ class ChooseBackgroundContainer(
       val canvas = Canvas(bitmap)
       canvas.drawColor(color)
       roundedCornersColorDrawable = RoundedCornersColorDrawable(bitmap,
-        COLOR_BORDER_LIGHT, 1.dp,
-        currentBgCorners)
+        COLOR_BORDER_LIGHT, backgroundImage.context.dimen(R.dimen.border_width),
+        currentBgCorners
+      )
     }
     roundedCornersColorDrawable!!.setColor(color)
     return roundedCornersColorDrawable!!

@@ -75,7 +75,7 @@ class GradientPalette @JvmOverloads constructor(
   
   // Circle
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = context.getColor(R.color.background)
+    color = ContextCompat.getColor(context, R.color.background)
     this.strokeWidth = circleStrokeWidth
     style = Paint.Style.STROKE
   }

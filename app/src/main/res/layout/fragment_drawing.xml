@@ -18,7 +18,7 @@
     android:layout_height="match_parent"/>
 
   <com.arsvechkarev.letta.views.DrawingView
-    android:id="@+id/drawingCanvas"
+    android:id="@+id/drawingView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 

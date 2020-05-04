@@ -15,6 +15,7 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.annotation.FloatRange
+import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.COLOR_BORDER_VERY_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
@@ -53,7 +54,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   init {
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.VerticalSeekbar,
       defStyleAttr, 0)
-    backgroundColor = context.getColor(R.color.background)
+    backgroundColor = ContextCompat.getColor(context, R.color.background)
     cornersRadius = attributes.getDimension(R.styleable.VerticalSeekbar_cornersRadius, 16.dp)
     lineVerticalOffset = attributes.getDimension(R.styleable.VerticalSeekbar_lineVerticalOffset,
       30.dp)

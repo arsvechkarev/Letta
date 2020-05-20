@@ -9,7 +9,9 @@ import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter.Project
 import com.arsvechkarev.letta.utils.inflate
 import kotlinx.android.synthetic.main.item_project.view.projectImage
 
-class ProjectsListAdapter : RecyclerView.Adapter<ProjectViewHolder>() {
+class ProjectsListAdapter(
+  private val onProjectClick: (Project) -> Unit
+) : RecyclerView.Adapter<ProjectViewHolder>() {
   
   private var data: List<Project> = ArrayList()
   
@@ -19,7 +21,7 @@ class ProjectsListAdapter : RecyclerView.Adapter<ProjectViewHolder>() {
   }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
-    return ProjectViewHolder(parent.inflate(R.layout.item_project))
+    return ProjectViewHolder(data, onProjectClick, parent.inflate(R.layout.item_project))
   }
   
   override fun onBindViewHolder(holder: ProjectViewHolder, position: Int) {
@@ -28,7 +30,17 @@ class ProjectsListAdapter : RecyclerView.Adapter<ProjectViewHolder>() {
   
   override fun getItemCount() = data.size
   
-  class ProjectViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+  class ProjectViewHolder(
+    data: List<Project>,
+    onProjectClick: (Project) -> Unit,
+    itemView: View
+  ) : RecyclerView.ViewHolder(itemView) {
+    
+    init {
+      itemView.projectImage.setOnClickListener {
+        onProjectClick.invoke(data[adapterPosition])
+      }
+    }
     
     fun bind(project: Project) {
       itemView.projectImage.setImageDrawable(project.image)

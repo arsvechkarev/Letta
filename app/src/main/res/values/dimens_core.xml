@@ -13,5 +13,5 @@
   <dimen name="text_h3">20sp</dimen>
   <dimen name="text_h2">22sp</dimen>
   <dimen name="text_h1">24sp</dimen>
-  <dimen name="text_h0">36sp</dimen>
+  <dimen name="text_h0">26sp</dimen>
 </resources>

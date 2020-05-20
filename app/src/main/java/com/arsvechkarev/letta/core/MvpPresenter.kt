@@ -1,10 +1,11 @@
 package com.arsvechkarev.letta.core
 
 import androidx.lifecycle.ViewModel
+import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
 
 abstract class MvpPresenter<V : MvpView>(
-  private val threader: Threader = Threader
+  private val threader: Threader
 ) : ViewModel() {
   
   protected var view: V? = null

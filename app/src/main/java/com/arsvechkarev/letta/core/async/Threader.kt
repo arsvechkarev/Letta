@@ -1,20 +1,26 @@
 package com.arsvechkarev.letta.core.async
 
-object Threader {
+import java.util.concurrent.Future
+
+/**
+ * Executes a given lambda on a specified thread
+ *
+ * @see AndroidThreader
+ */
+interface Threader {
   
-  private val backgroundWorker: Worker = BackgroundWorker.default()
-  private val ioWorker: Worker = BackgroundWorker.io()
-  private val mainThreadWorker: Worker = MainThreadWorker()
+  /**
+   * Executes [block] on a background thread and returns a future that represents that task
+   */
+  fun onBackground(block: () -> Unit): Future<*>
   
-  fun onBackground(block: () -> Unit) {
-    backgroundWorker.submit(block)
-  }
+  /**
+   * Executes [block] on a dedicated IO thread and returns a future that represents that task
+   */
+  fun onIoThread(block: () -> Unit): Future<*>
   
-  fun onIoThread(block: () -> Unit) {
-    ioWorker.submit(block)
-  }
-  
-  fun onMainThread(block: () -> Unit) {
-    mainThreadWorker.submit(block)
-  }
+  /**
+   * Executes [block] on the Android main thread
+   */
+  fun onMainThread(block: () -> Unit)
 }

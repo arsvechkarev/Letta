@@ -10,9 +10,15 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_CANCEL
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_UP
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.DURATION_ON_CLICK
 import com.arsvechkarev.letta.core.STROKE_PAINT
+import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
 import com.arsvechkarev.letta.utils.contains
 import com.arsvechkarev.letta.utils.execute
 
@@ -22,18 +28,17 @@ class Image @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
   
-  private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = Color.WHITE
-  }
+  private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private var image: Drawable?
-  private val animator = ValueAnimator()
   
   private var scaleFactor = 1f
+  private val scaleAnimator = ValueAnimator()
   
   init {
     val arr = context.obtainStyledAttributes(attrs, R.styleable.Image, defStyleAttr, 0)
     image = arr.getDrawable(R.styleable.Image_imageSrc)?.mutate()
-    image?.colorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+    backgroundPaint.color = arr.getColor(R.styleable.Image_backgroundColor,
+      ContextCompat.getColor(context, R.color.background))
     arr.recycle()
   }
   
@@ -68,12 +73,12 @@ class Image @JvmOverloads constructor(
   
   override fun onTouchEvent(event: MotionEvent): Boolean {
     when (event.action) {
-      MotionEvent.ACTION_DOWN -> {
+      ACTION_DOWN -> {
         animate(down = true)
         return true
       }
-      MotionEvent.ACTION_UP -> {
-        if (event in this) {
+      ACTION_UP, ACTION_CANCEL -> {
+        if (event.action == ACTION_UP && event in this) {
           performClick()
         }
         animate(down = false)
@@ -84,11 +89,10 @@ class Image @JvmOverloads constructor(
   }
   
   private fun animate(down: Boolean = true) {
-    val endScale = if (down) 0.9f else 1.0f
-    with(animator) {
-      cancel()
+    val endScale = if (down) VIEW_CLICK_SCALE_FACTOR else 1.0f
+    with(scaleAnimator) {
       setFloatValues(scaleFactor, endScale)
-      duration = 40
+      duration = DURATION_ON_CLICK
       addUpdateListener {
         scaleFactor = animatedValue as Float
         invalidate()

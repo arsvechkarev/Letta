@@ -85,6 +85,11 @@ open class RoundedCornersDrawable(
   
   companion object {
     
+    fun ofBitmap(context: Context, bitmap: Bitmap): RoundedCornersDrawable {
+      return RoundedCornersDrawable(bitmap, COLOR_BORDER_LIGHT, context.dimen(R.dimen.border_width),
+        context.dimen(R.dimen.corners_radius_default))
+    }
+    
     fun ofResource(
       context: Context,
       resId: Int,

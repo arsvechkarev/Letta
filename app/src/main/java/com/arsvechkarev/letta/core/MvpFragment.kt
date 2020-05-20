@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 abstract class MvpFragment<V : MvpView, P : MvpPresenter<V>>(
   private val presenterClass: KClass<P>,
   @LayoutRes layout: Int = 0
-) : Fragment(layout), MvpView {
+) : Fragment(layout), MvpView, NavigableFragment {
   
   protected lateinit var presenter: P
     private set

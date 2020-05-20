@@ -1,26 +1,40 @@
 package com.arsvechkarev.letta.features.projects.domain
 
 import android.content.Context
-import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.directoryProjects
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.core.model.Project
-import com.arsvechkarev.letta.utils.hasFilesWithin
+import com.arsvechkarev.letta.utils.allProjectsDirectory
+import com.arsvechkarev.letta.utils.hasProjectFiles
+import com.arsvechkarev.letta.views.RoundedCornersDrawable
+import timber.log.Timber
+import java.io.File
 
 class ProjectsListRepository(
   private val context: Context
 ) {
   
   fun getAllProjects(): List<Project> {
-    if (context.hasFilesWithin(directoryProjects)) {
-      return listOf(
-        Project(context.resources.getDrawable(R.drawable.bg_1, context.theme)),
-        Project(context.resources.getDrawable(R.drawable.bg_0_for_png, context.theme)),
-        Project(context.resources.getDrawable(R.drawable.bg_1, context.theme)),
-        Project(context.resources.getDrawable(R.drawable.bg_1, context.theme)),
-        Project(context.resources.getDrawable(R.drawable.bg_2, context.theme)),
-        Project(context.resources.getDrawable(R.drawable.bg_2, context.theme)),
-        Project(context.resources.getDrawable(R.drawable.bg_3, context.theme))
-      )
+    if (context.hasProjectFiles()) {
+      val list = ArrayList<Project>()
+      try {
+        val allProjectsDir = context.allProjectsDirectory
+        val directories = allProjectsDir.list()
+        assertThat(directories != null)
+        directories.forEach { filename ->
+          val tempFile = File(allProjectsDir, filename)
+          val options = BitmapFactory.Options().apply {
+            inPreferredConfig = Bitmap.Config.ARGB_8888
+          }
+          val bitmap = BitmapFactory.decodeFile(tempFile.canonicalPath, options)
+          val drawable = RoundedCornersDrawable.ofBitmap(context, bitmap)
+          list.add(Project(drawable))
+        }
+      } catch (e: Throwable) {
+        Timber.d(e)
+      }
+      return list
     }
     return emptyList()
   }

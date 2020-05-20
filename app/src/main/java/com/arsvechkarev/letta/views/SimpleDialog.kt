@@ -22,6 +22,9 @@ class SimpleDialog @JvmOverloads constructor(
   private lateinit var dialogView: View
   private var wasNoMoveEvent = false
   
+  var isOpened = false
+    private set
+  
   init {
     gone()
   }
@@ -33,6 +36,7 @@ class SimpleDialog @JvmOverloads constructor(
   }
   
   fun show() {
+    isOpened = true
     post {
       visible()
       dialogView.alpha = 0f
@@ -45,7 +49,8 @@ class SimpleDialog @JvmOverloads constructor(
     }
   }
   
-  fun dismiss() {
+  fun hide() {
+    isOpened = false
     post {
       animateColor(0x70000000, 0x00000000, andThen = { gone() })
       dialogView.animate()
@@ -68,7 +73,7 @@ class SimpleDialog @JvmOverloads constructor(
         val eventInDialog = event.x > dialogView.left && event.x < dialogView.right
             && event.y > dialogView.top && event.y < dialogView.bottom
         if (wasNoMoveEvent && !eventInDialog) {
-          dismiss()
+          hide()
           return true
         }
       }

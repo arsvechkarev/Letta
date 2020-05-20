@@ -13,6 +13,12 @@
 
   <declare-styleable name="Image">
     <attr name="imageSrc" format="reference"/>
+    <attr name="backgroundColor" format="color"/>
+  </declare-styleable>
+
+  <declare-styleable name="ProgressBar">
+    <attr name="trackWidth" format="dimension"/>
+    <attr name="color" format="color"/>
   </declare-styleable>
 
   <declare-styleable name="VerticalSeekbar">

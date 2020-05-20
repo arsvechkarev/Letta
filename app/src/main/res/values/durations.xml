@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <integer name="duration_default">300</integer>
+  <integer name="duration_fragment_transition">400</integer>
   <integer name="checkmark_appear_and_disappear">250</integer>
 </resources>

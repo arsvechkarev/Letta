@@ -60,4 +60,12 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   override fun onImageUploadingError() {
     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
   }
+  
+  override fun onBackPressed(): Boolean {
+    if (chooseBackgroundDialog.isOpened) {
+      chooseBackgroundDialog.hide()
+      return false
+    }
+    return true
+  }
 }

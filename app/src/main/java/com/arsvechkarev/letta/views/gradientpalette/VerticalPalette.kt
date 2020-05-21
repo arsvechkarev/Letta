@@ -11,6 +11,7 @@ import android.graphics.Region
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
+import com.arsvechkarev.letta.core.model.Circle
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.utils.i
 import com.arsvechkarev.letta.utils.toRect

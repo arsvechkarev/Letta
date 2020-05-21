@@ -24,6 +24,5 @@
   <declare-styleable name="VerticalSeekbar">
     <attr name="cornersRadius" format="dimension"/>
     <attr name="lineVerticalOffset" format="dimension"/>
-    <attr name="lineWidth" format="dimension"/>
   </declare-styleable>
 </resources>

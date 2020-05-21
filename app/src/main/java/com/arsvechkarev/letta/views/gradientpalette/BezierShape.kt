@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import com.arsvechkarev.letta.core.model.Circle
 import kotlin.math.cos
 import kotlin.math.sin
 

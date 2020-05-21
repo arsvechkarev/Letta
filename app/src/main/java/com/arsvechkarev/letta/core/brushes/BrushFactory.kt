@@ -11,7 +11,7 @@ object BrushFactory {
     return when (brushType) {
       CIRCLE -> CircleBrush(color, brushSize)
       SPRAY -> SprayBrush(color, brushSize)
-      OVAL -> OvalBrush(LettaApplication.resources, color, brushSize)
+      OVAL -> OvalBrush(LettaApplication.appContext.resources, color, brushSize)
     }
   }
 }

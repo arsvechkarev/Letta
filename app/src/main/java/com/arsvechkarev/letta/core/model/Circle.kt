@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.views.gradientpalette
+package com.arsvechkarev.letta.core.model
 
 class Circle {
   

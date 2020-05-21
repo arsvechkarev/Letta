@@ -19,5 +19,4 @@
   <dimen name="vertical_seekbar_height">280dp</dimen>
   <dimen name="vertical_seekbar_corners_radius">16dp</dimen>
   <dimen name="vertical_seekbar_offset">30dp</dimen>
-  <dimen name="vertical_seekbar_line_width">4dp</dimen>
 </resources>

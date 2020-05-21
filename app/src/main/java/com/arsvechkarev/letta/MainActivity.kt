@@ -5,14 +5,15 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.arsvechkarev.letta.core.Navigator
 
 class MainActivity : AppCompatActivity() {
   
-  val navigator: NavigatorImpl by lazy { NavigatorImpl(this@MainActivity) }
+  val navigator by lazy { NavigatorImpl(this@MainActivity) }
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    LettaApplication.initResources(resources)
+    LettaApplication.initDensities(resources.displayMetrics.density, resources.displayMetrics.scaledDensity)
     setContentView(R.layout.activity_main)
     ActivityCompat.requestPermissions(
       this,

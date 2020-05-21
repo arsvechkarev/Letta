@@ -3,11 +3,12 @@ package com.arsvechkarev.letta.features.projects.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import com.arsvechkarev.letta.LettaApplication
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.core.animateInvisibleAndScale
 import com.arsvechkarev.letta.core.model.Project
-import com.arsvechkarev.letta.features.projects.domain.ProjectsListRepository
+import com.arsvechkarev.letta.features.projects.data.ProjectsListRepository
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter
 import com.arsvechkarev.letta.utils.navigator
 import kotlinx.android.synthetic.main.fragment_all_projects.buttonNewProject
@@ -24,7 +25,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   })
   
   override fun createPresenter(): ProjectsListPresenter {
-    return ProjectsListPresenter(ProjectsListRepository(requireContext()))
+    return ProjectsListPresenter(ProjectsListRepository(LettaApplication.appContext))
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

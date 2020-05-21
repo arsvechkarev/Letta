@@ -68,8 +68,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:lineVerticalOffset="@dimen/vertical_seekbar_offset"
-    app:lineWidth="@dimen/vertical_seekbar_line_width"/>
+    app:lineVerticalOffset="@dimen/vertical_seekbar_offset"/>
 
   <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
     android:id="@+id/palette"

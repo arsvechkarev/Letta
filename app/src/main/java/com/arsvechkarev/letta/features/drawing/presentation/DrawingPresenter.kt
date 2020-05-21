@@ -6,7 +6,7 @@ import android.view.View
 import com.arsvechkarev.letta.core.MvpPresenter
 import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
-import com.arsvechkarev.letta.features.drawing.domain.ImageUploadingRepository
+import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
 import com.arsvechkarev.letta.views.DrawingView
 import timber.log.Timber
 

@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Toast
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
-import com.arsvechkarev.letta.features.drawing.domain.ImageUploadingRepository
+import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
 import kotlinx.android.synthetic.main.fragment_drawing.backgroundColor
 import kotlinx.android.synthetic.main.fragment_drawing.backgroundImage
 import kotlinx.android.synthetic.main.fragment_drawing.backgroundImagesRecyclerView

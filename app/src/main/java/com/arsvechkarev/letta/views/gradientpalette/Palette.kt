@@ -9,6 +9,7 @@ import android.graphics.RectF
 import android.graphics.Region
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
+import com.arsvechkarev.letta.core.model.Circle
 
 /**
  * Palette with gradient and animated circle

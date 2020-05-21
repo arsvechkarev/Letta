@@ -19,7 +19,9 @@ import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.COLOR_BORDER_VERY_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
+import com.arsvechkarev.letta.core.model.Circle
 import com.arsvechkarev.letta.utils.dp
+import com.arsvechkarev.letta.utils.drawBounds
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.utils.isWhiterThan
 import kotlin.math.abs
@@ -33,8 +35,6 @@ class VerticalSeekbar @JvmOverloads constructor(
   
   private val cornersRadius: Float
   private val lineVerticalOffset: Float
-  private val lineWidth: Float
-  
   private val backgroundColor: Int
   
   var onPercentChanged: (Float) -> Unit = {}
@@ -46,6 +46,7 @@ class VerticalSeekbar @JvmOverloads constructor(
     color = Color.WHITE
   }
   private var lineLength = 0f
+  private var lineWidth = 0f
   private var color = Color.RED
   
   private var currentY = 0f
@@ -58,7 +59,6 @@ class VerticalSeekbar @JvmOverloads constructor(
     cornersRadius = attributes.getDimension(R.styleable.VerticalSeekbar_cornersRadius, 16.dp)
     lineVerticalOffset = attributes.getDimension(R.styleable.VerticalSeekbar_lineVerticalOffset,
       30.dp)
-    lineWidth = attributes.getDimension(R.styleable.VerticalSeekbar_lineWidth, 4.dp)
     attributes.recycle()
   }
   
@@ -78,6 +78,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     lineLength = h - cornersRadius * 2
+    lineWidth = w / 6.5f
     currentY = (lineLength + lineVerticalOffset) - (0.2f * lineLength) // 20% from bottom
     with(path) {
       moveTo((-1).dp, cornersRadius / 2)
@@ -155,26 +156,5 @@ class VerticalSeekbar @JvmOverloads constructor(
   
   private fun colorChangeAllowed(color: Int): Boolean {
     return !color.isWhiterThan(0xAA)
-  }
-  
-  class Circle {
-    var x: Float = 0f
-    var y: Float = 0f
-    var radius: Float = 0f
-    var color: Int = 0
-    
-    fun set(x: Float, y: Float, radius: Float, color: Int = 0) {
-      this.x = x
-      this.y = y
-      this.radius = radius
-      this.color = color
-    }
-    
-    operator fun contains(pointF: PointF): Boolean {
-      val absX = abs(pointF.x - x)
-      val absY = abs(pointF.y - y)
-      val distToCenter = sqrt(absX * absX + absY * absY)
-      return distToCenter <= radius
-    }
   }
 }

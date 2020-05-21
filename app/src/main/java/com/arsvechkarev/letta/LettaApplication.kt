@@ -2,7 +2,6 @@ package com.arsvechkarev.letta
 
 import android.app.Application
 import android.content.Context
-import android.content.res.Resources
 import timber.log.Timber
 
 class LettaApplication : Application() {
@@ -15,7 +14,6 @@ class LettaApplication : Application() {
   
   companion object {
     
-    lateinit var resources: Resources
     lateinit var appContext: Context
     
     var density: Float = -1f
@@ -25,11 +23,10 @@ class LettaApplication : Application() {
       private set
     
     // Should be called from the activity that launches first, otherwise
-    // the resources will not be ready
-    fun initResources(resources: Resources) {
-      this.resources = resources
-      density = resources.displayMetrics.density
-      scaledDensity = resources.displayMetrics.scaledDensity
+    // densities will not be ready
+    fun initDensities(density: Float, scaledDensity: Float) {
+      this.density = density
+      this.scaledDensity = scaledDensity
     }
   }
 }

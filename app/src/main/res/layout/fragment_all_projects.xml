@@ -5,45 +5,32 @@
   android:layout_height="match_parent"
   android:background="@color/background">
 
-  <com.google.android.material.appbar.AppBarLayout
+  <com.arsvechkarev.letta.views.HeaderFrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.appbar.CollapsingToolbarLayout
+    <com.arsvechkarev.letta.views.GradientHeaderView
       android:layout_width="match_parent"
+      android:layout_height="180dp"
+      android:layout_gravity="center"/>
+
+    <TextView
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:layout_scrollFlags="scroll">
+      android:layout_gravity="center"
+      android:layout_marginBottom="12dp"
+      android:fontFamily="@font/rubik_medium"
+      android:text="All projects"
+      android:textColor="@color/text_header"
+      android:textSize="@dimen/text_h0"/>
 
-      <com.arsvechkarev.letta.views.HeaderFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.arsvechkarev.letta.views.GradientHeaderView
-          android:layout_width="match_parent"
-          android:layout_height="180dp"
-          android:layout_gravity="center"/>
-
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginBottom="12dp"
-          android:fontFamily="@font/rubik_medium"
-          android:text="All projects"
-          android:textColor="@color/text_header"
-          android:textSize="@dimen/text_h0"/>
-
-      </com.arsvechkarev.letta.views.HeaderFrameLayout>
-
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-  </com.google.android.material.appbar.AppBarLayout>
+  </com.arsvechkarev.letta.views.HeaderFrameLayout>
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerAllProjects"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+    app:layout_behavior=".views.behaviors.ScrollingRecyclerBehavior"/>
 
   <com.arsvechkarev.letta.views.ProgressBar
     android:id="@+id/projectsLoadingProgressBar"
@@ -51,6 +38,70 @@
     android:layout_height="60dp"
     android:layout_gravity="center"
     app:color="@color/primary"/>
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    android:background="#66000000"/>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:visibility="gone"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="#FAFAFA"
+    android:clipChildren="false">
+
+    <EditText
+      android:id="@+id/editTextProjectName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="16dp"
+      android:layout_marginTop="20dp"
+      android:gravity="center"
+      android:hint="Enter project name"
+      android:textColor="@android:color/black"
+      android:textColorHint="#555555"
+      android:textSize="16sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+      android:id="@+id/headerNewProject"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="16dp"
+      android:fontFamily="@font/rubik_medium"
+      android:gravity="center"
+      android:text="Background"
+      android:textColor="@android:color/black"
+      android:textSize="18sp"
+      app:layout_constraintTop_toBottomOf="@id/editTextProjectName"/>
+
+    <ImageView
+      android:id="@+id/imageViewBackgroundExample"
+      android:layout_width="160dp"
+      android:layout_height="160dp"
+      android:layout_margin="24dp"
+      android:src="@android:color/holo_green_dark"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/headerNewProject"/>
+
+    <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
+      android:id="@+id/bgGradientPalette"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/palette_smallest_size"
+      android:layout_marginHorizontal="24dp"
+      android:layout_marginTop="24dp"
+      android:layout_marginBottom="80dp"
+      android:padding="@dimen/palette_padding"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/imageViewBackgroundExample"/>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
   <com.arsvechkarev.letta.views.Image
     android:id="@+id/buttonNewProject"

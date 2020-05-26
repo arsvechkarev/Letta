@@ -4,9 +4,9 @@ import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 
-fun scrollHeader(parent: CoordinatorLayout, header: View, dy: Int): Boolean {
+fun scrollHeader(parent: CoordinatorLayout, header: View, dy: Int): Int {
   if (dy > 0 && parent.top <= header.top) // Already at the top
-    return false
+    return 0
   val offset: Int
   if (dy > 0) {
     offset = dy.coerceAtMost(parent.top - header.top)
@@ -14,5 +14,5 @@ fun scrollHeader(parent: CoordinatorLayout, header: View, dy: Int): Boolean {
     offset = dy
   }
   ViewCompat.offsetTopAndBottom(header, offset)
-  return true
+  return offset
 }

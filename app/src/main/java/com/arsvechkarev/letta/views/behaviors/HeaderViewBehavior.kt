@@ -10,7 +10,6 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ViewCompat
 import com.arsvechkarev.letta.LettaApplication
 import kotlin.math.abs
 
@@ -62,7 +61,7 @@ class HeaderViewBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
       ACTION_MOVE -> {
         val diff = ev.y - latestY
         latestY = ev.y
-        handled = scrollHeader(parent, child, diff.toInt())
+        handled = scrollHeader(parent, child, diff.toInt()) > 0
       }
     }
     println("qwerty: handled: $handled")

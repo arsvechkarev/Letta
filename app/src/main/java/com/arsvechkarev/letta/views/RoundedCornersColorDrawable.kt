@@ -10,11 +10,6 @@ class RoundedCornersColorDrawable(
   cornersRadius: Float
 ) : RoundedCornersDrawable(image, borderColor, borderWidth, cornersRadius) {
   
-  override fun onBoundsChange(bounds: Rect) {
-    super.onBoundsChange(bounds)
-    imagePaint.shader = null
-  }
-  
   fun setColor(color: Int) {
     imagePaint.color = color
   }

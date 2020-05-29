@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.arsvechkarev.letta.views.behaviors.HeaderViewBehavior
+import com.arsvechkarev.letta.views.behaviors.HeaderBehavior
 
 /**
  * Marker for [com.arsvechkarev.letta.views.behaviors.ScrollingRecyclerBehavior]
@@ -16,6 +16,6 @@ class HeaderFrameLayout @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr), CoordinatorLayout.AttachedBehavior {
   
   override fun getBehavior(): CoordinatorLayout.Behavior<*> {
-    return HeaderViewBehavior<HeaderFrameLayout>()
+    return HeaderBehavior<HeaderFrameLayout>()
   }
 }

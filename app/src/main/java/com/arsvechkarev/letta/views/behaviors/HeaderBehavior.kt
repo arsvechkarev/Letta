@@ -124,7 +124,6 @@ open class HeaderBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
         }
         if (isBeingDragged) {
           lastMotionY = y
-          // We're being dragged so scroll the ABL
           updateTopBottomOffset(dy)
         }
       }

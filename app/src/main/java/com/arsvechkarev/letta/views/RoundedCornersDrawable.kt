@@ -2,15 +2,15 @@ package com.arsvechkarev.letta.views
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.PixelFormat
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
@@ -47,15 +47,14 @@ open class RoundedCornersDrawable(
     imageRect.set(tempRect)
     tempRect.inset(borderWidth / 2f, borderWidth / 2f)
     borderRect.set(tempRect)
+    val bitmapShader = BitmapShader(this.image, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
     updateMatrix(this.image, bounds.width(), bounds.height())
+    bitmapShader.setLocalMatrix(imageMatrix)
+    imagePaint.shader = bitmapShader
   }
   
   override fun draw(canvas: Canvas) {
     canvas.drawRoundRect(imageRect, cornersRadius, cornersRadius, imagePaint)
-    
-    imagePaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
-    canvas.drawBitmap(image, imageMatrix, imagePaint)
-    
     canvas.drawRoundRect(borderRect, cornersRadius, cornersRadius, borderPaint)
   }
   

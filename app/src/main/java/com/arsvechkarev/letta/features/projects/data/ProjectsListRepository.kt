@@ -1,7 +1,6 @@
 package com.arsvechkarev.letta.features.projects.data
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.core.model.Project
@@ -25,7 +24,7 @@ class ProjectsListRepository(
         directories.forEach { filename ->
           val tempFile = File(allProjectsDir, filename)
           val options = BitmapFactory.Options().apply {
-            inPreferredConfig = Bitmap.Config.ARGB_8888
+            inSampleSize = 4
           }
           val bitmap = BitmapFactory.decodeFile(tempFile.canonicalPath, options)
           val drawable = RoundedCornersDrawable.ofBitmap(context, bitmap)

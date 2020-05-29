@@ -11,6 +11,9 @@ import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.features.projects.data.ProjectsListRepository
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter
 import com.arsvechkarev.letta.utils.navigator
+import kotlinx.android.synthetic.main.fragment_all_projects.backgroundImageExample
+import kotlinx.android.synthetic.main.fragment_all_projects.backgroundImagePalette
+import kotlinx.android.synthetic.main.fragment_all_projects.backgroundImagesRecyclerView
 import kotlinx.android.synthetic.main.fragment_all_projects.buttonNewProject
 import kotlinx.android.synthetic.main.fragment_all_projects.projectsLoadingProgressBar
 import kotlinx.android.synthetic.main.fragment_all_projects.recyclerAllProjects
@@ -24,6 +27,8 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     navigator.openExistingProject(project)
   })
   
+  private lateinit var chooseBgContainer: ChooseBgContainer
+  
   override fun createPresenter(): ProjectsListPresenter {
     return ProjectsListPresenter(ProjectsListRepository(LettaApplication.appContext))
   }
@@ -36,6 +41,8 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     buttonNewProject.setOnClickListener {
       navigator.goToNewProject()
     }
+    chooseBgContainer = ChooseBgContainer(backgroundImageExample, backgroundImagePalette,
+      backgroundImagesRecyclerView)
   }
   
   override fun onLoadedProjects(list: List<Project>) {
@@ -44,7 +51,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   override fun projectsAreEmpty() {
-  
+    projectsLoadingProgressBar.animateInvisibleAndScale()
   }
   
   override fun onDestroyView() {

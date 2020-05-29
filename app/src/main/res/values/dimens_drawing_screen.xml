@@ -12,9 +12,6 @@
   <dimen name="palette_smallest_size">32dp</dimen>
   <dimen name="palette_biggest_size">280dp</dimen>
   <dimen name="palette_padding">8dp</dimen>
-  <dimen name="horizontal_palette_margin">32dp</dimen>
-  <dimen name="bg_images_recycler_m_bottom">24dp</dimen>
-  <dimen name="text_choose_background_m_top">16dp</dimen>
   <dimen name="vertical_seekbar_width">30dp</dimen>
   <dimen name="vertical_seekbar_height">280dp</dimen>
   <dimen name="vertical_seekbar_corners_radius">16dp</dimen>

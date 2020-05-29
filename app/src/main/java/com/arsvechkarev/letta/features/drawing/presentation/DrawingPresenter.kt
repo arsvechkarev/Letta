@@ -15,10 +15,10 @@ class DrawingPresenter(
   threader: Threader = AndroidThreader
 ) : MvpPresenter<DrawingMvpView>(threader) {
   
-  fun uploadBitmap(drawingView: DrawingView, background: View?) {
+  fun uploadBitmap(drawingView: DrawingView) {
     updateView { onImageStartUploading() }
     onBackground {
-      val bitmap = drawBitmap(drawingView, background)
+      val bitmap = drawBitmap(drawingView, null)
       onIoThread {
         try {
           repository.saveBitmapToGallery(bitmap)

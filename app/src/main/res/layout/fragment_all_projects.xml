@@ -42,66 +42,50 @@
   <View
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone"
     android:background="#66000000"/>
 
-  <androidx.constraintlayout.widget.ConstraintLayout
+  <LinearLayout
     android:layout_width="match_parent"
-    android:visibility="gone"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="#FAFAFA"
-    android:clipChildren="false">
-
-    <EditText
-      android:id="@+id/editTextProjectName"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginHorizontal="16dp"
-      android:layout_marginTop="20dp"
-      android:gravity="center"
-      android:hint="Enter project name"
-      android:textColor="@android:color/black"
-      android:textColorHint="#555555"
-      android:textSize="16sp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"/>
+    android:background="@drawable/bg_choose_background_dialog"
+    android:clipChildren="false"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <TextView
-      android:id="@+id/headerNewProject"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_margin="16dp"
-      android:fontFamily="@font/rubik_medium"
+      android:layout_marginTop="@dimen/text_choose_background_m_top"
       android:gravity="center"
-      android:text="Background"
-      android:textColor="@android:color/black"
-      android:textSize="18sp"
-      app:layout_constraintTop_toBottomOf="@id/editTextProjectName"/>
+      android:text="@string/text_choose_background"
+      android:textColor="@color/text_primary"
+      android:textSize="@dimen/text_h3"
+      android:textStyle="bold"/>
 
-    <ImageView
-      android:id="@+id/imageViewBackgroundExample"
-      android:layout_width="160dp"
-      android:layout_height="160dp"
+    <com.arsvechkarev.letta.views.BorderImageView
+      android:id="@+id/backgroundImageExample"
+      android:layout_width="100dp"
+      android:layout_height="100dp"
       android:layout_margin="24dp"
-      android:src="@android:color/holo_green_dark"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/headerNewProject"/>
+      android:scaleType="fitXY"/>
 
     <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
-      android:id="@+id/bgGradientPalette"
+      android:id="@+id/backgroundImagePalette"
       android:layout_width="match_parent"
       android:layout_height="@dimen/palette_smallest_size"
-      android:layout_marginHorizontal="24dp"
-      android:layout_marginTop="24dp"
-      android:layout_marginBottom="80dp"
-      android:padding="@dimen/palette_padding"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/imageViewBackgroundExample"/>
+      android:layout_margin="@dimen/horizontal_palette_margin"
+      android:orientation="horizontal"
+      android:padding="@dimen/palette_padding"/>
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/backgroundImagesRecyclerView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/bg_images_recycler_m_bottom"
+      android:overScrollMode="never"/>
+
+  </LinearLayout>
 
   <com.arsvechkarev.letta.views.Image
     android:id="@+id/buttonNewProject"

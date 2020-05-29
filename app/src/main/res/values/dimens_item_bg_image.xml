@@ -4,4 +4,7 @@
   <dimen name="item_bg_image_size">70dp</dimen>
   <dimen name="item_bg_image_checkmark_size">50dp</dimen>
   <dimen name="item_bg_image_checkmark_icon_size">30dp</dimen>
+  <dimen name="horizontal_palette_margin">32dp</dimen>
+  <dimen name="bg_images_recycler_m_bottom">84dp</dimen>
+  <dimen name="text_choose_background_m_top">16dp</dimen>
 </resources>

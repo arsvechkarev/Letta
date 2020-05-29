@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_CANCEL
@@ -17,15 +16,12 @@ import android.view.View
 import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.COLOR_BORDER_VERY_LIGHT
+import com.arsvechkarev.letta.core.Colors.COLOR_BORDER_VERY_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.model.Circle
 import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.drawBounds
 import com.arsvechkarev.letta.utils.f
 import com.arsvechkarev.letta.utils.isWhiterThan
-import kotlin.math.abs
-import kotlin.math.sqrt
 
 class VerticalSeekbar @JvmOverloads constructor(
   context: Context,

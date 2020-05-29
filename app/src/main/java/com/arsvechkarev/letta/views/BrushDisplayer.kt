@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.core.Colors.COLOR_BORDER_LIGHT
 import com.arsvechkarev.letta.utils.dp
 import com.arsvechkarev.letta.utils.f
 

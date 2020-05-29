@@ -6,11 +6,7 @@ import android.widget.Toast
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
-import kotlinx.android.synthetic.main.fragment_drawing.backgroundColor
-import kotlinx.android.synthetic.main.fragment_drawing.backgroundImage
-import kotlinx.android.synthetic.main.fragment_drawing.backgroundImagesRecyclerView
 import kotlinx.android.synthetic.main.fragment_drawing.chooseBackgroundDialog
-import kotlinx.android.synthetic.main.fragment_drawing.chooseBgGradientPalette
 import kotlinx.android.synthetic.main.fragment_drawing.drawingView
 import kotlinx.android.synthetic.main.fragment_drawing.imageCurrentBackground
 import kotlinx.android.synthetic.main.fragment_drawing.imageDone
@@ -24,7 +20,6 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
 ), DrawingMvpView {
   
   private lateinit var paintContainer: PaintContainer
-  private lateinit var chooseBackgroundContainer: ChooseBackgroundContainer
   
   override fun createPresenter(): DrawingPresenter {
     return DrawingPresenter(ImageUploadingRepository(requireContext()))
@@ -34,18 +29,11 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     paintContainer = PaintContainer(
       imageUndo, drawingView, palette,
       verticalSeekbar, paintDisplayer)
-    chooseBackgroundContainer = ChooseBackgroundContainer(
-      backgroundImage,
-      backgroundColor,
-      imageCurrentBackground,
-      chooseBgGradientPalette,
-      backgroundImagesRecyclerView
-    )
     imageCurrentBackground.setOnClickListener {
       chooseBackgroundDialog.show()
     }
     imageDone.setOnClickListener {
-      presenter.uploadBitmap(drawingView, chooseBackgroundContainer.getImageBackground())
+      presenter.uploadBitmap(drawingView)
     }
   }
   

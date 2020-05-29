@@ -1,12 +1,12 @@
-package com.arsvechkarev.letta.features.drawing.list
+package com.arsvechkarev.letta.features.projects.list
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.model.ImageModel
-import com.arsvechkarev.letta.features.drawing.list.BackgroundImageAdapter.BackgroundImageViewHolder
 import com.arsvechkarev.letta.core.assertThat
+import com.arsvechkarev.letta.core.model.ImageModel
+import com.arsvechkarev.letta.features.projects.list.BackgroundImageAdapter.BackgroundImageViewHolder
 import com.arsvechkarev.letta.utils.inflate
 import com.arsvechkarev.letta.views.RoundedCornersDrawable
 import kotlinx.android.synthetic.main.item_bg_image.view.checkmark

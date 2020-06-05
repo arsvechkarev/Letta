@@ -1,11 +1,7 @@
 package com.arsvechkarev.letta
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import com.arsvechkarev.letta.core.Navigator
 
 class MainActivity : AppCompatActivity() {
   
@@ -15,23 +11,11 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     LettaApplication.initDensities(resources.displayMetrics.density, resources.displayMetrics.scaledDensity)
     setContentView(R.layout.activity_main)
-    ActivityCompat.requestPermissions(
-      this,
-      arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE),
-      1
-    )
-  }
-  
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<out String>,
-    grantResults: IntArray
-  ) {
-    navigator.openProjectsList()
+    navigator.start(savedInstanceState)
   }
   
   override fun onBackPressed() {
-    if (navigator.allowBackPressed()) {
+    if (navigator.allowPressBack()) {
       super.onBackPressed()
     }
   }

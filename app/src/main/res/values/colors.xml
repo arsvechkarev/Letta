@@ -3,11 +3,14 @@
   <color name="icon_default">#000000</color>
   <color name="icon_opposite">#FFFFFF</color>
 
-  <color name="primary">#105DA5</color>
+  <color name="primary">#167DDD</color>
   <color name="primary_light">#5cadfa</color>
   <color name="background">#FFFFFF</color>
   <color name="text_primary">#000000</color>
   <color name="text_header">#FFFFFF</color>
+  <color name="text_action">#FFFFFF</color>
   <color name="checkmark">#00CC2C</color>
   <color name="divider">#CCCCCC</color>
+
+  <color name="ripple">#99FFFFFF</color>
 </resources>

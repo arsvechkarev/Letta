@@ -40,18 +40,20 @@
     app:color="@color/primary"/>
 
   <View
+    android:id="@+id/bottomSheetShadowView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#66000000"/>
+    android:layout_height="match_parent"/>
 
   <LinearLayout
+    android:id="@+id/dialogProjectBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:background="@drawable/bg_choose_background_dialog"
     android:clipChildren="false"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:layout_behavior=".views.behaviors.BottomSheetBehavior">
 
     <TextView
       android:layout_width="match_parent"
@@ -84,6 +86,33 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/bg_images_recycler_m_bottom"
       android:overScrollMode="never"/>
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="24dp"
+      android:background="@drawable/bg_create_project"
+      android:clickable="true"
+      android:focusable="true"
+      android:gravity="center"
+      android:padding="6dp">
+
+      <ImageView
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="6dp"
+        android:src="@drawable/ic_new_project"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="6dp"
+        android:fontFamily="@font/rubik_medium"
+        android:text="Create project"
+        android:textColor="@color/text_action"
+        android:textSize="@dimen/text_h4"/>
+
+    </LinearLayout>
 
   </LinearLayout>
 

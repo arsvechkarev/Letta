@@ -10,17 +10,21 @@ import com.arsvechkarev.letta.core.animateInvisibleAndScale
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.features.projects.data.ProjectsListRepository
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter
+import com.arsvechkarev.letta.utils.behavior
 import com.arsvechkarev.letta.utils.navigator
-import kotlinx.android.synthetic.main.fragment_all_projects.backgroundImageExample
-import kotlinx.android.synthetic.main.fragment_all_projects.backgroundImagePalette
-import kotlinx.android.synthetic.main.fragment_all_projects.backgroundImagesRecyclerView
-import kotlinx.android.synthetic.main.fragment_all_projects.buttonNewProject
-import kotlinx.android.synthetic.main.fragment_all_projects.projectsLoadingProgressBar
-import kotlinx.android.synthetic.main.fragment_all_projects.recyclerAllProjects
+import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior
+import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImageExample
+import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImagePalette
+import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImagesRecyclerView
+import kotlinx.android.synthetic.main.fragment_projects_list.bottomSheetShadowView
+import kotlinx.android.synthetic.main.fragment_projects_list.buttonNewProject
+import kotlinx.android.synthetic.main.fragment_projects_list.dialogProjectBackground
+import kotlinx.android.synthetic.main.fragment_projects_list.projectsLoadingProgressBar
+import kotlinx.android.synthetic.main.fragment_projects_list.recyclerAllProjects
 
 class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter>(
   ProjectsListPresenter::class,
-  layout = R.layout.fragment_all_projects
+  layout = R.layout.fragment_projects_list
 ), ProjectsListView {
   
   private val adapter = ProjectsListAdapter(onProjectClick = { project ->
@@ -38,8 +42,14 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     recyclerAllProjects.layoutManager = GridLayoutManager(requireContext(), 3,
       GridLayoutManager.VERTICAL, false)
     presenter.startLoadingProjects()
+    val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
+    behavior.attachShadowView(bottomSheetShadowView)
     buttonNewProject.setOnClickListener {
-      navigator.goToNewProject()
+      if (behavior.isShown) {
+        behavior.hide()
+      } else {
+        behavior.show()
+      }
     }
     chooseBgContainer = ChooseBgContainer(backgroundImageExample, backgroundImagePalette,
       backgroundImagesRecyclerView)

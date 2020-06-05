@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams as ConstraintParams
 
 operator fun View.contains(event: MotionEvent): Boolean {
@@ -43,4 +44,9 @@ fun View.layoutParams(block: MarginLayoutParams.() -> Unit) {
 fun View.toggleKeyboard() {
   val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
   imm.toggleSoftInput(0, 0)
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T : CoordinatorLayout.Behavior<*>> View.behavior(): T {
+  return (layoutParams as CoordinatorLayout.LayoutParams).behavior as T
 }

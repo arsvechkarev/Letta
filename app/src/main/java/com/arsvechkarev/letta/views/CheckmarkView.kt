@@ -15,9 +15,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.DURATION_SMALL
-import com.arsvechkarev.letta.utils.cancelIfRunning
 import com.arsvechkarev.letta.utils.i
-import com.arsvechkarev.letta.utils.stopIfRunning
 
 class CheckmarkView @JvmOverloads constructor(
   context: Context,
@@ -132,12 +130,6 @@ class CheckmarkView @JvmOverloads constructor(
         circleRadius - circlePaint.strokeWidth / 2, circlePaint)
       currentDrawable.draw(canvas)
     }
-  }
-  
-  override fun onDetachedFromWindow() {
-    super.onDetachedFromWindow()
-    animator.cancelIfRunning()
-    currentDrawable.stopIfRunning()
   }
   
   private fun updateCheckedState() {

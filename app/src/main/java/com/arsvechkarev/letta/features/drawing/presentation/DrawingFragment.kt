@@ -6,9 +6,7 @@ import android.widget.Toast
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
-import kotlinx.android.synthetic.main.fragment_drawing.chooseBackgroundDialog
 import kotlinx.android.synthetic.main.fragment_drawing.drawingView
-import kotlinx.android.synthetic.main.fragment_drawing.imageCurrentBackground
 import kotlinx.android.synthetic.main.fragment_drawing.imageDone
 import kotlinx.android.synthetic.main.fragment_drawing.imageUndo
 import kotlinx.android.synthetic.main.fragment_drawing.paintDisplayer
@@ -29,9 +27,6 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     paintContainer = PaintContainer(
       imageUndo, drawingView, palette,
       verticalSeekbar, paintDisplayer)
-    imageCurrentBackground.setOnClickListener {
-      chooseBackgroundDialog.show()
-    }
     imageDone.setOnClickListener {
       presenter.uploadBitmap(drawingView)
     }
@@ -47,13 +42,5 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   
   override fun onImageUploadingError() {
     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-  }
-  
-  override fun onBackPressed(): Boolean {
-    if (chooseBackgroundDialog.isOpened) {
-      chooseBackgroundDialog.hide()
-      return false
-    }
-    return true
   }
 }

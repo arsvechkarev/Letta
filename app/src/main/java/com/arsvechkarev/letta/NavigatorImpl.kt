@@ -1,5 +1,6 @@
 package com.arsvechkarev.letta
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.letta.core.NavigableFragment
 import com.arsvechkarev.letta.core.Navigator
@@ -9,11 +10,17 @@ import com.arsvechkarev.letta.features.projects.presentation.ProjectsListFragmen
 
 class NavigatorImpl(private var activity: MainActivity?) : Navigator {
   
+  fun start(savedInstantState: Bundle?) {
+    if (savedInstantState == null) {
+      openProjectsList()
+    }
+  }
+  
   fun openProjectsList() {
     goToFragment(ProjectsListFragment(), animate = false, addToBackStack = false)
   }
   
-  fun allowBackPressed(): Boolean {
+  fun allowPressBack(): Boolean {
     val fragments = activity!!.supportFragmentManager.fragments
     var resultFragment: NavigableFragment? = null
     for (fragment in fragments) {
@@ -52,7 +59,7 @@ class NavigatorImpl(private var activity: MainActivity?) : Navigator {
         R.anim.transition_fragment_pop_exit
       )
     }
-    transaction.add(R.id.fragmentContainer, fragment as Fragment)
+    transaction.replace(R.id.fragmentContainer, fragment as Fragment)
     if (addToBackStack) {
       transaction.addToBackStack(null)
     }

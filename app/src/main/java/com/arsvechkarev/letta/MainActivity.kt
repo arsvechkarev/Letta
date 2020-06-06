@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     LettaApplication.initDensities(resources.displayMetrics.density, resources.displayMetrics.scaledDensity)
     setContentView(R.layout.activity_main)
-    navigator.start(savedInstanceState)
+    navigator.init(savedInstanceState)
   }
   
   override fun onBackPressed() {

@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImagePale
 import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImagesRecyclerView
 import kotlinx.android.synthetic.main.fragment_projects_list.bottomSheetShadowView
 import kotlinx.android.synthetic.main.fragment_projects_list.buttonNewProject
+import kotlinx.android.synthetic.main.fragment_projects_list.createNewProjectButton
 import kotlinx.android.synthetic.main.fragment_projects_list.dialogProjectBackground
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsLoadingProgressBar
 import kotlinx.android.synthetic.main.fragment_projects_list.recyclerAllProjects
@@ -43,7 +44,10 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
       GridLayoutManager.VERTICAL, false)
     presenter.startLoadingProjects()
     val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
-    behavior.attachShadowView(bottomSheetShadowView)
+    behavior.addShadowHook(bottomSheetShadowView)
+    createNewProjectButton.setOnClickListener {
+      navigator.goToNewProject()
+    }
     buttonNewProject.setOnClickListener {
       if (behavior.isShown) {
         behavior.hide()
@@ -62,6 +66,15 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   
   override fun projectsAreEmpty() {
     projectsLoadingProgressBar.animateInvisibleAndScale()
+  }
+  
+  override fun onBackPressed(): Boolean {
+    val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
+    if (behavior.isShown) {
+      behavior.hide()
+      return false
+    }
+    return true
   }
   
   override fun onDestroyView() {

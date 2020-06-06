@@ -10,7 +10,7 @@ import com.arsvechkarev.letta.features.projects.presentation.ProjectsListFragmen
 
 class NavigatorImpl(private var activity: MainActivity?) : Navigator {
   
-  fun start(savedInstantState: Bundle?) {
+  fun init(savedInstantState: Bundle?) {
     if (savedInstantState == null) {
       openProjectsList()
     }

@@ -48,7 +48,7 @@ class BackgroundImageAdapter(
   inner class BackgroundImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     
     init {
-      itemView.checkmark.setOnClickListener {
+      itemView.image.setOnClickListener {
         val previousViewHolder = recyclerView!!.findViewHolderForAdapterPosition(
           currentCheckedImagePosition) as? BackgroundImageViewHolder
         if (previousViewHolder == null) {

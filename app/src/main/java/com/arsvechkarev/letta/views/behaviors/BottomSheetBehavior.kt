@@ -6,27 +6,35 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ViewCompat
 import com.arsvechkarev.letta.core.DURATION_MEDIUM
 import com.arsvechkarev.letta.utils.cancelIfRunning
+import com.arsvechkarev.letta.utils.doOnEnd
 import java.lang.ref.WeakReference
 
 class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
   
-  private var height = -1
+  private var animating = false
   private var currentState = State.COLLAPSED
-  
   private var viewReference: WeakReference<V>? = null
-  private var currentOffset = 0
+  
+  private var parentBottom = -1
+  private var childMaxTop = -1
+  
+  private val slideListeners = ArrayList<SlideListener>()
+  
   private val animator = ValueAnimator().apply {
     duration = DURATION_MEDIUM
     interpolator = AccelerateDecelerateInterpolator()
     addUpdateListener {
       val child = viewReference?.get() ?: return@addUpdateListener
-      val previousOffset = currentOffset
-      currentOffset = it.animatedValue as Int
-      ViewCompat.offsetTopAndBottom(child, currentOffset - previousOffset)
+      child.top = it.animatedValue as Int
+      notifyListeners(child)
     }
+  }
+  
+  private fun notifyListeners(child: V) {
+    val percent = 1 - (child.top - childMaxTop).toFloat() / (parentBottom - childMaxTop)
+    slideListeners.forEach { listener -> listener.onSlide(percent) }
   }
   
   constructor(context: Context, attrs: AttributeSet) : this()
@@ -41,8 +49,8 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
     setState(State.COLLAPSED)
   }
   
-  fun attachShadowView(view: View) {
-  
+  fun addShadowHook(view: View) {
+    slideListeners.add(ShadowSlideListener(view))
   }
   
   override fun onLayoutChild(
@@ -50,16 +58,21 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
     child: V,
     layoutDirection: Int
   ): Boolean {
+    // If animating, do not allow parent to layout child, because it creates flicker
+    if (animating) return true
+    
     parent.onLayoutChild(child, layoutDirection)
     
     if (viewReference == null) {
-      height = child.height
+      if (childMaxTop == -1) {
+        childMaxTop = child.top
+      }
+      parentBottom = parent.bottom
       viewReference = WeakReference(child)
     }
     
     if (currentState == State.COLLAPSED) {
-      currentOffset = height
-      ViewCompat.offsetTopAndBottom(child, height)
+      child.top = parentBottom
     }
     return true
   }
@@ -70,29 +83,38 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
   
   override fun onDetachedFromLayoutParams() {
     viewReference = null
+    slideListeners.clear()
   }
   
   private fun setState(newState: State) {
     if (currentState == newState) return
     currentState = newState
-    
+  
     when (newState) {
       State.EXPANDED -> {
-        animateTo(0)
+        animateTo(childMaxTop)
       }
       State.COLLAPSED -> {
-        animateTo(height)
+        animateTo(parentBottom)
       }
     }
   }
   
-  private fun animateTo(offset: Int) {
+  private fun animateTo(newTop: Int) {
+    animating = true
+    val child = viewReference?.get()!!
     animator.cancelIfRunning()
-    animator.setIntValues(currentOffset, offset)
+    animator.setIntValues(child.top, newTop)
     animator.start()
+    animator.doOnEnd { animating = false }
   }
   
   enum class State {
     EXPANDED, COLLAPSED
+  }
+  
+  interface SlideListener {
+    
+    fun onSlide(slidePercent: Float)
   }
 }

@@ -26,6 +26,7 @@ class GradientHeaderView @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     val offset = h / 4f
+    path.reset()
     path.moveTo(0f, 0f)
     path.lineTo(w.f, 0f)
     path.lineTo(w.f, h - offset)

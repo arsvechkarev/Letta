@@ -18,6 +18,7 @@ abstract class MvpFragment<V : MvpView, P : MvpPresenter<V>>(
   
   abstract fun createPresenter(): P
   
+  @Suppress("UNCHECKED_CAST")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     presenter = ViewModelProviders.of(this, object : ViewModelProvider.Factory {

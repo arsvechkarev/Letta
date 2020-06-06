@@ -5,32 +5,41 @@
   android:layout_height="match_parent"
   android:background="@color/background">
 
-  <com.arsvechkarev.letta.views.HeaderFrameLayout
+  <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:elevation="0dp">
 
-    <com.arsvechkarev.letta.views.GradientHeaderView
+    <FrameLayout
       android:layout_width="match_parent"
-      android:layout_height="180dp"
-      android:layout_gravity="center"/>
-
-    <TextView
-      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:layout_marginBottom="12dp"
-      android:fontFamily="@font/rubik_medium"
-      android:text="All projects"
-      android:textColor="@color/text_header"
-      android:textSize="@dimen/text_h0"/>
+      android:background="@color/background"
+      app:layout_scrollFlags="scroll">
 
-  </com.arsvechkarev.letta.views.HeaderFrameLayout>
+      <com.arsvechkarev.letta.views.GradientHeaderView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_gravity="center"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/rubik_medium"
+        android:text="All projects"
+        android:textColor="@color/text_header"
+        android:textSize="@dimen/text_h0"/>
+
+    </FrameLayout>
+
+  </com.google.android.material.appbar.AppBarLayout>
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerAllProjects"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior=".views.behaviors.ScrollingRecyclerBehavior"/>
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
   <com.arsvechkarev.letta.views.ProgressBar
     android:id="@+id/projectsLoadingProgressBar"
@@ -88,6 +97,7 @@
       android:overScrollMode="never"/>
 
     <LinearLayout
+      android:id="@+id/createNewProjectButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="24dp"

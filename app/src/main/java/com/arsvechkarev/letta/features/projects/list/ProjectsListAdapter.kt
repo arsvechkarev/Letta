@@ -2,12 +2,15 @@ package com.arsvechkarev.letta.features.projects.list
 
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter.ProjectViewHolder
-import com.arsvechkarev.letta.utils.inflate
-import kotlinx.android.synthetic.main.item_project.view.projectImage
+import com.arsvechkarev.letta.utils.getDimen
+import com.arsvechkarev.letta.views.ClickableSquareImage
 
 class ProjectsListAdapter(
   private val onProjectClick: (Project) -> Unit
@@ -21,7 +24,12 @@ class ProjectsListAdapter(
   }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
-    return ProjectViewHolder(data, onProjectClick, parent.inflate(R.layout.item_project))
+    val image = ClickableSquareImage(parent.context)
+    val params = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+    val margin = parent.context.getDimen(R.dimen.item_bg_image_margin).toInt()
+    params.setMargins(margin, margin, margin, margin)
+    image.layoutParams = params
+    return ProjectViewHolder(data, onProjectClick, image)
   }
   
   override fun onBindViewHolder(holder: ProjectViewHolder, position: Int) {
@@ -37,13 +45,13 @@ class ProjectsListAdapter(
   ) : RecyclerView.ViewHolder(itemView) {
     
     init {
-      itemView.projectImage.setOnClickListener {
+      itemView.setOnClickListener {
         onProjectClick.invoke(data[adapterPosition])
       }
     }
     
     fun bind(project: Project) {
-      itemView.projectImage.setImageDrawable(project.image)
+      (itemView as ImageView).setImageDrawable(project.image)
     }
   }
 }

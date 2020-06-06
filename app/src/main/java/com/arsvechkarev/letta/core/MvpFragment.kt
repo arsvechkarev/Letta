@@ -5,7 +5,6 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import kotlin.reflect.KClass
 
 abstract class MvpFragment<V : MvpView, P : MvpPresenter<V>>(
@@ -21,7 +20,7 @@ abstract class MvpFragment<V : MvpView, P : MvpPresenter<V>>(
   @Suppress("UNCHECKED_CAST")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    presenter = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+    presenter = ViewModelProvider(this, object : ViewModelProvider.Factory {
       override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return createPresenter() as T
       }

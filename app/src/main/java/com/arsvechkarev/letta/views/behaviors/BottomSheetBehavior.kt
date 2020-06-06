@@ -3,6 +3,7 @@ package com.arsvechkarev.letta.views.behaviors
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -51,6 +52,10 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
   
   fun addShadowHook(view: View) {
     slideListeners.add(ShadowSlideListener(view))
+  }
+  
+  override fun onTouchEvent(parent: CoordinatorLayout, child: V, ev: MotionEvent): Boolean {
+    return true
   }
   
   override fun onLayoutChild(

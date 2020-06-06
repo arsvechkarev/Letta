@@ -5,12 +5,14 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.arsvechkarev.letta.LettaApplication
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.core.animateInvisibleAndScale
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.features.projects.data.ProjectsListRepository
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter
 import com.arsvechkarev.letta.utils.behavior
+import com.arsvechkarev.letta.utils.lerpColor
 import com.arsvechkarev.letta.utils.navigator
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImageExample
@@ -43,10 +45,23 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     recyclerAllProjects.layoutManager = GridLayoutManager(requireContext(), 3,
       GridLayoutManager.VERTICAL, false)
     presenter.startLoadingProjects()
-    val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
-    behavior.addShadowHook(bottomSheetShadowView)
+    prepareBehavior()
     createNewProjectButton.setOnClickListener {
       navigator.goToNewProject()
+    }
+    chooseBgContainer = ChooseBgContainer(backgroundImageExample, backgroundImagePalette,
+      backgroundImagesRecyclerView)
+  }
+  
+  private fun prepareBehavior() {
+    val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
+    behavior.addSlideListener { slidePercent ->
+      val color = lerpColor(0, Colors.COLOR_SHADOW, slidePercent)
+      bottomSheetShadowView.setBackgroundColor(color)
+    }
+    behavior.addSlideListener { slidePercent ->
+      buttonNewProject.alpha = 1 - slidePercent
+      buttonNewProject.translationY = (buttonNewProject.height / 2f) * slidePercent
     }
     buttonNewProject.setOnClickListener {
       if (behavior.isShown) {
@@ -55,8 +70,6 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
         behavior.show()
       }
     }
-    chooseBgContainer = ChooseBgContainer(backgroundImageExample, backgroundImagePalette,
-      backgroundImagesRecyclerView)
   }
   
   override fun onLoadedProjects(list: List<Project>) {

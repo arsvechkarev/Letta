@@ -103,8 +103,7 @@ class GradientPalette @JvmOverloads constructor(
   }
   private val swapperStroke = ContextCompat.getDrawable(context, R.drawable.ic_swap_stroke)!!
       .apply {
-        colorFilter = PorterDuffColorFilter(
-          COLOR_BORDER_LIGHT, PorterDuff.Mode.SRC_ATOP)
+        colorFilter = PorterDuffColorFilter(COLOR_BORDER_LIGHT, PorterDuff.Mode.SRC_ATOP)
       }
   private val swapperAnimator = ValueAnimator()
   private val bouncyAnimator = ValueAnimator()

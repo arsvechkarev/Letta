@@ -21,7 +21,7 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
   private var parentBottom = -1
   private var childMaxTop = -1
   
-  private val slideListeners = ArrayList<SlideListener>()
+  private val slideListeners = ArrayList<(Float) -> Unit>()
   
   private val animator = ValueAnimator().apply {
     duration = DURATION_MEDIUM
@@ -35,7 +35,7 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
   
   private fun notifyListeners(child: V) {
     val percent = 1 - (child.top - childMaxTop).toFloat() / (parentBottom - childMaxTop)
-    slideListeners.forEach { listener -> listener.onSlide(percent) }
+    slideListeners.forEach { listener -> listener.invoke(percent) }
   }
   
   @Suppress("unused") // Accessible through xml
@@ -51,8 +51,8 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
     setState(State.COLLAPSED)
   }
   
-  fun addShadowHook(view: View) {
-    slideListeners.add(ShadowSlideListener(view))
+  fun addSlideListener(listener: (Float) -> Unit) {
+    slideListeners.add(listener)
   }
   
   override fun onTouchEvent(parent: CoordinatorLayout, child: V, ev: MotionEvent): Boolean {
@@ -117,10 +117,5 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
   
   enum class State {
     EXPANDED, COLLAPSED
-  }
-  
-  interface SlideListener {
-    
-    fun onSlide(slidePercent: Float)
   }
 }

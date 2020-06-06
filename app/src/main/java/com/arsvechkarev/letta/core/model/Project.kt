@@ -1,7 +1,8 @@
 package com.arsvechkarev.letta.core.model
 
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
 
 class Project(
-  val image: Drawable
+  val filePath: String,
+  val image: Bitmap
 )

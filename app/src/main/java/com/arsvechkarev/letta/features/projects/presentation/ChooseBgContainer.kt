@@ -25,12 +25,16 @@ class ChooseBgContainer(
   
   private fun initializeAdapter(): BackgroundImageAdapter {
     val images = listOf(
-      ImageModel(R.drawable.bg_1),
-      ImageModel(R.drawable.bg_2),
-      ImageModel(R.drawable.bg_3)
+      ImageModel(R.drawable.bg1),
+      ImageModel(R.drawable.bg2),
+      ImageModel(R.drawable.bg3),
+      ImageModel(R.drawable.bg4),
+      ImageModel(R.drawable.bg5),
+      ImageModel(R.drawable.bg6),
+      ImageModel(R.drawable.bg7),
+      ImageModel(R.drawable.bg8)
     )
-    val adapter = BackgroundImageAdapter(
-      images, ::onImageSelected)
+    val adapter = BackgroundImageAdapter(images, ::onImageSelected)
     backgroundImagesRecyclerView.adapter = adapter
     backgroundImagesRecyclerView.layoutManager = LinearLayoutManager(backgroundImageExample.context,
       LinearLayoutManager.HORIZONTAL, false)

@@ -11,6 +11,7 @@ import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter.ProjectViewHolder
 import com.arsvechkarev.letta.utils.getDimen
 import com.arsvechkarev.letta.views.ClickableSquareImage
+import com.arsvechkarev.letta.views.RoundedCornersDrawable
 
 class ProjectsListAdapter(
   private val onProjectClick: (Project) -> Unit
@@ -51,7 +52,8 @@ class ProjectsListAdapter(
     }
     
     fun bind(project: Project) {
-      (itemView as ImageView).setImageDrawable(project.image)
+      (itemView as ImageView).setImageDrawable(
+        RoundedCornersDrawable.ofBitmap(itemView.context, project.image))
     }
   }
 }

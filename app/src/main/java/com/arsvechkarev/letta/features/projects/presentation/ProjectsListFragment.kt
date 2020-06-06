@@ -1,5 +1,6 @@
 package com.arsvechkarev.letta.features.projects.presentation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
@@ -53,6 +54,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
       backgroundImagesRecyclerView)
   }
   
+  @SuppressLint("ClickableViewAccessibility")
   private fun prepareBehavior() {
     val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
     behavior.addSlideListener { slidePercent ->
@@ -62,6 +64,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     behavior.addSlideListener { slidePercent ->
       buttonNewProject.alpha = 1 - slidePercent
       buttonNewProject.translationY = (buttonNewProject.height / 2f) * slidePercent
+      buttonNewProject.isEnabled = buttonNewProject.alpha != 0f
     }
     buttonNewProject.setOnClickListener {
       if (behavior.isShown) {

@@ -6,7 +6,6 @@ import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.utils.allProjectsDirectory
 import com.arsvechkarev.letta.utils.hasProjectFiles
-import com.arsvechkarev.letta.views.RoundedCornersDrawable
 import timber.log.Timber
 import java.io.File
 
@@ -27,8 +26,7 @@ class ProjectsListRepository(
             inSampleSize = 4
           }
           val bitmap = BitmapFactory.decodeFile(tempFile.canonicalPath, options)
-          val drawable = RoundedCornersDrawable.ofBitmap(context, bitmap)
-          list.add(Project(drawable))
+          list.add(Project(filename, bitmap))
         }
       } catch (e: Throwable) {
         Timber.d(e)

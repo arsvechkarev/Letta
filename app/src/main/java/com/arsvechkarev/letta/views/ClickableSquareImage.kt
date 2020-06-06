@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.widget.AppCompatImageView
 import com.arsvechkarev.letta.core.DURATION_ON_CLICK
 import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
@@ -56,7 +55,7 @@ class ClickableSquareImage @JvmOverloads constructor(
     return false
   }
   
-  fun animate(down: Boolean = true) {
+  private fun animate(down: Boolean = true) {
     val endScale = if (down) VIEW_CLICK_SCALE_FACTOR else 1.0f
     with(scaleAnimator) {
       cancel()

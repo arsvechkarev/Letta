@@ -3,10 +3,7 @@ package com.arsvechkarev.letta.views
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -40,11 +37,6 @@ class Image @JvmOverloads constructor(
     backgroundPaint.color = arr.getColor(R.styleable.Image_backgroundColor,
       ContextCompat.getColor(context, R.color.background))
     arr.recycle()
-  }
-  
-  fun setImage(drawable: Drawable) {
-    image = drawable
-    requestLayout()
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

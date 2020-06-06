@@ -3,12 +3,7 @@ package com.arsvechkarev.letta.utils
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
-import android.graphics.drawable.Animatable
 import android.view.ViewPropertyAnimator
-
-fun Animatable.stopIfRunning() {
-  if (isRunning) stop()
-}
 
 fun Animator.cancelIfRunning() {
   if (isRunning) cancel()

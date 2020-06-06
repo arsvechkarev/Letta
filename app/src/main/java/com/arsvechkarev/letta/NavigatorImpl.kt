@@ -16,7 +16,7 @@ class NavigatorImpl(private var activity: MainActivity?) : Navigator {
     }
   }
   
-  fun openProjectsList() {
+  private fun openProjectsList() {
     goToFragment(ProjectsListFragment(), animate = false, addToBackStack = false)
   }
   

@@ -4,14 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import android.view.View
 import com.arsvechkarev.letta.BuildConfig
-import com.arsvechkarev.letta.core.assertThat
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -26,8 +24,6 @@ val Float.i get() = this.toInt()
 operator fun MotionEvent.component1() = this.x
 
 operator fun MotionEvent.component2() = this.x
-
-fun MotionEvent.toPointF() = PointF(x, y)
 
 fun Drawable.toBitmap(): Bitmap {
   val bitmap = Bitmap.createBitmap(
@@ -71,17 +67,6 @@ fun Int.isWhiterThan(limitChannel: Int): Boolean {
   val b = this and 0x000000FF
   return r > limitChannel && g > limitChannel && b > limitChannel
       && r == g && r == b && g == b
-}
-
-fun Int.withAlpha(alpha: Int): Int {
-  assertThat(alpha in 0..255) { "Incorrect alpha: $alpha" }
-  val a = alpha shl 16
-  return this and 0xFF000000.toInt() or a
-}
-
-fun Int.withAlpha(alpha: Float): Int {
-  assertThat(alpha in 0f..1f) { "Incorrect alpha: $alpha" }
-  return withAlpha((alpha * 255).toInt())
 }
 
 fun lerpColor(startColor: Int, endColor: Int, fraction: Float): Int {

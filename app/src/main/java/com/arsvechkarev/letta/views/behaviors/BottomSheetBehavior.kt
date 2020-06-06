@@ -38,6 +38,7 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
     slideListeners.forEach { listener -> listener.onSlide(percent) }
   }
   
+  @Suppress("unused") // Accessible through xml
   constructor(context: Context, attrs: AttributeSet) : this()
   
   val isShown: Boolean get() = currentState == State.EXPANDED

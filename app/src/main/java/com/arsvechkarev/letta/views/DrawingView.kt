@@ -37,11 +37,6 @@ class DrawingView @JvmOverloads constructor(
   var onDown: () -> Unit = {}
   var onUp: () -> Unit = {}
   
-  fun clear() {
-    records.clear()
-    invalidate()
-  }
-  
   fun undo() {
     if (records.size > 0) {
       records.removeAt(records.size - 1)

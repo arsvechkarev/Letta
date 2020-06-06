@@ -35,7 +35,7 @@ open class RoundedCornersDrawable(
   private val imageMatrix = Matrix()
   private val imageRect = RectF()
   
-  protected val imagePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+  private val imagePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   
   override fun onBoundsChange(bounds: Rect) {
     val tempRect = RectF(

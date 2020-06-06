@@ -16,8 +16,8 @@ import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.DURATION_ON_CLICK
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
-import com.arsvechkarev.letta.utils.contains
-import com.arsvechkarev.letta.utils.execute
+import com.arsvechkarev.letta.extensions.contains
+import com.arsvechkarev.letta.extensions.execute
 
 class Image @JvmOverloads constructor(
   context: Context,

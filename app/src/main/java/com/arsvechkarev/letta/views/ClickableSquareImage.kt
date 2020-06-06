@@ -11,7 +11,7 @@ import android.view.MotionEvent.ACTION_UP
 import androidx.appcompat.widget.AppCompatImageView
 import com.arsvechkarev.letta.core.DURATION_ON_CLICK
 import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
-import com.arsvechkarev.letta.utils.execute
+import com.arsvechkarev.letta.extensions.execute
 import kotlin.math.max
 
 class ClickableSquareImage @JvmOverloads constructor(

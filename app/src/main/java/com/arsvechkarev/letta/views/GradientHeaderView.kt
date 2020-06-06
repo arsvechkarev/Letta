@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.extensions.f
 
 class GradientHeaderView @JvmOverloads constructor(
   context: Context,

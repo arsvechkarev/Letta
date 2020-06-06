@@ -20,7 +20,7 @@ class ChooseBgContainer(
       adapter.disableSelection()
       backgroundImageExample.updateColor(it)
     }
-    backgroundImageExample.updateDrawable(R.drawable.bg_1)
+    backgroundImageExample.updateDrawable(R.drawable.bg1)
   }
   
   private fun initializeAdapter(): BackgroundImageAdapter {

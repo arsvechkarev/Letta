@@ -2,8 +2,8 @@ package com.arsvechkarev.letta.core
 
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.arsvechkarev.letta.utils.doOnEnd
-import com.arsvechkarev.letta.utils.invisible
+import com.arsvechkarev.letta.extensions.doOnEnd
+import com.arsvechkarev.letta.extensions.invisible
 
 fun View.animateInvisibleAndScale() {
   isClickable = false

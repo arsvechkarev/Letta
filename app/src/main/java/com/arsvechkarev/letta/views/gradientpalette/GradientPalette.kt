@@ -25,16 +25,16 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.Colors.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.model.Circle
-import com.arsvechkarev.letta.utils.addBouncyBackEffect
-import com.arsvechkarev.letta.utils.c
-import com.arsvechkarev.letta.utils.doOnEnd
-import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.execute
-import com.arsvechkarev.letta.utils.f
-import com.arsvechkarev.letta.utils.i
+import com.arsvechkarev.letta.extensions.addBouncyBackEffect
+import com.arsvechkarev.letta.extensions.c
+import com.arsvechkarev.letta.extensions.doOnEnd
+import com.arsvechkarev.letta.extensions.dp
+import com.arsvechkarev.letta.extensions.execute
+import com.arsvechkarev.letta.extensions.f
+import com.arsvechkarev.letta.extensions.i
 import kotlin.math.PI
 
 /**

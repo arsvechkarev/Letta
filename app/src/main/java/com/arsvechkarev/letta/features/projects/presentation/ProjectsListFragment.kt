@@ -6,15 +6,15 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.arsvechkarev.letta.LettaApplication
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.Colors
+import com.arsvechkarev.letta.core.COLOR_SHADOW
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.core.animateInvisibleAndScale
 import com.arsvechkarev.letta.core.model.Project
+import com.arsvechkarev.letta.extensions.behavior
+import com.arsvechkarev.letta.extensions.lerpColor
+import com.arsvechkarev.letta.extensions.navigator
 import com.arsvechkarev.letta.features.projects.data.ProjectsListRepository
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter
-import com.arsvechkarev.letta.utils.behavior
-import com.arsvechkarev.letta.utils.lerpColor
-import com.arsvechkarev.letta.utils.navigator
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImageExample
 import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImagePalette
@@ -58,7 +58,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   private fun prepareBehavior() {
     val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
     behavior.addSlideListener { slidePercent ->
-      val color = lerpColor(0, Colors.COLOR_SHADOW, slidePercent)
+      val color = lerpColor(0, COLOR_SHADOW, slidePercent)
       bottomSheetShadowView.setBackgroundColor(color)
     }
     behavior.addSlideListener { slidePercent ->

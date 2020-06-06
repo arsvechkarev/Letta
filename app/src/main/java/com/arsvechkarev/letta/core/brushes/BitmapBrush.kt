@@ -1,6 +1,6 @@
 package com.arsvechkarev.letta.core.brushes
 
-import com.arsvechkarev.letta.utils.i
+import com.arsvechkarev.letta.extensions.i
 import kotlin.math.sqrt
 
 abstract class BitmapBrush(

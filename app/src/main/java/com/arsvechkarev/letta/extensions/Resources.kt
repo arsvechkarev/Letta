@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.utils
+package com.arsvechkarev.letta.extensions
 
 import android.content.Context
 import androidx.annotation.DimenRes

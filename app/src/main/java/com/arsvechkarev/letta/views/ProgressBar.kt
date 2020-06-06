@@ -10,10 +10,10 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.utils.cancelIfRunning
-import com.arsvechkarev.letta.utils.dpInt
-import com.arsvechkarev.letta.utils.execute
-import com.arsvechkarev.letta.utils.f
+import com.arsvechkarev.letta.extensions.cancelIfRunning
+import com.arsvechkarev.letta.extensions.dpInt
+import com.arsvechkarev.letta.extensions.execute
+import com.arsvechkarev.letta.extensions.f
 
 class ProgressBar @JvmOverloads constructor(
   context: Context,

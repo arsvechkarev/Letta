@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.utils
+package com.arsvechkarev.letta.extensions
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -7,30 +7,18 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
-import android.view.MotionEvent
 import android.view.View
 import com.arsvechkarev.letta.BuildConfig
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.roundToInt
-
 
 val Int.f get() = this.toFloat()
 val Float.i get() = this.toInt()
 
-/**
- * Deconstructing motion event:
- *    val (x, y) = event
- */
-operator fun MotionEvent.component1() = this.x
-
-operator fun MotionEvent.component2() = this.x
-
 fun Drawable.toBitmap(): Bitmap {
-  val bitmap = Bitmap.createBitmap(
-    intrinsicWidth,
-    intrinsicHeight,
-    Bitmap.Config.ARGB_8888
-  )
+  val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
   val canvas = Canvas(bitmap)
   setBounds(0, 0, canvas.width, canvas.height)
   draw(canvas)
@@ -47,16 +35,11 @@ fun RectF.toRect(): Rect {
   return Rect(left.i, top.i, right.i, bottom.i)
 }
 
-// Only in debug
-fun View.drawBounds(canvas: Canvas, color: Int = Color.RED) {
-  if (!BuildConfig.DEBUG) {
-    throw IllegalStateException("Nope")
-  }
-  canvas.drawRect(Rect(0, 0, width, height), Paint().apply {
-    style = Paint.Style.STROKE
-    this.color = color
-    strokeWidth = 5f
-  })
+fun RectF.roundToInts() {
+  left = floor(left)
+  top = floor(top)
+  right = ceil(right)
+  bottom = ceil(bottom)
 }
 
 val String.c get() = Color.parseColor(this)
@@ -103,4 +86,16 @@ fun lerpColor(startColor: Int, endColor: Int, fraction: Float): Int {
   b = b.toDouble().pow(1.0 / 2.2).toFloat() * 255.0f
   
   return (a.roundToInt() shl 24) or (r.roundToInt() shl 16) or (g.roundToInt() shl 8) or b.roundToInt()
+}
+
+// Only in debug
+fun View.drawBounds(canvas: Canvas, color: Int = Color.RED) {
+  if (!BuildConfig.DEBUG) {
+    throw IllegalStateException("Nope")
+  }
+  canvas.drawRect(Rect(0, 0, width, height), Paint().apply {
+    style = Paint.Style.STROKE
+    this.color = color
+    strokeWidth = 5f
+  })
 }

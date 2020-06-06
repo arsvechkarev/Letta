@@ -16,12 +16,12 @@ import android.view.View
 import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.Colors.COLOR_BORDER_VERY_LIGHT
+import com.arsvechkarev.letta.core.COLOR_BORDER_VERY_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.model.Circle
-import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.f
-import com.arsvechkarev.letta.utils.isWhiterThan
+import com.arsvechkarev.letta.extensions.dp
+import com.arsvechkarev.letta.extensions.f
+import com.arsvechkarev.letta.extensions.isWhiterThan
 
 class VerticalSeekbar @JvmOverloads constructor(
   context: Context,

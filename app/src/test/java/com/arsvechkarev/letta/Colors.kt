@@ -1,6 +1,6 @@
 package com.arsvechkarev.letta
 
-import com.arsvechkarev.letta.utils.withAlpha
+import com.arsvechkarev.letta.extensions.withAlpha
 import org.junit.Test
 
 class Colors {

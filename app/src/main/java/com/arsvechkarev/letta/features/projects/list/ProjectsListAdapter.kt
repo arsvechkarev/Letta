@@ -8,8 +8,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.model.Project
+import com.arsvechkarev.letta.extensions.getDimen
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter.ProjectViewHolder
-import com.arsvechkarev.letta.utils.getDimen
 import com.arsvechkarev.letta.views.ClickableSquareImage
 import com.arsvechkarev.letta.views.RoundedCornersDrawable
 

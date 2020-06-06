@@ -5,9 +5,9 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import com.arsvechkarev.letta.utils.dp
-import com.arsvechkarev.letta.utils.f
-import com.arsvechkarev.letta.utils.i
+import com.arsvechkarev.letta.extensions.dp
+import com.arsvechkarev.letta.extensions.f
+import com.arsvechkarev.letta.extensions.i
 import kotlin.random.Random
 
 class SprayBrush(color: Int, brushSize: Float) : Brush(color, brushSize) {

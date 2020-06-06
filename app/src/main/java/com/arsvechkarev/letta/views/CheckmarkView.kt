@@ -15,7 +15,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.DURATION_SMALL
-import com.arsvechkarev.letta.utils.i
+import com.arsvechkarev.letta.extensions.i
 
 class CheckmarkView @JvmOverloads constructor(
   context: Context,

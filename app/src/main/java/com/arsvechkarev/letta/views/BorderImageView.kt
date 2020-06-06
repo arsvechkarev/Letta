@@ -9,8 +9,8 @@ import android.util.AttributeSet
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.Colors
-import com.arsvechkarev.letta.utils.getDimen
+import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.extensions.getDimen
 
 class BorderImageView @JvmOverloads constructor(
   context: Context,
@@ -20,7 +20,7 @@ class BorderImageView @JvmOverloads constructor(
   
   private val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.STROKE
-    color = Colors.COLOR_BORDER_LIGHT
+    color = COLOR_BORDER_LIGHT
     strokeWidth = context.getDimen(R.dimen.border_width)
   }
   private val borderRect = Rect()

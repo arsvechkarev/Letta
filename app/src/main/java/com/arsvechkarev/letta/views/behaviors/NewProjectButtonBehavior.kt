@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.arsvechkarev.letta.utils.doOnEnd
+import com.arsvechkarev.letta.extensions.doOnEnd
 
 class NewProjectButtonBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
   

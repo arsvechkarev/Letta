@@ -2,7 +2,7 @@ package com.arsvechkarev.letta.features.drawing.data
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.arsvechkarev.letta.utils.allProjectsDirectory
+import com.arsvechkarev.letta.extensions.allProjectsDirectory
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream

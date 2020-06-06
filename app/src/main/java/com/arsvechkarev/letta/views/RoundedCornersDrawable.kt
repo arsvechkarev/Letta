@@ -13,10 +13,10 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.Colors.COLOR_BORDER_LIGHT
-import com.arsvechkarev.letta.utils.f
-import com.arsvechkarev.letta.utils.getDimen
-import com.arsvechkarev.letta.utils.toBitmap
+import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.extensions.f
+import com.arsvechkarev.letta.extensions.getDimen
+import com.arsvechkarev.letta.extensions.toBitmap
 
 open class RoundedCornersDrawable(
   private val image: Bitmap,

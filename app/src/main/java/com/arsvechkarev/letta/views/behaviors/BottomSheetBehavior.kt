@@ -8,8 +8,8 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.arsvechkarev.letta.core.DURATION_MEDIUM
-import com.arsvechkarev.letta.utils.cancelIfRunning
-import com.arsvechkarev.letta.utils.doOnEnd
+import com.arsvechkarev.letta.extensions.cancelIfRunning
+import com.arsvechkarev.letta.extensions.doOnEnd
 import java.lang.ref.WeakReference
 
 class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {

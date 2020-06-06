@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.utils
+package com.arsvechkarev.letta.extensions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

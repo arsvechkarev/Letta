@@ -25,6 +25,7 @@ class Image @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
   
+  private val drawStroke: Boolean
   private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private var image: Drawable?
   
@@ -34,8 +35,9 @@ class Image @JvmOverloads constructor(
   init {
     val arr = context.obtainStyledAttributes(attrs, R.styleable.Image, defStyleAttr, 0)
     image = arr.getDrawable(R.styleable.Image_imageSrc)?.mutate()
-    backgroundPaint.color = arr.getColor(R.styleable.Image_backgroundColor,
-      ContextCompat.getColor(context, R.color.background))
+    val defaultColor = ContextCompat.getColor(context, R.color.background)
+    backgroundPaint.color = arr.getColor(R.styleable.Image_backgroundColor, defaultColor)
+    drawStroke = arr.getBoolean(R.styleable.Image_drawStroke, true)
     arr.recycle()
   }
   
@@ -58,8 +60,9 @@ class Image @JvmOverloads constructor(
       scale(scaleFactor, scaleFactor, halfWidth, halfHeight)
       drawCircle(halfWidth, halfHeight, halfWidth, backgroundPaint)
       image?.draw(canvas)
-      drawCircle(halfWidth, halfHeight, halfWidth,
-        STROKE_PAINT)
+      if (drawStroke) {
+        drawCircle(halfWidth, halfHeight, halfWidth, STROKE_PAINT)
+      }
     }
   }
   

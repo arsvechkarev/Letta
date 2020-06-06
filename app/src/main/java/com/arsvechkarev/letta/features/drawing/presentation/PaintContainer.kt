@@ -2,12 +2,12 @@ package com.arsvechkarev.letta.features.drawing.presentation
 
 import android.graphics.Color
 import com.arsvechkarev.letta.core.brushes.BrushType
-import com.arsvechkarev.letta.utils.exponentiate
 import com.arsvechkarev.letta.views.BrushDisplayer
 import com.arsvechkarev.letta.views.DrawingView
 import com.arsvechkarev.letta.views.Image
 import com.arsvechkarev.letta.views.VerticalSeekbar
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
+import kotlin.math.pow
 
 class PaintContainer(
   undoImage: Image,
@@ -42,5 +42,9 @@ class PaintContainer(
       drawingView.brushSize = width
       brushDisplayer.draw(drawingView.brushColor, width)
     }
+  }
+  
+  private fun Float.exponentiate(): Float {
+    return this * 50 + (this * 6).pow(3.5f)
   }
 }

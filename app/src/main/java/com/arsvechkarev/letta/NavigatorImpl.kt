@@ -59,7 +59,7 @@ class NavigatorImpl(private var activity: MainActivity?) : Navigator {
         R.anim.transition_fragment_pop_exit
       )
     }
-    transaction.replace(R.id.fragmentContainer, fragment as Fragment)
+    transaction.add(R.id.fragmentContainer, fragment as Fragment)
     if (addToBackStack) {
       transaction.addToBackStack(null)
     }

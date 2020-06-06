@@ -12,8 +12,9 @@
   </declare-styleable>
 
   <declare-styleable name="Image">
-    <attr name="imageSrc" format="reference"/>
     <attr name="backgroundColor" format="color"/>
+    <attr name="drawStroke" format="boolean"/>
+    <attr name="imageSrc" format="reference"/>
   </declare-styleable>
 
   <declare-styleable name="ProgressBar">

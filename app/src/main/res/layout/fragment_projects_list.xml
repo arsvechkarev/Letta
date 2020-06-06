@@ -134,6 +134,8 @@
     android:layout_margin="16dp"
     android:padding="8dp"
     app:backgroundColor="@color/primary"
-    app:imageSrc="@drawable/ic_new_project"/>
+    app:drawStroke="false"
+    app:imageSrc="@drawable/ic_new_project"
+    app:layout_behavior=".views.behaviors.NewProjectButtonBehavior"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -25,3 +25,36 @@ fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
 fun <T : CoordinatorLayout.Behavior<*>> View.behavior(): T {
   return (layoutParams as CoordinatorLayout.LayoutParams).behavior as T
 }
+
+inline fun ViewGroup.findChild(predicate: (View) -> Boolean): View {
+  for (i in 0 until childCount) {
+    val child = getChildAt(i)
+    if (predicate(child)) {
+      return child
+    }
+  }
+  throw IllegalStateException("No child matching predicate")
+}
+
+inline fun View.withLayoutParams(block: View.(ViewGroup.MarginLayoutParams) -> Unit) {
+  block.invoke(this, layoutParams as ViewGroup.MarginLayoutParams)
+}
+
+fun View.doLayout(left: Int, top: Int, right: Int, bottom: Int) {
+  layout(left, top, right, bottom)
+}
+
+val View.marginParams: ViewGroup.MarginLayoutParams
+  get() = layoutParams as ViewGroup.MarginLayoutParams
+
+val View.widthWithMargins: Int
+  get() {
+    val params = layoutParams as ViewGroup.MarginLayoutParams
+    return params.width + params.rightMargin + params.leftMargin
+  }
+
+val View.heightWithMargins: Int
+  get() {
+    val params = layoutParams as ViewGroup.MarginLayoutParams
+    return params.height + params.topMargin + params.bottomMargin
+  }

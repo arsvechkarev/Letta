@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.arsvechkarev.letta.views.PaintingViewGroup xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/paintingViewGroup"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:clipChildren="false">
@@ -22,9 +23,7 @@
     android:layout_marginTop="@dimen/img_tool_m_top"
     android:layout_marginEnd="@dimen/img_done_margin"
     android:padding="@dimen/img_tool_padding"
-    app:imageSrc="@drawable/ic_checkmark"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+    app:imageSrc="@drawable/ic_checkmark"/>
 
   <com.arsvechkarev.letta.views.Image
     android:id="@+id/imageUndo"
@@ -33,19 +32,13 @@
     android:layout_marginTop="@dimen/img_tool_m_top"
     android:layout_marginEnd="@dimen/img_undo_m_end"
     android:padding="@dimen/img_tool_padding"
-    app:imageSrc="@drawable/ic_undo"
-    app:layout_constraintBottom_toBottomOf="@id/imageDone"
-    app:layout_constraintEnd_toStartOf="@id/imageDone"
-    app:layout_constraintTop_toTopOf="parent"/>
+    app:imageSrc="@drawable/ic_undo"/>
 
   <com.arsvechkarev.letta.views.VerticalSeekbar
     android:id="@+id/verticalSeekbar"
     android:layout_width="@dimen/vertical_seekbar_width"
     android:layout_height="@dimen/vertical_seekbar_height"
     app:cornersRadius="@dimen/vertical_seekbar_corners_radius"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
     app:lineVerticalOffset="@dimen/vertical_seekbar_offset"/>
 
   <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
@@ -53,16 +46,11 @@
     android:layout_width="@dimen/palette_smallest_size"
     android:layout_height="@dimen/palette_biggest_size"
     android:orientation="vertical"
-    android:padding="@dimen/palette_padding"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="@id/imageDone"
-    app:layout_constraintStart_toStartOf="@id/imageDone"
-    app:layout_constraintTop_toTopOf="parent"/>
+    android:padding="@dimen/palette_padding"/>
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerBrushes"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintBottom_toBottomOf="parent"/>
+    android:layout_height="wrap_content"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.arsvechkarev.letta.views.PaintingViewGroup>

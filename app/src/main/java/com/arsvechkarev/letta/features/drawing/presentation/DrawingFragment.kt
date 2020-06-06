@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.fragment_drawing.drawingView
 import kotlinx.android.synthetic.main.fragment_drawing.imageDone
 import kotlinx.android.synthetic.main.fragment_drawing.imageUndo
 import kotlinx.android.synthetic.main.fragment_drawing.paintDisplayer
+import kotlinx.android.synthetic.main.fragment_drawing.paintingViewGroup
 import kotlinx.android.synthetic.main.fragment_drawing.palette
 import kotlinx.android.synthetic.main.fragment_drawing.verticalSeekbar
 
@@ -24,9 +25,12 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    paintingViewGroup.assignDrawingView(drawingView)
+    paintingViewGroup.assignImagesIds(imageUndo.id, imageDone.id)
     paintContainer = PaintContainer(
       imageUndo, drawingView, palette,
-      verticalSeekbar, paintDisplayer)
+      verticalSeekbar, paintDisplayer
+    )
     imageDone.setOnClickListener {
       presenter.uploadBitmap(drawingView)
     }

@@ -1,13 +1,10 @@
 package com.arsvechkarev.letta.features.drawing.presentation
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.view.View
 import com.arsvechkarev.letta.core.MvpPresenter
 import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
-import com.arsvechkarev.letta.views.DrawingView
 import timber.log.Timber
 
 class DrawingPresenter(
@@ -15,28 +12,16 @@ class DrawingPresenter(
   threader: Threader = AndroidThreader
 ) : MvpPresenter<DrawingMvpView>(threader) {
   
-  fun uploadBitmap(drawingView: DrawingView) {
-    updateView { onImageStartUploading() }
-    onBackground {
-      val bitmap = drawBitmap(drawingView, null)
-      onIoThread {
-        try {
-          repository.saveBitmapToGallery(bitmap)
-          updateView { onImageUploaded() }
-        } catch (e: Throwable) {
-          Timber.d(e)
-          updateView { onImageUploadingError() }
-        }
+  fun uploadBitmap(bitmap: Bitmap) {
+    updateView { onStartUploadingImage() }
+    onIoThread {
+      try {
+        repository.saveBitmapToGallery(bitmap)
+        updateView { onImageUploaded() }
+      } catch (e: Throwable) {
+        Timber.d(e)
+        updateView { onImageUploadingError() }
       }
     }
-  }
-  
-  private fun drawBitmap(drawingView: DrawingView, background: View?): Bitmap {
-    val bitmap = Bitmap.createBitmap(drawingView.width, drawingView.height,
-      Bitmap.Config.ARGB_8888)
-    val canvas = Canvas(bitmap)
-    background?.draw(canvas)
-    drawingView.draw(canvas)
-    return bitmap
   }
 }

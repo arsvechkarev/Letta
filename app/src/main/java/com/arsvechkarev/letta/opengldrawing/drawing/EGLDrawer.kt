@@ -59,7 +59,7 @@ class EGLDrawer(
   
   fun setCurrentContext(): Boolean {
     if (!isInitialized) {
-      return false
+      error("Context is not initialized")
     }
     val egl10 = egl10
     val makeCurrent = egl10.eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext)
@@ -116,9 +116,6 @@ class EGLDrawer(
   }
   
   override fun run() {
-    if (bitmap.isRecycled) {
-      return
-    }
     isInitialized = initializeGL()
     super.run()
   }
@@ -136,7 +133,7 @@ class EGLDrawer(
     val configsCount = IntArray(1)
     val configs = arrayOfNulls<EGLConfig>(1)
     val configSpec = intArrayOf(
-      EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+      EGL10.EGL_RENDERABLE_TYPE, EGL_OPEN_GL_ES2_BIT,
       EGL10.EGL_RED_SIZE, 8,
       EGL10.EGL_GREEN_SIZE, 8,
       EGL10.EGL_BLUE_SIZE, 8,
@@ -211,6 +208,6 @@ class EGLDrawer(
   
   companion object {
     private const val EGL_CONTEXT_CLIENT_VERSION = 0x3098
-    private const val EGL_OPENGL_ES2_BIT = 4
+    private const val EGL_OPEN_GL_ES2_BIT = 4
   }
 }

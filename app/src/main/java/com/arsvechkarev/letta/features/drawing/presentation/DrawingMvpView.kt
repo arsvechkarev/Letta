@@ -4,7 +4,7 @@ import com.arsvechkarev.letta.core.MvpView
 
 interface DrawingMvpView : MvpView {
   
-  fun onImageStartUploading()
+  fun onStartUploadingImage()
   
   fun onImageUploaded()
   

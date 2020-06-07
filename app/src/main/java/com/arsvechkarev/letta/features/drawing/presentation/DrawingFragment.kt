@@ -1,6 +1,5 @@
 package com.arsvechkarev.letta.features.drawing.presentation
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -38,23 +37,20 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
       }
     }
     val undoStore = UndoStore()
-    val openGLDrawingView = createDrawingView(
-      undoStore, PlainBrush(), renderer
-    )
-    openGLDrawingView.updateBrushSize(2f)
-    openGLDrawingView.updateColor(Color.GREEN)
-    paintContainer = PaintContainer(undoStore, renderer,
-      imageUndo, openGLDrawingView, palette,
-      verticalSeekbar, paintDisplayer
+    val openGLDrawingView = createDrawingView(undoStore, PlainBrush(), renderer)
+    paintContainer = PaintContainer(undoStore, imageUndo,
+      openGLDrawingView, palette, verticalSeekbar,
+      paintDisplayer
     )
     paintingViewGroup.addDrawingView(openGLDrawingView)
     paintingViewGroup.assignImagesIds(imageUndo.id, imageDone.id)
     imageDone.setOnClickListener {
-    
+      val bitmap = openGLDrawingView.getResultBitmap()
+      presenter.uploadBitmap(bitmap)
     }
   }
   
-  override fun onImageStartUploading() {
+  override fun onStartUploadingImage() {
     Toast.makeText(requireContext(), "Start uploading", Toast.LENGTH_SHORT).show()
   }
   
@@ -64,6 +60,11 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   
   override fun onImageUploadingError() {
     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+  }
+  
+  override fun onDestroyView() {
+    paintContainer.shutdown()
+    super.onDestroyView()
   }
   
   private fun createDrawingView(

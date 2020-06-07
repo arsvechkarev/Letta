@@ -16,7 +16,7 @@ class PlainBrush : Brush {
   override fun getStamp(resources: Resources): Bitmap {
     val options = BitmapFactory.Options()
     options.inScaled = false
-    return BitmapFactory.decodeResource(resources, R.drawable.paint_dots, options)
+    return BitmapFactory.decodeResource(resources, R.drawable.paint_circle, options)
   }
 }
 

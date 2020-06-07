@@ -3,7 +3,6 @@ package com.arsvechkarev.letta.features.drawing.presentation
 import android.graphics.Color
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
-import com.arsvechkarev.letta.opengldrawing.drawing.Renderer
 import com.arsvechkarev.letta.views.BrushDisplayer
 import com.arsvechkarev.letta.views.Image
 import com.arsvechkarev.letta.views.VerticalSeekbar
@@ -12,9 +11,8 @@ import kotlin.math.pow
 
 class PaintContainer(
   undoStore: UndoStore,
-  renderer: Renderer,
   undoImage: Image,
-  openGLDrawingView: OpenGLDrawingView,
+  private val openGLDrawingView: OpenGLDrawingView,
   palette: GradientPalette,
   verticalSeekbar: VerticalSeekbar,
   brushDisplayer: BrushDisplayer
@@ -49,5 +47,9 @@ class PaintContainer(
   
   private fun Float.exponentiate(): Float {
     return this * 50 + (this * 6).pow(3.5f)
+  }
+  
+  fun shutdown() {
+    openGLDrawingView.shutdown()
   }
 }

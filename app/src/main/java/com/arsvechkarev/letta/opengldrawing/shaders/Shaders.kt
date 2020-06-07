@@ -209,6 +209,6 @@ object Shaders {
     vararg uniforms: String
   ): Shader {
     return Shader(vertexShader, fragmentShader,
-      arrayOf(*uniforms))
+      arrayOf(*uniforms), arrayOf())
   }
 }

@@ -9,18 +9,8 @@ import com.arsvechkarev.letta.extensions.to4x4Matrix
 import com.arsvechkarev.letta.opengldrawing.Action
 import com.arsvechkarev.letta.opengldrawing.Logger
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush
-import com.arsvechkarev.letta.opengldrawing.shaders.BLIT
-import com.arsvechkarev.letta.opengldrawing.shaders.BLIT_WITH_MASK
-import com.arsvechkarev.letta.opengldrawing.shaders.BLIT_WITH_MASK_LIGHT
-import com.arsvechkarev.letta.opengldrawing.shaders.COLOR
-import com.arsvechkarev.letta.opengldrawing.shaders.COMPOSITE_WITH_MASK
-import com.arsvechkarev.letta.opengldrawing.shaders.COMPOSITE_WITH_MASK_LIGHT
-import com.arsvechkarev.letta.opengldrawing.shaders.MASK
-import com.arsvechkarev.letta.opengldrawing.shaders.MVP_MATRIX
-import com.arsvechkarev.letta.opengldrawing.shaders.NON_PRE_MULTIPLIED_BLIT
 import com.arsvechkarev.letta.opengldrawing.shaders.Shader
-import com.arsvechkarev.letta.opengldrawing.shaders.Shaders
-import com.arsvechkarev.letta.opengldrawing.shaders.TEXTURE
+import com.arsvechkarev.letta.opengldrawing.shaders.ShaderSet
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -80,15 +70,15 @@ class Painting(
   }
   
   fun setupShaders() {
-    shaders = Shaders.setup()
+    shaders = ShaderSet.setup()
   }
   
   fun setRenderProjection(projection: FloatArray) {
     renderProjection = projection
   }
   
-  fun setBitmap(bitmap: Bitmap) {
-    bitmapTexture = Texture(bitmap)
+  fun setBitmap(bitmap: Bitmap?) {
+    bitmapTexture = Texture(bitmap!!)
   }
   
   fun render() {
@@ -102,13 +92,13 @@ class Painting(
   fun paintStroke(path: Path, clearBuffer: Boolean, action: Action) {
     openGLDrawingView.performInEGLContext {
       activePath = path
-    
+  
       var bounds: RectF? = null
-    
+  
       GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, getReusableFramebuffer())
       GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
         GLES20.GL_TEXTURE_2D, getPaintTexture(), 0)
-    
+  
       Logger.printGLErrorIfAny()
       
       val status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER)
@@ -128,8 +118,7 @@ class Painting(
         }
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, brushTexture!!.texture)
-        GLES20.glUniformMatrix4fv(shader.getUniform(
-          MVP_MATRIX), 1, false,
+        GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false,
           FloatBuffer.wrap(projection))
         GLES20.glUniform1i(shader.getUniform("texture"), 0)
         bounds = RenderUtils.renderPath(path, renderState)
@@ -144,6 +133,7 @@ class Painting(
       } else {
         activeStrokeBounds = bounds
       }
+  
       action()
     }
   }
@@ -151,29 +141,26 @@ class Painting(
   fun commitStroke(color: Int) {
     openGLDrawingView.performInEGLContext {
       registerUndo(activeStrokeBounds)
-    
+  
       beginSuppressingChanges()
-    
+  
       update {
-        val key = if (brush.isLightSaber) COMPOSITE_WITH_MASK_LIGHT else COMPOSITE_WITH_MASK
+        val key = if (brush.isLightSaber) "compositeWithMaskLight" else "compositeWithMask"
         val shader = shaders.getValue(key)
-      
+    
         GLES20.glUseProgram(shader.program)
-        
-        GLES20.glUniformMatrix4fv(shader.getUniform(
-          MVP_MATRIX), 1, false,
+    
+        GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false,
           FloatBuffer.wrap(projection))
-        GLES20.glUniform1i(shader.getUniform(
-          MASK), 0)
-        Shader.setColorUniform(shader.getUniform(
-          COLOR), color)
-        
+        GLES20.glUniform1i(shader.getUniform("mask"), 0)
+        Shader.setColorUniform(shader.getUniform("color"), color)
+    
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getPaintTexture())
-        
+    
         GLES20.glBlendFuncSeparate(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA,
           GLES20.GL_SRC_ALPHA, GLES20.GL_ONE)
-        
+    
         GLES20.glVertexAttribPointer(0, 2, GLES20.GL_FLOAT, false, 8, vertexBuffer)
         GLES20.glEnableVertexAttribArray(0)
         GLES20.glVertexAttribPointer(1, 2, GLES20.GL_FLOAT, false, 8, textureBuffer)
@@ -196,48 +183,55 @@ class Painting(
     val minY = rect.top.toInt()
     val width = rect.width().toInt()
     val height = rect.height().toInt()
-    
+  
     GLES20.glGenFramebuffers(1, buffers, 0)
-    
+  
     val framebuffer = buffers[0]
     GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, framebuffer)
     GLES20.glGenTextures(1, buffers, 0)
-    
+  
     val texture = buffers[0]
     GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture)
-    GLES20.glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR)
-    GLES20.glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR)
+    GLES20
+        .glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR)
+    GLES20
+        .glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR)
     GLES20.glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
       GL10.GL_CLAMP_TO_EDGE)
     GLES20.glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
       GL10.GL_CLAMP_TO_EDGE)
     GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0,
       GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null)
-    
+  
     GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
       GLES20.GL_TEXTURE_2D, texture, 0)
-    
+  
     GLES20.glViewport(0, 0, size.width.toInt(), size.height.toInt())
-    val key = if (undo) NON_PRE_MULTIPLIED_BLIT else BLIT
-    val shader = shaders.getValue(key)
-    
+    val shader = shaders[if (undo) "nonPremultipliedBlit" else "blit"]!!
+  
     GLES20.glUseProgram(shader.program)
-    
+  
     val translate = android.graphics.Matrix()
     translate.preTranslate(-minX.toFloat(), -minY.toFloat())
-    val effectiveProjection = translate.to4x4Matrix()
-    val finalProjection = multiplyMatrices(projection,
-      effectiveProjection)
-    
-    GLES20.glUniformMatrix4fv(shader.getUniform(
-      MVP_MATRIX), 1, false,
+    val effective = translate.to4x4Matrix()
+    val finalProjection = multiplyMatrices(projection, effective)
+  
+    GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false,
       FloatBuffer.wrap(finalProjection))
+  
+    if (undo) {
+      GLES20.glUniform1i(shader.getUniform("texture"), 0)
     
-    GLES20.glUniform1i(shader.getUniform(
-      TEXTURE), 0)
-    GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
-    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getBitmapTexture())
+      GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTexture())
+    } else {
+      GLES20.glUniform1i(shader.getUniform("texture"), 0)
     
+      GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, bitmapTexture.texture)
+      GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTexture())
+    }
     GLES20.glClearColor(0f, 0f, 0f, 0f)
     GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
     GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA)
@@ -245,14 +239,15 @@ class Painting(
     GLES20.glEnableVertexAttribArray(0)
     GLES20.glVertexAttribPointer(1, 2, GLES20.GL_FLOAT, false, 8, textureBuffer)
     GLES20.glEnableVertexAttribArray(1)
-    
+  
     GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
-    
+  
     dataBuffer.limit(width * height * 4)
     GLES20.glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
       dataBuffer)
-    
-    val paintingData = if (undo) {
+  
+    val data: PaintingData
+    data = if (undo) {
       PaintingData(null, dataBuffer)
     } else {
       val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -263,7 +258,7 @@ class Painting(
     GLES20.glDeleteFramebuffers(1, buffers, 0)
     buffers[0] = texture
     GLES20.glDeleteTextures(1, buffers, 0)
-    return paintingData
+    return data
   }
   
   fun setBrush(value: Brush) {
@@ -279,8 +274,8 @@ class Painting(
   fun onPause(completionAction: Action) {
     openGLDrawingView.performInEGLContext {
       paused = true
-      val paintingData = getPaintingData(bounds, true)
-      backupSlice = Slice(paintingData.byteBuffer!!, bounds)
+      val data = getPaintingData(bounds, true)
+      backupSlice = Slice(data.byteBuffer!!, bounds)
       cleanResources(false)
       completionAction()
     }
@@ -334,28 +329,25 @@ class Painting(
   }
   
   private fun render(mask: Int, color: Int) {
-    val s = if (brush.isLightSaber) BLIT_WITH_MASK_LIGHT else BLIT_WITH_MASK
+    val s = if (brush.isLightSaber) "blitWithMaskLight" else "blitWithMask"
     val shader = shaders.getValue(s)
-    
+  
     GLES20.glUseProgram(shader.program)
-    
-    GLES20.glUniformMatrix4fv(shader.getUniform(
-      MVP_MATRIX), 1, false,
+  
+    GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false,
       FloatBuffer.wrap(renderProjection))
-    GLES20.glUniform1i(shader.getUniform(
-      TEXTURE), 0)
-    GLES20.glUniform1i(shader.getUniform(MASK), 1)
-    Shader.setColorUniform(shader.getUniform(
-      COLOR), color)
-    
+    GLES20.glUniform1i(shader.getUniform("texture"), 0)
+    GLES20.glUniform1i(shader.getUniform("mask"), 1)
+    Shader.setColorUniform(shader.getUniform("color"), color)
+  
     GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
-    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getBitmapTexture())
-    
+    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTexture())
+  
     GLES20.glActiveTexture(GLES20.GL_TEXTURE1)
     GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mask)
-    
+  
     GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-    
+  
     GLES20.glVertexAttribPointer(0, 2, GLES20.GL_FLOAT, false, 8, vertexBuffer)
     GLES20.glEnableVertexAttribArray(0)
     GLES20.glVertexAttribPointer(1, 2, GLES20.GL_FLOAT, false, 8, textureBuffer)
@@ -367,17 +359,15 @@ class Painting(
   }
   
   private fun renderBlit() {
-    val shader = shaders.getValue(BLIT)
+    val shader = shaders.getValue("blit")
     GLES20.glUseProgram(shader.program)
-    
-    GLES20.glUniformMatrix4fv(shader.getUniform(
-      MVP_MATRIX), 1, false,
+  
+    GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false,
       FloatBuffer.wrap(renderProjection))
-    GLES20.glUniform1i(shader.getUniform(
-      TEXTURE), 0)
-    
+    GLES20.glUniform1i(shader.getUniform("texture"), 0)
+  
     GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
-    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getBitmapTexture())
+    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTexture())
     
     GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA)
     
@@ -392,7 +382,7 @@ class Painting(
   private fun update(action: Action) {
     GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, getReusableFramebuffer())
     GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
-      GLES20.GL_TEXTURE_2D, getBitmapTexture(), 0)
+      GLES20.GL_TEXTURE_2D, getTexture(), 0)
     
     val status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER)
     if (status == GLES20.GL_FRAMEBUFFER_COMPLETE) {
@@ -423,7 +413,7 @@ class Painting(
   private fun restoreSlice(slice: Slice) {
     openGLDrawingView.performInEGLContext {
       val buffer = slice.data
-      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getBitmapTexture())
+      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTexture())
       GLES20.glTexSubImage2D(GLES20.GL_TEXTURE_2D, 0, slice.x, slice.y,
         slice.width, slice.height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
         buffer)
@@ -444,7 +434,7 @@ class Painting(
     return reusableFramebuffer
   }
   
-  private fun getBitmapTexture(): Int {
+  private fun getTexture(): Int {
     return bitmapTexture.texture
   }
   

@@ -8,10 +8,10 @@ import android.graphics.RectF
 import android.graphics.SurfaceTexture
 import android.view.MotionEvent
 import android.view.TextureView
+import android.view.View
 import com.arsvechkarev.letta.extensions.multiplyMatrices
 import com.arsvechkarev.letta.extensions.orthoM
 import com.arsvechkarev.letta.extensions.to4x4Matrix
-import com.arsvechkarev.letta.opengldrawing.Action
 import com.arsvechkarev.letta.opengldrawing.DispatchQueue
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush
@@ -115,11 +115,14 @@ class OpenGLDrawingView(
     renderer.onFinishedDrawing(moved)
   }
   
-  fun performInEGLContext(action: Action) {
+  fun performInEGLContext(action: () -> Unit) {
     if (eglDrawer == null) {
       return
     }
     eglDrawer!!.postRunnable {
+      if (eglDrawer == null || !eglDrawer!!.isInitialized) {
+        return@postRunnable
+      }
       eglDrawer!!.setCurrentContext()
       action()
     }
@@ -136,6 +139,7 @@ class OpenGLDrawingView(
         eglDrawer = null
       }
     }
+    visibility = View.GONE
   }
   
   
@@ -169,8 +173,7 @@ class OpenGLDrawingView(
     val top = eglDrawer!!.bufferHeight.toFloat()
     projection.orthoM(0.0f, right, 0.0f, top, -1.0f, 1.0f)
     val effectiveProjection = matrix.to4x4Matrix()
-    val finalProjection = multiplyMatrices(projection,
-      effectiveProjection)
+    val finalProjection = multiplyMatrices(projection, effectiveProjection)
     painting.setRenderProjection(finalProjection)
   }
 }

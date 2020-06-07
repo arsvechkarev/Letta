@@ -8,6 +8,7 @@ import java.util.HashMap
 class Shader(
   vertexShaderCode: String,
   fragmentShaderCode: String,
+  attributes: Array<String>,
   uniforms: Array<String>
 ) {
   
@@ -21,6 +22,9 @@ class Shader(
     val fragmentShader = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
     GLES20.glAttachShader(program, vertexShader.shaderHandle)
     GLES20.glAttachShader(program, fragmentShader.shaderHandle)
+    for (i in attributes.indices) {
+      GLES20.glBindAttribLocation(program, i, attributes[i])
+    }
     linkProgram(program)
     for (uniform in uniforms) {
       uniformsMap[uniform] = GLES20.glGetUniformLocation(program, uniform)

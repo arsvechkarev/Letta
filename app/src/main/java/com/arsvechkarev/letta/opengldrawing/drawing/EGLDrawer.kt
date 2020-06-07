@@ -7,7 +7,6 @@ import android.graphics.SurfaceTexture
 import android.opengl.GLES20
 import android.opengl.GLUtils
 import android.os.Looper
-import com.arsvechkarev.letta.opengldrawing.Action
 import com.arsvechkarev.letta.opengldrawing.DispatchQueue
 import com.arsvechkarev.letta.opengldrawing.Logger
 import java.util.concurrent.CountDownLatch
@@ -22,7 +21,7 @@ class EGLDrawer(
   private var bitmap: Bitmap,
   private val painting: Painting,
   private val queue: DispatchQueue
-) : DispatchQueue("EGLDrawerThread") {
+) : DispatchQueue("CanvasInternal") {
   
   private lateinit var egl10: EGL10
   private var eglDisplay: EGLDisplay? = null
@@ -38,7 +37,7 @@ class EGLDrawer(
   var bufferHeight = 0
     private set
   
-  private var scheduledRunnable: Action? = null
+  private var scheduledRunnable: (() -> Unit)? = null
   
   private val drawRunnable = label@{
     if (!isInitialized) {
@@ -59,7 +58,7 @@ class EGLDrawer(
   
   fun setCurrentContext(): Boolean {
     if (!isInitialized) {
-      error("Context is not initialized")
+      return false
     }
     val egl10 = egl10
     val makeCurrent = egl10.eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext)
@@ -94,7 +93,8 @@ class EGLDrawer(
   fun shutdown() {
     postRunnable {
       finish()
-      Looper.myLooper()!!.quit()
+      val looper = Looper.myLooper()
+      looper?.quit()
     }
   }
   
@@ -116,6 +116,9 @@ class EGLDrawer(
   }
   
   override fun run() {
+    if (bitmap.isRecycled) {
+      return
+    }
     isInitialized = initializeGL()
     super.run()
   }

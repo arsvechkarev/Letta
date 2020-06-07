@@ -5,12 +5,12 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
-import com.arsvechkarev.letta.core.async.AndroidThreader.onMainThread
+import com.arsvechkarev.letta.core.async.AndroidThreader
 import java.util.Vector
 import kotlin.math.floor
 import kotlin.math.pow
 
-class InputProcessor(private val openGLDrawingView: OpenGLDrawingView) {
+class InputProcessor(private val drawingView: OpenGLDrawingView) {
   
   private var startedDrawing = false
   private var isFirst = false
@@ -30,7 +30,7 @@ class InputProcessor(private val openGLDrawingView: OpenGLDrawingView) {
   fun process(event: MotionEvent) {
     val action = event.actionMasked
     val x = event.x
-    val y = openGLDrawingView.height - event.y
+    val y = drawingView.height - event.y
     tempPoints[0] = x
     tempPoints[1] = y
     invertMatrix.mapPoints(tempPoints)
@@ -47,7 +47,7 @@ class InputProcessor(private val openGLDrawingView: OpenGLDrawingView) {
           clearBuffer = true
         } else {
           if (!hasMoved) {
-            openGLDrawingView.onBeganDrawing()
+            drawingView.onBeganDrawing()
             hasMoved = true
           }
           points[pointsCount] = location
@@ -60,7 +60,7 @@ class InputProcessor(private val openGLDrawingView: OpenGLDrawingView) {
       }
       ACTION_UP -> {
         if (!hasMoved) {
-          if (openGLDrawingView.isDrawAllowed) {
+          if (drawingView.isDrawAllowed) {
             location.edge = true
             paintPath(Path(arrayOf(location)))
           }
@@ -69,9 +69,9 @@ class InputProcessor(private val openGLDrawingView: OpenGLDrawingView) {
           smoothAndPaintPoints(true)
         }
         pointsCount = 0
-        openGLDrawingView.painting.commitStroke(openGLDrawingView.currentColor)
+        drawingView.painting.commitStroke(drawingView.currentColor)
         startedDrawing = false
-        openGLDrawingView.onFinishedDrawing(hasMoved)
+        drawingView.onFinishedDrawing(hasMoved)
       }
     }
   }
@@ -133,14 +133,13 @@ class InputProcessor(private val openGLDrawingView: OpenGLDrawingView) {
   }
   
   private fun paintPath(path: Path) {
-    path.setup(openGLDrawingView.currentColor, openGLDrawingView.currentWeight,
-      openGLDrawingView.currentBrush)
+    path.setup(drawingView.currentColor, drawingView.currentWeight, drawingView.currentBrush)
     if (clearBuffer) {
       lastRemainder = 0.0
     }
     path.remainder = lastRemainder
-    openGLDrawingView.painting.paintStroke(path, clearBuffer) {
-      onMainThread {
+    drawingView.painting.paintStroke(path, clearBuffer) {
+      AndroidThreader.onMainThread {
         lastRemainder = path.remainder
         clearBuffer = false
       }

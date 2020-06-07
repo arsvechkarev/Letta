@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.letta.core.NavigableFragment
 import com.arsvechkarev.letta.core.Navigator
-import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.features.drawing.presentation.DrawingFragment
 import com.arsvechkarev.letta.features.projects.presentation.ProjectsListFragment
 
@@ -37,12 +36,9 @@ class NavigatorImpl(private var activity: MainActivity?) : Navigator {
     activity = null
   }
   
-  override fun goToNewProject() {
-    goToFragment(DrawingFragment(), animate = true, addToBackStack = true)
-  }
-  
-  override fun openExistingProject(project: Project) {
-    goToFragment(DrawingFragment(), animate = true, addToBackStack = true)
+  override fun openProject(arguments: Bundle) {
+    val fragment = DrawingFragment().apply { this.arguments = arguments }
+    goToFragment(fragment, animate = true, addToBackStack = true)
   }
   
   private fun goToFragment(

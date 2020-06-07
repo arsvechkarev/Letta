@@ -1,12 +1,19 @@
 package com.arsvechkarev.letta.features.drawing.presentation
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
-import kotlinx.android.synthetic.main.fragment_drawing.drawingView
+import com.arsvechkarev.letta.opengldrawing.DispatchQueue
+import com.arsvechkarev.letta.opengldrawing.UndoStore
+import com.arsvechkarev.letta.opengldrawing.brushes.Brush
+import com.arsvechkarev.letta.opengldrawing.brushes.PlainBrush
+import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
+import com.arsvechkarev.letta.opengldrawing.drawing.Renderer
+import com.arsvechkarev.letta.opengldrawing.drawing.Size
 import kotlinx.android.synthetic.main.fragment_drawing.imageDone
 import kotlinx.android.synthetic.main.fragment_drawing.imageUndo
 import kotlinx.android.synthetic.main.fragment_drawing.paintDisplayer
@@ -25,14 +32,25 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    paintingViewGroup.assignDrawingView(drawingView)
-    paintingViewGroup.assignImagesIds(imageUndo.id, imageDone.id)
-    paintContainer = PaintContainer(
-      imageUndo, drawingView, palette,
+    val renderer = object : Renderer {
+      override fun shouldDraw(): Boolean {
+        return true
+      }
+    }
+    val undoStore = UndoStore()
+    val openGLDrawingView = createDrawingView(
+      undoStore, PlainBrush(), renderer
+    )
+    openGLDrawingView.updateBrushSize(2f)
+    openGLDrawingView.updateColor(Color.GREEN)
+    paintContainer = PaintContainer(undoStore, renderer,
+      imageUndo, openGLDrawingView, palette,
       verticalSeekbar, paintDisplayer
     )
+    paintingViewGroup.addDrawingView(openGLDrawingView)
+    paintingViewGroup.assignImagesIds(imageUndo.id, imageDone.id)
     imageDone.setOnClickListener {
-      presenter.uploadBitmap(drawingView)
+    
     }
   }
   
@@ -46,5 +64,18 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   
   override fun onImageUploadingError() {
     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+  }
+  
+  private fun createDrawingView(
+    undoStore: UndoStore,
+    initialBrush: Brush,
+    renderer: Renderer
+  ): OpenGLDrawingView {
+    val bitmap = getBitmapBy(requireContext(), arguments!!)
+    val size = Size(bitmap.width.toFloat(), bitmap.height.toFloat())
+    val queue = DispatchQueue("Painting")
+    return OpenGLDrawingView(
+      requireContext(), size, initialBrush, undoStore, bitmap, queue, renderer
+    )
   }
 }

@@ -26,7 +26,7 @@ class ProjectsListRepository(
             inSampleSize = 4
           }
           val bitmap = BitmapFactory.decodeFile(tempFile.canonicalPath, options)
-          list.add(Project(filename, bitmap))
+          list.add(Project(tempFile.canonicalPath, bitmap))
         }
       } catch (e: Throwable) {
         Timber.d(e)

@@ -1,10 +1,8 @@
 package com.arsvechkarev.letta.core
 
-import com.arsvechkarev.letta.core.model.Project
+import android.os.Bundle
 
 interface Navigator {
   
-  fun goToNewProject()
-  
-  fun openExistingProject(project: Project)
+  fun openProject(arguments: Bundle)
 }

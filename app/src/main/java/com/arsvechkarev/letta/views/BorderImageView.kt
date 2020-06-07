@@ -25,12 +25,17 @@ class BorderImageView @JvmOverloads constructor(
   }
   private val borderRect = Rect()
   
+  var resId = 0
+    private set
+  
   fun updateColor(color: Int) {
+    this.resId = 0
     setImageDrawable(null)
     setBackgroundColor(color)
   }
   
   fun updateDrawable(@DrawableRes resId: Int) {
+    this.resId = resId
     setBackgroundColor(Color.TRANSPARENT)
     setImageResource(resId)
   }

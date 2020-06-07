@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
-import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.extensions.doLayout
 import com.arsvechkarev.letta.extensions.findChild
 import com.arsvechkarev.letta.extensions.marginParams
 import com.arsvechkarev.letta.extensions.widthWithMargins
 import com.arsvechkarev.letta.extensions.withLayoutParams
+import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 
 class PaintingViewGroup @JvmOverloads constructor(
@@ -23,15 +23,14 @@ class PaintingViewGroup @JvmOverloads constructor(
   
   private var imageUndoId = 0
   private var imageDoneId = 0
-  private var drawingView: DrawingView? = null
+  
+  fun addDrawingView(drawingView: OpenGLDrawingView) {
+    addView(drawingView, 0)
+  }
   
   fun assignImagesIds(imageUndoId: Int, imageDoneId: Int) {
     this.imageUndoId = imageUndoId
     this.imageDoneId = imageDoneId
-  }
-  
-  fun assignDrawingView(drawingView: DrawingView) {
-    this.drawingView = drawingView
   }
   
   override fun checkLayoutParams(p: LayoutParams): Boolean {
@@ -53,16 +52,14 @@ class PaintingViewGroup @JvmOverloads constructor(
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    assertThat(drawingView != null) { "DrawingView is null" }
-    
     val height = b - t
     val imageDone = childWithId(imageDoneId)
     val imageUndo = childWithId(imageUndoId)
-    
-    drawingView!!.layout(0, 0, r, b)
-    
+  
+    childWithClass<OpenGLDrawingView>().layout(0, 0, r, b)
+  
     childWithClass<BrushDisplayer>().layout(0, 0, r, b)
-    
+  
     imageDone.withLayoutParams { params ->
       doLayout(
         left = r - params.width - params.rightMargin,

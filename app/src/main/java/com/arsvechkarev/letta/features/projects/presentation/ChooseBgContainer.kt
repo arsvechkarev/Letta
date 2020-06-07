@@ -1,8 +1,10 @@
 package com.arsvechkarev.letta.features.projects.presentation
 
+import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.brushes.BackgroundType
 import com.arsvechkarev.letta.core.model.ImageModel
 import com.arsvechkarev.letta.features.projects.list.BackgroundImageAdapter
 import com.arsvechkarev.letta.views.BorderImageView
@@ -23,6 +25,14 @@ class ChooseBgContainer(
     backgroundImageExample.updateDrawable(R.drawable.bg1)
   }
   
+  fun getBackgroundType(): BackgroundType {
+    if (backgroundImageExample.resId == 0) {
+      val color = (backgroundImageExample.background as ColorDrawable).color
+      return BackgroundType.Color(color)
+    }
+    return BackgroundType.DrawableRes(backgroundImageExample.resId)
+  }
+  
   private fun initializeAdapter(): BackgroundImageAdapter {
     val images = listOf(
       ImageModel(R.drawable.bg1),
@@ -40,7 +50,6 @@ class ChooseBgContainer(
       LinearLayoutManager.HORIZONTAL, false)
     return adapter
   }
-  
   
   private fun onImageSelected(image: ImageModel?) {
     when (image) {

@@ -12,7 +12,6 @@ import com.arsvechkarev.letta.core.throwEx
 import com.arsvechkarev.letta.extensions.multiplyMatrices
 import com.arsvechkarev.letta.extensions.orthoM
 import com.arsvechkarev.letta.extensions.to4x4Matrix
-import com.arsvechkarev.letta.opengldrawing.DispatchQueue
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 
@@ -23,7 +22,6 @@ class OpenGLDrawingView(
   var currentBrush: Brush,
   private val undoStore: UndoStore,
   private var backgroundBitmap: Bitmap,
-  private var queue: DispatchQueue,
   private val renderer: Renderer
 ) : TextureView(context) {
   
@@ -56,7 +54,7 @@ class OpenGLDrawingView(
         height: Int
       ) {
         val painting = painting ?: throwEx()
-        eglDrawer = EGLDrawer(surface, backgroundBitmap, painting, queue)
+        eglDrawer = EGLDrawer(surface, backgroundBitmap, painting)
         val eglDrawer = eglDrawer ?: throwEx()
         eglDrawer.setBufferSize(width, height)
         updateTransform()
@@ -119,7 +117,7 @@ class OpenGLDrawingView(
   }
   
   fun performInEGLContext(action: () -> Unit) {
-    val eglDrawer = eglDrawer ?: throwEx()
+    val eglDrawer = eglDrawer ?: return
     eglDrawer.postRunnable {
       eglDrawer.setCurrentContext()
       action()

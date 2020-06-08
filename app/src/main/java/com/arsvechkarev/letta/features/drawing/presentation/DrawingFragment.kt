@@ -6,7 +6,6 @@ import android.widget.Toast
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
-import com.arsvechkarev.letta.opengldrawing.DispatchQueue
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.brushes.PlainBrush
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
@@ -65,12 +64,11 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     val initialBrush = PlainBrush()
     val bitmap = getBitmapBy(requireContext(), arguments!!)
     val size = Size(bitmap.width.toFloat(), bitmap.height.toFloat())
-    val queue = DispatchQueue("Painting")
     val renderer = object : Renderer {
       override fun shouldDraw() = true
     }
     return OpenGLDrawingView(
-      requireContext(), size, initialBrush, undoStore, bitmap, queue, renderer
+      requireContext(), size, initialBrush, undoStore, bitmap, renderer
     )
   }
 }

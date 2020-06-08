@@ -19,8 +19,7 @@ import javax.microedition.khronos.egl.EGLSurface
 class EGLDrawer(
   private val surfaceTexture: SurfaceTexture,
   private var bitmap: Bitmap,
-  private val painting: Painting,
-  private val queue: DispatchQueue
+  private val painting: Painting
 ) : DispatchQueue("EGLDrawer") {
   
   private lateinit var egl10: EGL10
@@ -52,7 +51,7 @@ class EGLDrawer(
     GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA)
     egl10.eglSwapBuffers(eglDisplay, eglSurface)
     if (!isReady) {
-      queue.postRunnable(200) { isReady = true }
+      postRunnable(200) { isReady = true }
     }
   }
   

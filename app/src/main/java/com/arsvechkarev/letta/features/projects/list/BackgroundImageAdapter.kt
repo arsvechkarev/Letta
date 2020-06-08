@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.core.model.ImageModel
 import com.arsvechkarev.letta.extensions.inflate
 import com.arsvechkarev.letta.features.projects.list.BackgroundImageAdapter.BackgroundImageViewHolder
@@ -49,22 +48,30 @@ class BackgroundImageAdapter(
     
     init {
       itemView.image.setOnClickListener {
-        val previousViewHolder = recyclerView!!.findViewHolderForAdapterPosition(
-          currentCheckedImagePosition) as? BackgroundImageViewHolder
-        if (previousViewHolder == null) {
+        if (currentCheckedImagePosition == RecyclerView.NO_POSITION) {
           // No view was selected before
           currentCheckedImagePosition = adapterPosition
-          itemView.checkmark.isChecked = !itemView.checkmark.isChecked
+          itemView.checkmark.isChecked = true
           onImageSelected(data[currentCheckedImagePosition])
           return@setOnClickListener
         }
+        val previousViewHolder = recyclerView!!.findViewHolderForAdapterPosition(
+          currentCheckedImagePosition) as? BackgroundImageViewHolder
         if (previousViewHolder == this) {
-          // Deselecting this view holder
-          assertThat(previousViewHolder.itemView.checkmark.isChecked)
-          previousViewHolder.itemView.checkmark.isChecked = false
-          currentCheckedImagePosition = RecyclerView.NO_POSITION
+          // Deselecting current view
           onImageSelected(null)
+          itemView.checkmark.isChecked = false
+          return@setOnClickListener
+        }
+        if (previousViewHolder == null) {
+          // Holder is not found, just updating current view
+          itemView.checkmark.isChecked = true
+          val prevPosition = currentCheckedImagePosition
+          currentCheckedImagePosition = adapterPosition
+          onImageSelected(data[currentCheckedImagePosition])
+          notifyItemChanged(prevPosition)
         } else {
+          // Animating both previous and current view
           previousViewHolder.itemView.checkmark?.isChecked = false
           currentCheckedImagePosition = adapterPosition
           itemView.checkmark.isChecked = true
@@ -76,7 +83,9 @@ class BackgroundImageAdapter(
     fun bind(item: ImageModel) {
       val drawable = RoundedCornersDrawable.ofResource(itemView.context, item.drawableRes)
       itemView.image.setImageDrawable(drawable)
-      itemView.checkmark.updateWithoutAnimation(currentCheckedImagePosition == adapterPosition)
+      val isChecked = currentCheckedImagePosition == adapterPosition
+      println("www: pos = $adapterPosition, isChecked = $isChecked")
+      itemView.checkmark.updateWithoutAnimation(isChecked)
     }
   }
 }

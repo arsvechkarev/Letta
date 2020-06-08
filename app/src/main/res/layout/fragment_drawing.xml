@@ -32,9 +32,7 @@
   <com.arsvechkarev.letta.views.VerticalSeekbar
     android:id="@+id/verticalSeekbar"
     android:layout_width="@dimen/vertical_seekbar_width"
-    android:layout_height="@dimen/vertical_seekbar_height"
-    app:cornersRadius="@dimen/vertical_seekbar_corners_radius"
-    app:lineVerticalOffset="@dimen/vertical_seekbar_offset"/>
+    android:layout_height="@dimen/vertical_seekbar_height"/>
 
   <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
     android:id="@+id/palette"

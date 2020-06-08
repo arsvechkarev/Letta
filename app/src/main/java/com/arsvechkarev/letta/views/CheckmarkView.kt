@@ -33,12 +33,10 @@ class CheckmarkView @JvmOverloads constructor(
   private val checkmarkDisappear = context.getDrawable(
     R.drawable.avd_chechmark_disappear) as AnimatedVectorDrawable
   
-  private val imageSize: Float
   private var currentDrawable = checkmarkDisappear
-  
+  private var imageSize = 0f
   private var maxStrokeWidth = -1f
   private var circleRadius = -1f
-  
   private var _isChecked = false
   
   var isChecked: Boolean
@@ -57,10 +55,6 @@ class CheckmarkView @JvmOverloads constructor(
     }
   
   init {
-    val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.CheckmarkView,
-      defStyleAttr, 0)
-    imageSize = attributes.getDimension(R.styleable.CheckmarkView_imageSize, -1f)
-    attributes.recycle()
     val colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
     checkmarkAppear.colorFilter = colorFilter
     checkmarkDisappear.colorFilter = colorFilter
@@ -99,26 +93,14 @@ class CheckmarkView @JvmOverloads constructor(
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    val bounds: Rect
-    if (imageSize == -1f) {
-      circleRadius = maxOf(w / 2f, h / 2f)
-      maxStrokeWidth = maxOf(w, h) / 2f
-      bounds = Rect(
-        (w / 2f - w * 0.4f).i,
-        (h / 2f - h * 0.4f).i,
-        (w / 2f + w * 0.4f).i,
-        (h / 2f + h * 0.4f).i
-      )
-    } else {
-      maxStrokeWidth = imageSize / 2f
-      circleRadius = imageSize / 2f
-      bounds = Rect(
-        (w / 2f - imageSize * 0.4f).i,
-        (h / 2f - imageSize * 0.4f).i,
-        (w / 2f + imageSize * 0.4f).i,
-        (h / 2f + imageSize * 0.4f).i
-      )
-    }
+    circleRadius = maxOf(w / 2f, h / 2f)
+    maxStrokeWidth = maxOf(w, h) / 2f
+    val bounds = Rect(
+      (w / 2f - w * 0.4f).i,
+      (h / 2f - h * 0.4f).i,
+      (w / 2f + w * 0.4f).i,
+      (h / 2f + h * 0.4f).i
+    )
     circlePaint.strokeWidth = if (isChecked) maxStrokeWidth else 0f
     checkmarkAppear.bounds = bounds
     checkmarkDisappear.bounds = bounds

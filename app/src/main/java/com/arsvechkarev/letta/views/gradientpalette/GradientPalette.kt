@@ -35,7 +35,6 @@ import com.arsvechkarev.letta.extensions.dp
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.extensions.i
-import kotlin.math.PI
 
 /**
  * Gradient palette for choosing colors
@@ -54,13 +53,11 @@ class GradientPalette @JvmOverloads constructor(
   
   private val palette: Palette
   
-  private val gradientOuterPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+  private val gradientOuterStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     color = COLOR_BORDER_LIGHT
     style = Paint.Style.STROKE
-    strokeWidth = 10.dp
   }
   private val gradientStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    strokeWidth = 7.dp
     color = Color.WHITE
     style = Paint.Style.STROKE
   }
@@ -114,10 +111,6 @@ class GradientPalette @JvmOverloads constructor(
   private var bezierSpotEnd = 0f
   private var bezierSpotValue = 0f
   private val bezierHolder = PropertyValuesHolder.ofFloat("bezier", 0f) // Put 0 as a stub
-  private var bezierSpotOffset = 22.dp
-  private var bezierVerticalOffset = 9.1f.dp
-  private var bezierHorizontalOffset = 3.2f.dp
-  private var bezierAngle = (PI / 6).toFloat()
   
   private var animatedFraction = 0f
   private val animatedFractionHolder = PropertyValuesHolder.ofFloat("fraction",
@@ -162,7 +155,9 @@ class GradientPalette @JvmOverloads constructor(
     bezierSpotStart = holder.bezierSpotStart
     bezierSpotEnd = holder.bezierSpotEnd
     bezierSpotValue = bezierSpotStart
-    bezierShape.init(bezierAngle, bezierVerticalOffset, bezierHorizontalOffset)
+    gradientOuterStrokePaint.strokeWidth = holder.gradientOuterStrokeWidth
+    gradientStrokePaint.strokeWidth = holder.gradientStrokeWidth
+    bezierShape.init(BEZIER_ANGLE, BEZIER_VERTICAL_OFFSET, BEZIER_HORIZONTAL_OFFSET)
   }
   
   override fun onDraw(canvas: Canvas) {
@@ -176,22 +171,21 @@ class GradientPalette @JvmOverloads constructor(
         canvas.scale(gradientScale, gradientScale, gradientRect.centerX(), gradientRect.centerY())
         execute {
           translate(gradientRect.left, gradientRect.top)
-          palette.drawGradientRect(canvas, gradientRect, gradientOuterPaint)
+          palette.drawGradientRect(canvas, gradientRect, gradientOuterStrokePaint)
           drawPath(gradientPath, gradientStrokePaint)
         }
         drawBitmap(gradientBitmap, gradientRect.left, gradientRect.top, gradientPaint)
-        val bezierOffset = bezierSpotOffset * animatedFraction
+        val bezierOffset = BEZIER_SPOT_OFFSET * animatedFraction
         val bezierDistance = bezierSpotValue + bezierOffset
         palette.drawBezierShape(bezierShape, canvas, circle, bezierDistance, bezierOffset)
-        palette.drawCircle(canvas, circle.radius, circle.x, circle.y, circleStrokePaint)
+        canvas.drawCircle(circle.x, circle.y, circle.radius, circleStrokePaint)
         if (circle.radius == radiusSelected) {
-          palette.drawCircleStroke(canvas, circle.radius, circle.x, circle.y,
-            circleStrokePaint.strokeWidth,
-            STROKE_PAINT)
+          canvas.drawCircle(
+            circle.x, circle.y, circle.radius + circleStrokePaint.strokeWidth / 2, STROKE_PAINT
+          )
         }
-        palette.drawCircle(canvas, circle.radius, circle.x, circle.y, circlePaint)
-        palette.drawCircle(canvas, circle.radius, circle.x, circle.y,
-          STROKE_PAINT)
+        canvas.drawCircle(circle.x, circle.y, circle.radius, circlePaint)
+        canvas.drawCircle(circle.x, circle.y, circle.radius, STROKE_PAINT)
       }
     }
   }

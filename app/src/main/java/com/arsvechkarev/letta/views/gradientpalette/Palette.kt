@@ -18,6 +18,7 @@ import com.arsvechkarev.letta.core.model.Circle
  * @see HorizontalPalette
  */
 interface Palette {
+  
   fun initHolder(width: Int, height: Int, swapper: Drawable, swapperStroke: Drawable,
                  padding: Padding, circleStrokeWidth: Float): ValuesHolder
   
@@ -26,11 +27,6 @@ interface Palette {
   fun getCircleX(circle: Circle): Float
   
   fun getCircleY(circle: Circle): Float
-  
-  fun drawCircle(canvas: Canvas, radius: Float, x: Float, y: Float, circleStrokePaint: Paint)
-  
-  fun drawCircleStroke(canvas: Canvas, radius: Float, x: Float, y: Float,
-                       strokeWidth: Float, strokePaint: Paint)
   
   fun isNotInSwapper(event: MotionEvent, swapper: Drawable): Boolean
   

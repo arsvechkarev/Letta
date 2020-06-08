@@ -42,17 +42,19 @@ class HorizontalPalette : Palette {
     val gradientRectBounds = RectF(
       padding.left + circleStrokeWidth,
       padding.top,
-      width.f - padding.right - circleStrokeWidth - swapperBounds.width() * 1.1f,
+      width.f - padding.right - circleStrokeWidth - swapperBounds.width() * GRADIENT_RECT_BOTTOM_COEFF,
       height.f - padding.bottom
     )
     val roundRectRadius = height / 2f
     val startAnimAxis = height / 2f
-    val endAnimAxis = -height * 2.5f
-    val radiusFloating = height * 1.3f
+    val endAnimAxis = -height * END_ANIM_AXIS_COEFF
+    val radiusFloating = height * RADIUS_FLOATING_COEFF
     val radiusSelected = height / 2f - circleStrokeWidth / 2
     val currentAxisValue = width / 2f
     val bezierSpotStart = height / 2f + radiusSelected
-    val bezierSpotEnd = -height / 1.6f
+    val bezierSpotEnd = -height / BEZIER_SPOT_END_COEFF
+    val gradientOuterStrokeWidth = height / GRADIENT_OUTER_STROKE_WIDTH_COEFF
+    val gradientStrokeWidth = gradientOuterStrokeWidth * GRADIENT_STROKE_WIDTH_COEFF
     return ValuesHolder(
       swapperBounds = swapperBounds,
       swapperStrokeBounds = swapperStrokeBounds,
@@ -66,7 +68,9 @@ class HorizontalPalette : Palette {
       currentAnimRadius = radiusSelected,
       currentAxisValue = currentAxisValue,
       bezierSpotStart = bezierSpotStart,
-      bezierSpotEnd = bezierSpotEnd
+      bezierSpotEnd = bezierSpotEnd,
+      gradientOuterStrokeWidth = gradientOuterStrokeWidth,
+      gradientStrokeWidth = gradientStrokeWidth
     )
   }
   
@@ -78,15 +82,6 @@ class HorizontalPalette : Palette {
   override fun getCircleX(circle: Circle) = circle.y
   
   override fun getCircleY(circle: Circle) = circle.x
-  
-  override fun drawCircle(canvas: Canvas, radius: Float, x: Float, y: Float, circleStrokePaint: Paint) {
-    canvas.drawCircle(x, y, radius, circleStrokePaint)
-  }
-  
-  override fun drawCircleStroke(canvas: Canvas, radius: Float, x: Float, y: Float,
-                                strokeWidth: Float, strokePaint: Paint) {
-    canvas.drawCircle(x, y, radius + strokeWidth / 2, strokePaint)
-  }
   
   override fun isNotInSwapper(event: MotionEvent, swapper: Drawable) =
       event.x <= width - swapper.bounds.width()

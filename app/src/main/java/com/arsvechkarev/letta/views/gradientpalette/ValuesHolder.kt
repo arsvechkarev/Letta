@@ -16,5 +16,7 @@ class ValuesHolder(
   val currentAnimRadius: Float,
   val currentAxisValue: Float,
   val bezierSpotStart: Float,
-  val bezierSpotEnd: Float
+  val bezierSpotEnd: Float,
+  val gradientOuterStrokeWidth: Float,
+  val gradientStrokeWidth: Float
 )

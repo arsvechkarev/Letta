@@ -31,7 +31,6 @@ import com.arsvechkarev.letta.core.model.Circle
 import com.arsvechkarev.letta.extensions.addBouncyBackEffect
 import com.arsvechkarev.letta.extensions.c
 import com.arsvechkarev.letta.extensions.doOnEnd
-import com.arsvechkarev.letta.extensions.dp
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.extensions.i
@@ -61,7 +60,7 @@ class GradientPalette @JvmOverloads constructor(
     color = Color.WHITE
     style = Paint.Style.STROKE
   }
-  private val gradientPaint = Paint()
+  private val gradientPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val gradientRect = RectF()
   private val gradientPath = Path()
   private val gradientRegion = Region()
@@ -74,7 +73,6 @@ class GradientPalette @JvmOverloads constructor(
   // Circle
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     color = ContextCompat.getColor(context, R.color.background)
-    this.strokeWidth = circleStrokeWidth
     style = Paint.Style.STROKE
   }
   
@@ -89,8 +87,8 @@ class GradientPalette @JvmOverloads constructor(
   private var currentAnimAxis = 0f
   private var currentAnimRadius = 0f
   private val circleAnimator = ValueAnimator()
-  private val axisHolder = PropertyValuesHolder.ofFloat("axis", 0f) // Put 0 as a stub
-  private val radiusHolder = PropertyValuesHolder.ofFloat("radius", 0f) // Put 0 as a stub
+  private val axisHolder = PropertyValuesHolder.ofFloat(AXIS, 0f) // Put 0 as a stub
+  private val radiusHolder = PropertyValuesHolder.ofFloat(RADIUS, 0f) // Put 0 as a stub
   
   // Swapper
   private var swapperMode = SwapperMode.RAINBOW
@@ -110,11 +108,10 @@ class GradientPalette @JvmOverloads constructor(
   private var bezierSpotStart = 0f
   private var bezierSpotEnd = 0f
   private var bezierSpotValue = 0f
-  private val bezierHolder = PropertyValuesHolder.ofFloat("bezier", 0f) // Put 0 as a stub
+  private val bezierHolder = PropertyValuesHolder.ofFloat(BEZIER, 0f) // Put 0 as a stub
   
   private var animatedFraction = 0f
-  private val animatedFractionHolder = PropertyValuesHolder.ofFloat("fraction",
-    0f) // Put 0 as a stub
+  private val animatedFractionHolder = PropertyValuesHolder.ofFloat(FRACTION, 0f) // Put 0 as a stub
   
   var onColorChanged: (Int) -> Unit = {}
   var currentColor = 0
@@ -133,7 +130,7 @@ class GradientPalette @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     val padding = Padding(paddingLeft.f, paddingTop.f, paddingRight.f, paddingBottom.f)
-    val holder = palette.initHolder(w, h, swapper, swapperStroke, padding, circleStrokeWidth)
+    val holder = palette.initHolder(w, h, swapper, swapperStroke, padding)
     swapper.bounds = holder.swapperBounds
     swapperStroke.bounds = holder.swapperStrokeBounds
     gradientRect.set(holder.gradientRectBounds)
@@ -157,6 +154,7 @@ class GradientPalette @JvmOverloads constructor(
     bezierSpotValue = bezierSpotStart
     gradientOuterStrokePaint.strokeWidth = holder.gradientOuterStrokeWidth
     gradientStrokePaint.strokeWidth = holder.gradientStrokeWidth
+    circleStrokePaint.strokeWidth = holder.circleStrokeWidth
     bezierShape.init(BEZIER_ANGLE, BEZIER_VERTICAL_OFFSET, BEZIER_HORIZONTAL_OFFSET)
   }
   
@@ -293,11 +291,10 @@ class GradientPalette @JvmOverloads constructor(
       cancel()
       setValues(axisHolder, radiusHolder, bezierHolder, animatedFractionHolder)
       addUpdateListener {
-        this@GradientPalette.animatedFraction = getAnimatedValue("fraction") as Float
-        currentAnimAxis = getAnimatedValue("axis") as Float
-        println("animAxis = $currentAnimAxis")
-        currentAnimRadius = getAnimatedValue("radius") as Float
-        bezierSpotValue = getAnimatedValue("bezier") as Float
+        this@GradientPalette.animatedFraction = getAnimatedValue(FRACTION) as Float
+        currentAnimAxis = getAnimatedValue(AXIS) as Float
+        currentAnimRadius = getAnimatedValue(RADIUS) as Float
+        bezierSpotValue = getAnimatedValue(BEZIER) as Float
         palette.updateCircle(circle, currentMovingAxis, currentAnimAxis, currentAnimRadius)
         invalidate()
       }
@@ -357,9 +354,13 @@ class GradientPalette @JvmOverloads constructor(
   }
   
   companion object {
-    private val circleStrokeWidth = 7.dp
     private const val GRADIENT_SENSITIVITY = 2
     private const val CIRCLE_ANIMATION_DURATION = 150L
     private const val SWAP_ANIMATION_DURATION = 200L
+  
+    private const val FRACTION = "fraction"
+    private const val AXIS = "axis"
+    private const val RADIUS = "radius"
+    private const val BEZIER = "bezier"
   }
 }

@@ -26,11 +26,11 @@ class VerticalPalette : Palette {
     height: Int,
     swapper: Drawable,
     swapperStroke: Drawable,
-    padding: Padding,
-    circleStrokeWidth: Float
+    padding: Padding
   ): ValuesHolder {
     this.width = width
     this.height = height
+    val circleStrokeWidth = width / CIRCLE_STROKE_WIDTH
     val swapperBounds = Rect(
       width / 2 - swapper.intrinsicWidth / 2, height - swapper.intrinsicHeight,
       width / 2 + swapper.intrinsicWidth / 2, height
@@ -70,7 +70,8 @@ class VerticalPalette : Palette {
       bezierSpotStart = bezierSpotStart,
       bezierSpotEnd = bezierSpotEnd,
       gradientOuterStrokeWidth = gradientOuterStrokeWidth,
-      gradientStrokeWidth = gradientStrokeWidth
+      gradientStrokeWidth = gradientStrokeWidth,
+      circleStrokeWidth = circleStrokeWidth
     )
   }
   

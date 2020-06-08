@@ -10,7 +10,7 @@ val STROKE_PAINT: Paint
       strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = COLOR_BORDER_LIGHT
         style = Paint.Style.STROKE
-        strokeWidth = 1.dp
+        strokeWidth = 0.8f.dp
       }
     }
     return strokePaint!!

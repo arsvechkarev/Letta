@@ -19,8 +19,8 @@ import com.arsvechkarev.letta.core.model.Circle
  */
 interface Palette {
   
-  fun initHolder(width: Int, height: Int, swapper: Drawable, swapperStroke: Drawable,
-                 padding: Padding, circleStrokeWidth: Float): ValuesHolder
+  fun initHolder(width: Int, height: Int, swapper: Drawable,
+                 swapperStroke: Drawable, padding: Padding): ValuesHolder
   
   fun drawGradientRect(canvas: Canvas, gradientRect: RectF, gradientOuterPaint: Paint)
   

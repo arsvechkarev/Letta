@@ -18,5 +18,6 @@ class ValuesHolder(
   val bezierSpotStart: Float,
   val bezierSpotEnd: Float,
   val gradientOuterStrokeWidth: Float,
-  val gradientStrokeWidth: Float
+  val gradientStrokeWidth: Float,
+  val circleStrokeWidth: Float
 )

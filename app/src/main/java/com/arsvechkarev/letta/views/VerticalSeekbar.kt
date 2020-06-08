@@ -18,7 +18,6 @@ import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.COLOR_BORDER_VERY_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
-import com.arsvechkarev.letta.core.model.Circle
 import com.arsvechkarev.letta.extensions.dp
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.extensions.isWhiterThan
@@ -29,34 +28,22 @@ class VerticalSeekbar @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
   
-  private val cornersRadius: Float
-  private val lineVerticalOffset: Float
-  private val backgroundColor: Int
-  
-  var onPercentChanged: (Float) -> Unit = {}
-  var onUp: () -> Unit = {}
-  
+  private val backgroundColor = ContextCompat.getColor(context, R.color.background)
   private val path = Path()
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.FILL
     color = Color.WHITE
   }
+  
+  private var cornersRadius = 0f
+  private var lineVerticalOffset = 0f
   private var lineLength = 0f
   private var lineWidth = 0f
   private var color = Color.RED
-  
   private var currentY = 0f
-  private var circle = Circle()
   
-  init {
-    val attributes = context.obtainStyledAttributes(attrs, R.styleable.VerticalSeekbar,
-      defStyleAttr, 0)
-    backgroundColor = ContextCompat.getColor(context, R.color.background)
-    cornersRadius = attributes.getDimension(R.styleable.VerticalSeekbar_cornersRadius, 16.dp)
-    lineVerticalOffset = attributes.getDimension(R.styleable.VerticalSeekbar_lineVerticalOffset,
-      30.dp)
-    attributes.recycle()
-  }
+  var onPercentChanged: (Float) -> Unit = {}
+  var onUp: () -> Unit = {}
   
   fun updatePercent(@FloatRange(from = 0.0, to = 1.0) percent: Float) {
     val lineLength = height - lineVerticalOffset * 2
@@ -75,6 +62,8 @@ class VerticalSeekbar @JvmOverloads constructor(
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     lineLength = h - cornersRadius * 2
     lineWidth = w / 6.5f
+    lineVerticalOffset = h / 10f
+    cornersRadius = w / 2f
     currentY = (lineLength + lineVerticalOffset) - (0.2f * lineLength) // 20% from bottom
     with(path) {
       moveTo((-1).dp, cornersRadius / 2)
@@ -102,10 +91,9 @@ class VerticalSeekbar @JvmOverloads constructor(
     
     paint.color = color
     canvas.drawLine(halfWidth, endLine, halfWidth, currentY, paint)
-    
+  
     paint.setCircleStyle()
-    circle.set(halfWidth, currentY, width / 4f)
-    canvas.drawCircle(halfWidth, currentY, 20f, paint)
+    canvas.drawCircle(halfWidth, currentY, halfWidth / 2f, paint)
   }
   
   @SuppressLint("ClickableViewAccessibility")

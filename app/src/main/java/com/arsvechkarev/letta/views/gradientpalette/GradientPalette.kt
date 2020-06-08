@@ -29,7 +29,6 @@ import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.model.Circle
 import com.arsvechkarev.letta.extensions.addBouncyBackEffect
-import com.arsvechkarev.letta.extensions.c
 import com.arsvechkarev.letta.extensions.doOnEnd
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.f
@@ -305,36 +304,12 @@ class GradientPalette @JvmOverloads constructor(
   }
   
   private fun initRainbowShader() {
-    val colors = intArrayOf(
-      0x15d8c7,
-      0x24c52e,
-      0xcfae1d,
-      0xb63a13,
-      0x7f379c,
-      0x3219b,
-      0x369b3
-    )
-    val colorsMap = mapOf(
-      "#FFBFBF".c to 0.01f,
-      "#FF0000".c to 0.09f,
-      "#FFFF00".c to 0.16f,
-      "#FFFF00".c to 0.21f,
-      "#84FF00".c to 0.27f,
-      "#0BE024".c to 0.34f,
-      "#00FFFB".c to 0.44f,
-      "#00FFFB".c to 0.47f,
-      "#0000FF".c to 0.59f,
-      "#FB00FF".c to 0.67f,
-      "#FB00FF".c to 0.78f,
-      "#460A57".c to 0.91f
-    )
-    rainbowGradient = palette.createRainbowGradient(gradientRect, colorsMap)
+    rainbowGradient = palette.createRainbowGradient(gradientRect, rainbowColors, rainbowPositions)
   }
   
   private fun initBlackAndWhiteShader() {
-    val colors = intArrayOf("#FFFFFF".c, "#000000".c)
-    val positions = floatArrayOf(0f, 0.95f)
-    blackAndWhiteGradient = palette.createBlackAndWhiteGradient(gradientRect, colors, positions)
+    blackAndWhiteGradient = palette.createBlackAndWhiteGradient(gradientRect,
+      blackAndWhiteColors, blackAndWhitePositions)
   }
   
   private fun drawGradientBitmap() {
@@ -362,5 +337,24 @@ class GradientPalette @JvmOverloads constructor(
     private const val AXIS = "axis"
     private const val RADIUS = "radius"
     private const val BEZIER = "bezier"
+  
+    val rainbowColors = intArrayOf(
+      0xffff7878.toInt(),
+      0xffff0000.toInt(),
+      0xffffe414.toInt(),
+      0xfffffb00.toInt(),
+      0xff51ff00.toInt(),
+      0xff00ffa2.toInt(),
+      0xff00eaff.toInt(),
+      0xff2457ff.toInt(),
+      0xff9d00ff.toInt(),
+      0xffff00c3.toInt(),
+      0xff460A57.toInt()
+    )
+    val rainbowPositions = floatArrayOf(0.00f, 0.07f, 0.20f, 0.25f, 0.37f,
+      0.45f, 0.53f, 0.63f, 0.76f, 0.88f, 0.99f)
+  
+    val blackAndWhiteColors = intArrayOf(0xffffffff.toInt(), 0xff000000.toInt())
+    val blackAndWhitePositions = floatArrayOf(0f, 0.95f)
   }
 }

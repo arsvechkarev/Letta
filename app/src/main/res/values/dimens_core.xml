@@ -3,7 +3,7 @@
   <dimen name="ic_size_default">24dp</dimen>
   <dimen name="ic_size_big">40dp</dimen>
 
-  <dimen name="border_width">1dp</dimen>
+  <dimen name="border_width">0.6dp</dimen>
 
   <dimen name="corners_radius_default">8dp</dimen>
   <dimen name="corners_radius_small">2dp</dimen>

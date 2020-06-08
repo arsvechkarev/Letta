@@ -39,7 +39,7 @@ interface Palette {
   fun createBlackAndWhiteGradient(gradientRect: RectF, colors: IntArray,
                                   positions: FloatArray): LinearGradient
   
-  fun createRainbowGradient(gradientRect: RectF, colors: Map<Int, Float>): LinearGradient
+  fun createRainbowGradient(gradientRect: RectF, colors: IntArray, positions: FloatArray): LinearGradient
   
   fun drawGradientPath(canvas: Canvas, gradientRect: RectF, gradientPath: Path,
                        gradientPaint: Paint, gradientRegion: Region)

@@ -118,13 +118,11 @@ class HorizontalPalette : Palette {
     colors, positions, Shader.TileMode.CLAMP
   )
   
-  override fun createRainbowGradient(gradientRect: RectF, colors: Map<Int, Float>) =
+  override fun createRainbowGradient(gradientRect: RectF, colors: IntArray, positions: FloatArray) =
       LinearGradient(
         0f, gradientRect.height() / 2,
         gradientRect.width(), gradientRect.height() / 2,
-        colors.keys.toTypedArray().toIntArray(),
-        colors.values.toTypedArray().toFloatArray(),
-        Shader.TileMode.CLAMP
+        colors, positions, Shader.TileMode.CLAMP
       )
   
   override fun drawGradientPath(

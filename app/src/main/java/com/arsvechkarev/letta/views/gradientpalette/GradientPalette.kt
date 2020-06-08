@@ -338,7 +338,7 @@ class GradientPalette @JvmOverloads constructor(
     private const val RADIUS = "radius"
     private const val BEZIER = "bezier"
   
-    val rainbowColors = intArrayOf(
+    private val rainbowColors = intArrayOf(
       0xffff7878.toInt(),
       0xffff0000.toInt(),
       0xffffe414.toInt(),
@@ -351,10 +351,10 @@ class GradientPalette @JvmOverloads constructor(
       0xffff00c3.toInt(),
       0xff460A57.toInt()
     )
-    val rainbowPositions = floatArrayOf(0.00f, 0.07f, 0.20f, 0.25f, 0.37f,
+    private val rainbowPositions = floatArrayOf(0.00f, 0.07f, 0.20f, 0.25f, 0.37f,
       0.45f, 0.53f, 0.63f, 0.76f, 0.88f, 0.99f)
   
-    val blackAndWhiteColors = intArrayOf(0xffffffff.toInt(), 0xff000000.toInt())
-    val blackAndWhitePositions = floatArrayOf(0f, 0.95f)
+    private val blackAndWhiteColors = intArrayOf(0xffffffff.toInt(), 0xff000000.toInt())
+    private val blackAndWhitePositions = floatArrayOf(0f, 0.95f)
   }
 }

@@ -10,7 +10,7 @@ import com.arsvechkarev.letta.opengldrawing.Action
 import com.arsvechkarev.letta.opengldrawing.Logger
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 import com.arsvechkarev.letta.opengldrawing.shaders.Shader
-import com.arsvechkarev.letta.opengldrawing.shaders.ShaderSet
+import com.arsvechkarev.letta.opengldrawing.shaders.Shaders
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -70,7 +70,7 @@ class Painting(
   }
   
   fun setupShaders() {
-    shaders = ShaderSet.setup()
+    shaders = Shaders.setup()
   }
   
   fun setRenderProjection(projection: FloatArray) {

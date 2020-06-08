@@ -4,6 +4,8 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -13,6 +15,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.COLOR_DISABLED
 import com.arsvechkarev.letta.core.DURATION_ON_CLICK
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
@@ -27,8 +30,8 @@ class Image @JvmOverloads constructor(
   
   private val drawStroke: Boolean
   private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+  private val colorFilterDisabled = PorterDuffColorFilter(COLOR_DISABLED, PorterDuff.Mode.SRC_ATOP)
   private var image: Drawable?
-  
   private var scaleFactor = 1f
   private val scaleAnimator = ValueAnimator()
   
@@ -59,7 +62,16 @@ class Image @JvmOverloads constructor(
       val halfHeight = height / 2f
       scale(scaleFactor, scaleFactor, halfWidth, halfHeight)
       drawCircle(halfWidth, halfHeight, halfWidth, backgroundPaint)
-      image?.draw(canvas)
+      image?.let { image ->
+        if (isEnabled) {
+          image.colorFilter = null
+        }
+        image.draw(canvas)
+        if (!isEnabled) {
+          image.colorFilter = colorFilterDisabled
+          image.draw(canvas)
+        }
+      }
       if (drawStroke) {
         drawCircle(halfWidth, halfHeight, halfWidth, STROKE_PAINT)
       }
@@ -67,6 +79,7 @@ class Image @JvmOverloads constructor(
   }
   
   override fun onTouchEvent(event: MotionEvent): Boolean {
+    if (!isEnabled) return true
     when (event.action) {
       ACTION_DOWN -> {
         animate(down = true)

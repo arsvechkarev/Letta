@@ -29,7 +29,9 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    val undoStore = UndoStore()
+    val undoStore = UndoStore(onHistoryChanged = {
+      paintContainer.onHistoryChanged()
+    })
     val openGLDrawingView = createOpenGLDrawingView(undoStore)
     paintContainer = PaintContainer(undoStore, imageUndo,
       openGLDrawingView, palette, verticalSeekbar,

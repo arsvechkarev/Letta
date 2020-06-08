@@ -9,8 +9,8 @@ import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 import kotlin.math.pow
 
 class PaintContainer(
-  undoStore: UndoStore,
-  undoImage: Image,
+  private val undoStore: UndoStore,
+  private val undoImage: Image,
   private val openGLDrawingView: OpenGLDrawingView,
   palette: GradientPalette,
   verticalSeekbar: VerticalSeekbar,
@@ -21,13 +21,13 @@ class PaintContainer(
     val initialBrushPercent = 0.3f
     verticalSeekbar.updatePercent(initialBrushPercent)
     openGLDrawingView.updateBrushSize(initialBrushPercent.exponentiate())
-  
     verticalSeekbar.onUp = {
       brushDisplayer.clear()
     }
     undoImage.setOnClickListener {
       undoStore.undo()
     }
+    undoImage.isEnabled = false
     palette.onColorChanged = {
       verticalSeekbar.updateColorIfAllowed(it)
       openGLDrawingView.updateColor(it)
@@ -45,5 +45,10 @@ class PaintContainer(
   
   fun shutdown() {
     openGLDrawingView.shutdown()
+  }
+  
+  fun onHistoryChanged() {
+    val canUndo = undoStore.canUndo
+    undoImage.isEnabled = canUndo
   }
 }

@@ -6,8 +6,6 @@ import android.opengl.GLES20
 import com.arsvechkarev.letta.extensions.roundToInts
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import kotlin.math.abs
-import kotlin.math.atan2
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
@@ -19,6 +17,7 @@ object RenderUtils {
     state.spacing = path.brush.spacing
     state.alpha = path.brush.alpha
     state.angle = path.brush.angleRadians
+    state.isAngleRandom = path.brush.isAngleRandom
     state.scale = path.brush.scale
     val length = path.length
     if (length == 0) {
@@ -41,11 +40,7 @@ object RenderUtils {
     val distance = lastPoint!!.distanceTo(point!!).toDouble()
     val vector = point.subtract(lastPoint)
     var unitVector = Point(1.0, 1.0)
-    val vectorAngle = if (abs(state.angle) > 0.0f) {
-      state.angle
-    } else {
-      atan2(vector.y, vector.x).toFloat()
-    }
+    val vectorAngle = state.computeAngle(vector)
     val brushWeight = state.baseWeight * state.scale
     val step = max(1.0f, state.spacing * brushWeight).toDouble()
     if (distance > 0.0) {
@@ -81,7 +76,7 @@ object RenderUtils {
   private fun paintStamp(point: Point, state: RenderState) {
     val brushWeight = state.baseWeight * state.scale
     val start = point.toPointF()
-    val angle = if (abs(state.angle) > 0.0f) state.angle else 0.0f
+    val angle = state.computeAngle()
     val alpha = state.alpha
     state.prepare()
     state.appendValuesCount(1)

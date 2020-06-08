@@ -63,7 +63,7 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   }
   
   private fun createOpenGLDrawingView(undoStore: UndoStore): OpenGLDrawingView {
-    val initialBrush = EllipticalBrush()
+    val initialBrush = EllipticalBrush
     val bitmap = getBitmapBy(requireContext(), arguments!!)
     val size = Size(bitmap.width.toFloat(), bitmap.height.toFloat())
     val renderer = object : Renderer {

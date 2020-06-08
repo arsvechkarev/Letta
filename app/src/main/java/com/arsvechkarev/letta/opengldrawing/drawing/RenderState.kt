@@ -3,6 +3,8 @@ package com.arsvechkarev.letta.opengldrawing.drawing
 import android.graphics.PointF
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import kotlin.math.abs
+import kotlin.math.atan2
 
 class RenderState {
   
@@ -10,6 +12,7 @@ class RenderState {
   var spacing = 0f
   var alpha = 0f
   var angle = 0f
+  var isAngleRandom = false
   var scale = 0f
   var remainder = 0.0
   var count = 0
@@ -63,6 +66,13 @@ class RenderState {
     buffer.putFloat(angle)
     buffer.putFloat(alpha)
     return true
+  }
+  
+  fun computeAngle(vector: Point? = null): Float {
+    if (isAngleRandom) return Math.random().toFloat()
+    if (abs(angle) > 0.0f) return angle
+    if (vector == null) return 0f
+    return atan2(vector.y, vector.x).toFloat()
   }
   
   fun reset() {

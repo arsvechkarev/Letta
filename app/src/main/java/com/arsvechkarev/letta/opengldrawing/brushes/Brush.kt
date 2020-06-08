@@ -14,6 +14,8 @@ interface Brush {
     get() = 1f
   val isLightSaber: Boolean
     get() = false
+  val isAngleRandom: Boolean
+    get() = false
   
   fun getStamp(context: Context): Bitmap {
     val options = BitmapFactory.Options()

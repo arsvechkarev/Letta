@@ -14,9 +14,6 @@ import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-val Int.f get() = this.toFloat()
-val Float.i get() = this.toInt()
-
 fun Drawable.toBitmap(): Bitmap {
   val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
   val canvas = Canvas(bitmap)
@@ -41,8 +38,6 @@ fun RectF.roundToInts() {
   right = ceil(right)
   bottom = ceil(bottom)
 }
-
-val String.c get() = Color.parseColor(this)
 
 fun Int.isWhiterThan(limitChannel: Int): Boolean {
   val r = this and 0x00FF0000 shr 16

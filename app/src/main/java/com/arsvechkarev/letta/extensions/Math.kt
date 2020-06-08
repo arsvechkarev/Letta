@@ -2,6 +2,11 @@ package com.arsvechkarev.letta.extensions
 
 import android.graphics.Matrix
 
+val Int.f get() = this.toFloat()
+val Float.i get() = this.toInt()
+
+fun Int.toRadians(): Float = Math.toRadians(this.toDouble()).toFloat()
+
 fun FloatArray.orthoM(left: Float, right: Float, bottom: Float, top: Float, near: Float, far: Float) {
   android.opengl.Matrix.orthoM(this, 0, left, right, bottom, top, near, far)
 }

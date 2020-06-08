@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.core.brushes
+package com.arsvechkarev.letta.core.model
 
 sealed class BackgroundType {
   

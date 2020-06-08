@@ -114,7 +114,7 @@ class Painting(
         val shader = shaders.getValue(key)
         GLES20.glUseProgram(shader.program)
         if (brushTexture == null) {
-          brushTexture = Texture(brush.getStamp(openGLDrawingView.context.resources))
+          brushTexture = Texture(brush.getStamp(openGLDrawingView.context))
         }
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, brushTexture!!.texture)

@@ -18,7 +18,7 @@ object RenderUtils {
     state.baseWeight = path.baseWeight
     state.spacing = path.brush.spacing
     state.alpha = path.brush.alpha
-    state.angle = path.brush.angle
+    state.angle = path.brush.angleRadians
     state.scale = path.brush.scale
     val length = path.length
     if (length == 0) {

@@ -9,8 +9,8 @@ import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.COLOR_SHADOW
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.core.animateInvisibleAndScale
-import com.arsvechkarev.letta.core.brushes.BackgroundType.Color
-import com.arsvechkarev.letta.core.brushes.BackgroundType.DrawableRes
+import com.arsvechkarev.letta.core.model.BackgroundType.Color
+import com.arsvechkarev.letta.core.model.BackgroundType.DrawableRes
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.extensions.behavior
 import com.arsvechkarev.letta.extensions.lerpColor

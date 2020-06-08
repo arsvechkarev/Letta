@@ -4,7 +4,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.brushes.BackgroundType
+import com.arsvechkarev.letta.core.model.BackgroundType
 import com.arsvechkarev.letta.core.model.ImageModel
 import com.arsvechkarev.letta.features.projects.list.BackgroundImageAdapter
 import com.arsvechkarev.letta.views.BorderImageView

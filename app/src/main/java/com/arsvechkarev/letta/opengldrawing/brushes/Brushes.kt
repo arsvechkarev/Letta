@@ -1,36 +1,17 @@
 package com.arsvechkarev.letta.opengldrawing.brushes
 
-import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.extensions.toRadians
 
-class PlainBrush : Brush {
-  
+object CircleBrush : Brush {
   override val spacing = 0.03f
   override val alpha = 0.85f
-  override val angle = 0f
-  override val scale = 1f
-  override val isLightSaber = false
-  
-  override fun getStamp(resources: Resources): Bitmap {
-    val options = BitmapFactory.Options()
-    options.inScaled = false
-    return BitmapFactory.decodeResource(resources, R.drawable.paint_circle, options)
-  }
+  override val stamp = R.drawable.brush_circle
 }
 
-class EllipticalBrush : Brush {
-  
+object EllipticalBrush : Brush {
   override val spacing = 0.04f
-  override val alpha = 0.2f
-  override val angle = Math.toRadians(125.0).toFloat()
-  override val scale = 1.5f
-  override val isLightSaber = false
-  
-  override fun getStamp(resources: Resources): Bitmap {
-    val options = BitmapFactory.Options()
-    options.inScaled = false
-    return BitmapFactory.decodeResource(resources, R.drawable.paint_elliptical_brush, options)
-  }
+  override val alpha = 0.5f
+  override val stamp = R.drawable.brush_elliptical
+  override val angleRadians = 125.toRadians()
 }

@@ -1,6 +1,5 @@
 package com.arsvechkarev.letta.opengldrawing.shaders
 
-import java.util.Collections
 import java.util.HashMap
 
 object Shaders {
@@ -69,23 +68,6 @@ object Shaders {
     }
     """.trimIndent()
   
-  private val BLIT_WITH_MASK_FSH = """
-    precision highp float;
-    varying vec2 varTexcoord;
-    uniform sampler2D texture;
-    uniform sampler2D mask;
-    uniform vec4 color;
-    
-    void main() {
-      vec4 dst = texture2D(texture, varTexcoord.st, 0.0);
-      float srcAlpha = color.a * texture2D(mask, varTexcoord.st, 0.0).a;
-      float outAlpha = srcAlpha + dst.a * (1.0 - srcAlpha);
-      gl_FragColor.rgb = (color.rgb * srcAlpha + dst.rgb * dst.a * (1.0 - srcAlpha)) / outAlpha;
-      gl_FragColor.a = outAlpha;
-      gl_FragColor.rgb *= gl_FragColor.a;
-    }
-    """.trimIndent()
-  
   private val BLIT_WITH_MASK_LIGHT_FSH = """
     precision highp float;
     varying vec2 varTexcoord;
@@ -102,6 +84,23 @@ object Shaders {
       finalColor = mix(finalColor.rgb, vec3(1.0, 1.0, 1.0), maskColor.b);
       float outAlpha = srcAlpha + dst.a * (1.0 - srcAlpha);
       gl_FragColor.rgb = (finalColor * srcAlpha + dst.rgb * dst.a * (1.0 - srcAlpha)) / outAlpha;
+      gl_FragColor.a = outAlpha;
+      gl_FragColor.rgb *= gl_FragColor.a;
+    }
+    """.trimIndent()
+  
+  private val BLIT_WITH_MASK_FSH = """
+    precision highp float;
+    varying vec2 varTexcoord;
+    uniform sampler2D texture;
+    uniform sampler2D mask;
+    uniform vec4 color;
+    
+    void main() {
+      vec4 dst = texture2D(texture, varTexcoord.st, 0.0);
+      float srcAlpha = color.a * texture2D(mask, varTexcoord.st, 0.0).a;
+      float outAlpha = srcAlpha + dst.a * (1.0 - srcAlpha);
+      gl_FragColor.rgb = (color.rgb * srcAlpha + dst.rgb * dst.a * (1.0 - srcAlpha)) / outAlpha;
       gl_FragColor.a = outAlpha;
       gl_FragColor.rgb *= gl_FragColor.a;
     }
@@ -147,67 +146,67 @@ object Shaders {
     }
     """.trimIndent()
   
-  fun setup(): Map<String, Shader> {
-    val result = HashMap<String, Shader>()
+  private val availableShaders = createMap()
+  
+  private fun createMap(): HashMap<String, Map<String, Any>> {
+    val result = HashMap<String, Map<String, Any>>()
     result[BRUSH] = setupValues(
-      BRUSH_VSH,
-      BRUSH_FSH,
-      MVP_MATRIX,
-      TEXTURE)
+      BRUSH_VSH, BRUSH_FSH, arrayOf(IN_POSITION, IN_TEXCOORD, ALPHA), arrayOf(MVP_MATRIX, TEXTURE)
+    )
     result[BRUSH_LIGHT] = setupValues(
-      BRUSH_VSH,
-      BRUSH_LIGHT_FSH,
-      MVP_MATRIX,
-      TEXTURE)
+      BRUSH_VSH, BRUSH_LIGHT_FSH, arrayOf(IN_POSITION, IN_TEXCOORD, ALPHA), arrayOf(MVP_MATRIX, TEXTURE)
+    )
     result[BLIT] = setupValues(
-      BLIT_VSH,
-      BLIT_FSH,
-      MVP_MATRIX,
-      TEXTURE)
+      BLIT_VSH, BLIT_FSH, arrayOf(IN_POSITION, IN_TEXCOORD), arrayOf(MVP_MATRIX, TEXTURE)
+    )
     result[BLIT_WITH_MASK] = setupValues(
-      BLIT_VSH,
-      BLIT_WITH_MASK_FSH, MVP_MATRIX,
-      TEXTURE,
-      MASK,
-      COLOR
+      BLIT_VSH, BLIT_WITH_MASK_FSH, arrayOf(IN_POSITION, IN_TEXCOORD),
+      arrayOf(MVP_MATRIX, TEXTURE, MASK, COLOR)
     )
     result[BLIT_WITH_MASK_LIGHT] = setupValues(
-      BLIT_VSH,
-      BLIT_WITH_MASK_LIGHT_FSH,
-      MVP_MATRIX,
-      TEXTURE,
-      MASK,
-      COLOR
+      BLIT_VSH, BLIT_WITH_MASK_LIGHT_FSH, arrayOf(IN_POSITION, IN_TEXCOORD),
+      arrayOf(MVP_MATRIX, TEXTURE, MASK, COLOR)
     )
     result[COMPOSITE_WITH_MASK] = setupValues(
-      BLIT_VSH,
-      COMPOSITE_WITH_MASK_FSH,
-      MVP_MATRIX,
-      MASK,
-      COLOR
+      BLIT_VSH, COMPOSITE_WITH_MASK_FSH, arrayOf(IN_POSITION, IN_TEXCOORD),
+      arrayOf(MVP_MATRIX, MASK, COLOR)
     )
     result[COMPOSITE_WITH_MASK_LIGHT] = setupValues(
-      BLIT_VSH,
-      COMPOSITE_WITH_MASK_LIGHT_FSH,
-      MVP_MATRIX,
-      TEXTURE,
-      MASK,
-      COLOR
+      BLIT_VSH, COMPOSITE_WITH_MASK_LIGHT_FSH, arrayOf(IN_POSITION, IN_TEXCOORD),
+      arrayOf(MVP_MATRIX, TEXTURE, MASK, COLOR)
     )
     result[NON_PRE_MULTIPLIED_BLIT] = setupValues(
-      BLIT_VSH,
-      NON_PRE_MULTIPLIED_BLIT_FSH,
-      MVP_MATRIX,
-      TEXTURE
+      BLIT_VSH, NON_PRE_MULTIPLIED_BLIT_FSH, arrayOf(IN_POSITION, IN_TEXCOORD),
+      arrayOf(MVP_MATRIX, TEXTURE)
     )
-    return Collections.unmodifiableMap(result)
+    return result
+  }
+  
+  @Suppress("UNCHECKED_CAST")
+  fun setup(): Map<String, Shader> {
+    val result: MutableMap<String, Shader> = HashMap()
+    for ((key, value) in availableShaders) {
+      val vertex = value[VERTEX] as String
+      val fragment = value[FRAGMENT] as String
+      val attributes = value[ATTRIBUTES] as Array<String>
+      val uniforms = value[UNIFORMS] as Array<String>
+      val shader = Shader(vertex, fragment, attributes, uniforms)
+      result[key] = shader
+    }
+    return result
   }
   
   private fun setupValues(
     vertexShader: String,
     fragmentShader: String,
-    vararg uniforms: String
-  ): Shader {
-    return Shader(vertexShader, fragmentShader, *uniforms)
+    attributes: Array<String>,
+    uniforms: Array<String>
+  ): Map<String, Any> {
+    return mapOf(
+      VERTEX to vertexShader,
+      FRAGMENT to fragmentShader,
+      ATTRIBUTES to attributes,
+      UNIFORMS to uniforms
+    )
   }
 }

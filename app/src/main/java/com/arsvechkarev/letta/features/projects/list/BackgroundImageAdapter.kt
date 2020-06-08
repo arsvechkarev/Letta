@@ -4,8 +4,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.SingleSelectionAdapter
 import com.arsvechkarev.letta.core.model.ImageModel
+import com.arsvechkarev.letta.core.recycler.SingleSelectionAdapter
 import com.arsvechkarev.letta.extensions.inflate
 import com.arsvechkarev.letta.features.projects.list.BackgroundImageAdapter.BackgroundImageViewHolder
 import com.arsvechkarev.letta.views.RoundedCornersDrawable
@@ -13,9 +13,9 @@ import kotlinx.android.synthetic.main.item_bg_image.view.checkmark
 import kotlinx.android.synthetic.main.item_bg_image.view.image
 
 class BackgroundImageAdapter(
-  private val data: List<ImageModel>,
+  data: List<ImageModel>,
   private val onImageSelected: (ImageModel?) -> Unit
-) : SingleSelectionAdapter<BackgroundImageViewHolder>() {
+) : SingleSelectionAdapter<ImageModel, BackgroundImageViewHolder>(data) {
   
   fun disableSelection() {
     val currentViewHolder = getSelectedView() ?: return
@@ -27,13 +27,7 @@ class BackgroundImageAdapter(
     return BackgroundImageViewHolder(parent.inflate(R.layout.item_bg_image))
   }
   
-  override fun onBindViewHolder(holder: BackgroundImageViewHolder, position: Int) {
-    holder.bind(data[position])
-  }
-  
-  override fun getItemCount() = data.size
-  
-  inner class BackgroundImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+  inner class BackgroundImageViewHolder(itemView: View) : BaseViewHolder<ImageModel>(itemView) {
     
     init {
       itemView.image.setOnClickListener {
@@ -68,7 +62,7 @@ class BackgroundImageAdapter(
       }
     }
     
-    fun bind(item: ImageModel) {
+    override fun bind(item: ImageModel) {
       val drawable = RoundedCornersDrawable.ofResource(itemView.context, item.drawableRes)
       itemView.image.setImageDrawable(drawable)
       val isChecked = selectedPosition == adapterPosition

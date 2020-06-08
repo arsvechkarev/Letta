@@ -1,6 +1,7 @@
 package com.arsvechkarev.letta.features.drawing.presentation
 
 import com.arsvechkarev.letta.opengldrawing.UndoStore
+import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.views.BrushDisplayer
 import com.arsvechkarev.letta.views.Image
@@ -39,16 +40,20 @@ class PaintContainer(
     }
   }
   
-  private fun Float.exponentiate(): Float {
-    return this * 20 + (this * 4).pow(3.7f)
+  fun updateBrush(brush: Brush) {
+    openGLDrawingView.updateBrush(brush)
+  }
+  
+  fun onHistoryChanged() {
+    val canUndo = undoStore.canUndo
+    undoImage.isEnabled = canUndo
   }
   
   fun shutdown() {
     openGLDrawingView.shutdown()
   }
   
-  fun onHistoryChanged() {
-    val canUndo = undoStore.canUndo
-    undoImage.isEnabled = canUndo
+  private fun Float.exponentiate(): Float {
+    return this * 20 + (this * 4).pow(3.7f)
   }
 }

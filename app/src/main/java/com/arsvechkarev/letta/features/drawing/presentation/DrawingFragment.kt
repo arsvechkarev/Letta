@@ -3,10 +3,13 @@ package com.arsvechkarev.letta.features.drawing.presentation
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
+import com.arsvechkarev.letta.features.drawing.list.BrushAdapter
 import com.arsvechkarev.letta.opengldrawing.UndoStore
+import com.arsvechkarev.letta.opengldrawing.brushes.BRUSHES
 import com.arsvechkarev.letta.opengldrawing.brushes.EllipticalBrush
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.opengldrawing.drawing.Renderer
@@ -16,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_drawing.imageUndo
 import kotlinx.android.synthetic.main.fragment_drawing.paintDisplayer
 import kotlinx.android.synthetic.main.fragment_drawing.paintingViewGroup
 import kotlinx.android.synthetic.main.fragment_drawing.palette
+import kotlinx.android.synthetic.main.fragment_drawing.recyclerBrushes
 import kotlinx.android.synthetic.main.fragment_drawing.verticalSeekbar
 
 class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
@@ -24,11 +28,18 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   
   private lateinit var paintContainer: PaintContainer
   
+  private val brushAdapter = BrushAdapter(BRUSHES, onBrushSelected = {
+    paintContainer.updateBrush(it)
+  })
+  
   override fun createPresenter(): DrawingPresenter {
     return DrawingPresenter(ImageUploadingRepository(requireContext()))
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    recyclerBrushes.adapter = brushAdapter
+    recyclerBrushes.layoutManager = LinearLayoutManager(context,
+      LinearLayoutManager.HORIZONTAL, false)
     val undoStore = UndoStore(onHistoryChanged = {
       paintContainer.onHistoryChanged()
     })

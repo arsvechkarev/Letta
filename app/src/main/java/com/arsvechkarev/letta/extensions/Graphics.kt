@@ -3,6 +3,7 @@ package com.arsvechkarev.letta.extensions
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.ColorMatrix
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
@@ -82,6 +83,13 @@ fun lerpColor(startColor: Int, endColor: Int, fraction: Float): Int {
   
   return (a.roundToInt() shl 24) or (r.roundToInt() shl 16) or (g.roundToInt() shl 8) or b.roundToInt()
 }
+
+val colorMatrix = ColorMatrix(floatArrayOf(
+  -1.0f, 0.0f, 0.0f, 0.0f, 255.0f,
+  0.0f, -1.0f, 0.0f, 0.0f, 255.0f,
+  0.0f, 0.0f, -1.0f, 0.0f, 255.0f,
+  0.0f, 0.0f, 0.0f, 1.0f, 0.0f
+))
 
 // Only in debug
 fun View.drawBounds(canvas: Canvas, color: Int = Color.RED) {

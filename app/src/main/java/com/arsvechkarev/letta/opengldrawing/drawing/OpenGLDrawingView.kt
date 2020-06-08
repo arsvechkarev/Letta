@@ -103,8 +103,8 @@ class OpenGLDrawingView(
     currentWeight = size
   }
   
-  fun updateBrush(value: Brush) {
-    currentBrush = value
+  fun updateBrush(brush: Brush) {
+    currentBrush = brush
     painting!!.setBrush(currentBrush)
   }
   
@@ -135,7 +135,6 @@ class OpenGLDrawingView(
       eglDrawer = null
     }
   }
-  
   
   override fun onTouchEvent(event: MotionEvent): Boolean {
     val eglDrawer = eglDrawer ?: throwEx()

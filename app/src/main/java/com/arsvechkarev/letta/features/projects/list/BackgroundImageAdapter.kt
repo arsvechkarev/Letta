@@ -60,8 +60,7 @@ class BackgroundImageAdapter(
         }
         if (previousViewHolder == this) {
           // Deselecting this view holder
-          assertThat(
-            previousViewHolder.itemView.checkmark.isChecked)
+          assertThat(previousViewHolder.itemView.checkmark.isChecked)
           previousViewHolder.itemView.checkmark.isChecked = false
           currentCheckedImagePosition = RecyclerView.NO_POSITION
           onImageSelected(null)

@@ -69,7 +69,7 @@ class InputProcessor(private val drawingView: OpenGLDrawingView) {
           smoothAndPaintPoints(true)
         }
         pointsCount = 0
-        drawingView.painting.commitStroke(drawingView.currentColor)
+        drawingView.painting!!.commitStroke(drawingView.currentColor)
         startedDrawing = false
         drawingView.onFinishedDrawing(hasMoved)
       }
@@ -138,7 +138,7 @@ class InputProcessor(private val drawingView: OpenGLDrawingView) {
       lastRemainder = 0.0
     }
     path.remainder = lastRemainder
-    drawingView.painting.paintStroke(path, clearBuffer) {
+    drawingView.painting!!.paintStroke(path, clearBuffer) {
       AndroidThreader.onMainThread {
         lastRemainder = path.remainder
         clearBuffer = false

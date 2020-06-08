@@ -8,7 +8,6 @@ import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
 import com.arsvechkarev.letta.opengldrawing.DispatchQueue
 import com.arsvechkarev.letta.opengldrawing.UndoStore
-import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 import com.arsvechkarev.letta.opengldrawing.brushes.PlainBrush
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.opengldrawing.drawing.Renderer
@@ -31,13 +30,8 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    val renderer = object : Renderer {
-      override fun shouldDraw(): Boolean {
-        return true
-      }
-    }
     val undoStore = UndoStore()
-    val openGLDrawingView = createDrawingView(undoStore, PlainBrush(), renderer)
+    val openGLDrawingView = createOpenGLDrawingView(undoStore)
     paintContainer = PaintContainer(undoStore, imageUndo,
       openGLDrawingView, palette, verticalSeekbar,
       paintDisplayer
@@ -67,14 +61,14 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     super.onDestroyView()
   }
   
-  private fun createDrawingView(
-    undoStore: UndoStore,
-    initialBrush: Brush,
-    renderer: Renderer
-  ): OpenGLDrawingView {
+  private fun createOpenGLDrawingView(undoStore: UndoStore): OpenGLDrawingView {
+    val initialBrush = PlainBrush()
     val bitmap = getBitmapBy(requireContext(), arguments!!)
     val size = Size(bitmap.width.toFloat(), bitmap.height.toFloat())
     val queue = DispatchQueue("Painting")
+    val renderer = object : Renderer {
+      override fun shouldDraw() = true
+    }
     return OpenGLDrawingView(
       requireContext(), size, initialBrush, undoStore, bitmap, queue, renderer
     )

@@ -17,3 +17,7 @@ inline fun assertThat(condition: Boolean, lazyMessage: () -> String = { "" }) {
     }
   }
 }
+
+fun throwEx(): Nothing {
+  throw IllegalStateException()
+}

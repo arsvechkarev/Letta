@@ -15,6 +15,7 @@ class LettaApplication : Application() {
   companion object {
     
     lateinit var appContext: Context
+      private set
     
     var density: Float = -1f
       private set

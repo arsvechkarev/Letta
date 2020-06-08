@@ -8,7 +8,7 @@ import android.graphics.RectF
 import android.graphics.SurfaceTexture
 import android.view.MotionEvent
 import android.view.TextureView
-import android.view.View
+import com.arsvechkarev.letta.core.throwEx
 import com.arsvechkarev.letta.extensions.multiplyMatrices
 import com.arsvechkarev.letta.extensions.orthoM
 import com.arsvechkarev.letta.extensions.to4x4Matrix
@@ -32,10 +32,11 @@ class OpenGLDrawingView(
   private var eglDrawer: EGLDrawer? = null
   private var shuttingDown = false
   
-  val painting: Painting
   var currentWeight = 0f
     private set
   var currentColor = 0
+    private set
+  var painting: Painting? = null
     private set
   
   init {
@@ -43,7 +44,7 @@ class OpenGLDrawingView(
       override fun onContentChanged(rect: RectF?) {
         eglDrawer?.scheduleRedraw()
       }
-  
+      
       override val undoStore = this@OpenGLDrawingView.undoStore
     }
     painting = Painting(paintingSize, painter, this, currentBrush)
@@ -54,10 +55,12 @@ class OpenGLDrawingView(
         width: Int,
         height: Int
       ) {
+        val painting = painting ?: throwEx()
         eglDrawer = EGLDrawer(surface, backgroundBitmap, painting, queue)
-        eglDrawer!!.setBufferSize(width, height)
+        val eglDrawer = eglDrawer ?: throwEx()
+        eglDrawer.setBufferSize(width, height)
         updateTransform()
-        eglDrawer!!.requestRender()
+        eglDrawer.requestRender()
         if (painting.isPaused()) {
           painting.onResume()
         }
@@ -68,7 +71,7 @@ class OpenGLDrawingView(
         width: Int,
         height: Int
       ) {
-        val drawer = eglDrawer ?: return
+        val drawer = eglDrawer ?: throwEx()
         drawer.setBufferSize(width, height)
         updateTransform()
         drawer.requestRender()
@@ -77,7 +80,7 @@ class OpenGLDrawingView(
       override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
         eglDrawer ?: return true
         if (!shuttingDown) {
-          painting.onPause {
+          painting!!.onPause {
             eglDrawer!!.shutdown()
             eglDrawer = null
           }
@@ -104,7 +107,7 @@ class OpenGLDrawingView(
   
   fun updateBrush(value: Brush) {
     currentBrush = value
-    painting.setBrush(currentBrush)
+    painting!!.setBrush(currentBrush)
   }
   
   fun onBeganDrawing() {
@@ -116,14 +119,9 @@ class OpenGLDrawingView(
   }
   
   fun performInEGLContext(action: () -> Unit) {
-    if (eglDrawer == null) {
-      return
-    }
-    eglDrawer!!.postRunnable {
-      if (eglDrawer == null || !eglDrawer!!.isInitialized) {
-        return@postRunnable
-      }
-      eglDrawer!!.setCurrentContext()
+    val eglDrawer = eglDrawer ?: throwEx()
+    eglDrawer.postRunnable {
+      eglDrawer.setCurrentContext()
       action()
     }
   }
@@ -132,19 +130,17 @@ class OpenGLDrawingView(
   
   fun shutdown() {
     shuttingDown = true
-    if (eglDrawer != null) {
-      performInEGLContext {
-        painting.cleanResources(transformedBitmap)
-        eglDrawer!!.shutdown()
-        eglDrawer = null
-      }
+    performInEGLContext {
+      painting?.cleanResources(transformedBitmap)
+      painting = null
+      eglDrawer?.shutdown()
+      eglDrawer = null
     }
-    visibility = View.GONE
   }
   
   
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    val eglDrawer = eglDrawer ?: return false
+    val eglDrawer = eglDrawer ?: throwEx()
     if (event.pointerCount > 1) {
       return false
     }
@@ -156,13 +152,13 @@ class OpenGLDrawingView(
   }
   
   private fun brushWeightForSize(size: Float): Float {
-    val paintingWidth = painting.size.width
+    val paintingWidth = painting!!.size.width
     return 8.0f / 2048.0f * paintingWidth + 90.0f / 2048.0f * paintingWidth * size
   }
   
   private fun updateTransform() {
     val matrix = Matrix()
-    val paintingSize = painting.size
+    val paintingSize = painting!!.size
     val scale = width / paintingSize.width
     matrix.preTranslate(width / 2.0f, height / 2.0f)
     matrix.preScale(scale, -scale)
@@ -174,6 +170,6 @@ class OpenGLDrawingView(
     projection.orthoM(0.0f, right, 0.0f, top, -1.0f, 1.0f)
     val effectiveProjection = matrix.to4x4Matrix()
     val finalProjection = multiplyMatrices(projection, effectiveProjection)
-    painting.setRenderProjection(finalProjection)
+    painting!!.setRenderProjection(finalProjection)
   }
 }

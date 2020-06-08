@@ -7,7 +7,7 @@ import com.arsvechkarev.letta.R
 
 class PlainBrush : Brush {
   
-  override val spacing = 0.3f
+  override val spacing = 0.03f
   override val alpha = 0.85f
   override val angle = 0f
   override val scale = 1f

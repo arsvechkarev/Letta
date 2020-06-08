@@ -21,7 +21,7 @@ class EGLDrawer(
   private var bitmap: Bitmap,
   private val painting: Painting,
   private val queue: DispatchQueue
-) : DispatchQueue("CanvasInternal") {
+) : DispatchQueue("EGLDrawer") {
   
   private lateinit var egl10: EGL10
   private var eglDisplay: EGLDisplay? = null

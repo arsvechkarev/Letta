@@ -147,6 +147,7 @@ class GradientPalette @JvmOverloads constructor(
     palette.updateCircle(circle, currentMovingAxis, currentAnimAxis, radiusSelected)
     drawGradientBitmap()
     currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentMovingAxis)
+    onColorChanged(currentColor)
     circlePaint.color = currentColor
     bezierSpotStart = holder.bezierSpotStart
     bezierSpotEnd = holder.bezierSpotEnd

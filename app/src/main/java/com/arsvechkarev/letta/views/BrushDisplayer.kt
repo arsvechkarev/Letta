@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.core.COLOR_BORDER_DARK
 import com.arsvechkarev.letta.extensions.dp
 import com.arsvechkarev.letta.extensions.f
 
@@ -20,15 +20,15 @@ class BrushDisplayer @JvmOverloads constructor(
   private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.STROKE
     strokeWidth = 1.dp
-    color = COLOR_BORDER_LIGHT
+    color = COLOR_BORDER_DARK
     maskFilter = BlurMaskFilter(2.dp, BlurMaskFilter.Blur.NORMAL)
   }
-  private var diameter = 0f
+  private var radius = 0f
   private var isDrawing = true
   
-  fun draw(color: Int, diameter: Float) {
+  fun draw(color: Int, radius: Float) {
     isDrawing = true
-    this.diameter = diameter
+    this.radius = radius
     circlePaint.color = color
     invalidate()
   }
@@ -42,7 +42,6 @@ class BrushDisplayer @JvmOverloads constructor(
     if (isDrawing) {
       val x = width.f / 2
       val y = height.f / 4
-      val radius = diameter / 2
       canvas.drawCircle(x, y, radius, circlePaint)
       canvas.drawCircle(x, y, radius, strokePaint)
     }

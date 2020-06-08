@@ -100,7 +100,7 @@ class OpenGLDrawingView(
   }
   
   fun updateBrushSize(size: Float) {
-    currentWeight = brushWeightForSize(size)
+    currentWeight = size
   }
   
   fun updateBrush(value: Brush) {
@@ -147,11 +147,6 @@ class OpenGLDrawingView(
       return true
     }
     return false
-  }
-  
-  private fun brushWeightForSize(size: Float): Float {
-    val paintingWidth = painting!!.size.width
-    return 8.0f / 2048.0f * paintingWidth + 90.0f / 2048.0f * paintingWidth * size
   }
   
   private fun updateTransform() {

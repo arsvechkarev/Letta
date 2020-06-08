@@ -46,10 +46,12 @@ class VerticalSeekbar @JvmOverloads constructor(
   var onUp: () -> Unit = {}
   
   fun updatePercent(@FloatRange(from = 0.0, to = 1.0) percent: Float) {
-    val lineLength = height - lineVerticalOffset * 2
-    val value = lineLength * percent
-    currentY = height - value - lineVerticalOffset
-    invalidate()
+    post {
+      val lineLength = height - lineVerticalOffset * 2
+      val value = lineLength * percent
+      currentY = height - value - lineVerticalOffset
+      invalidate()
+    }
   }
   
   fun updateColorIfAllowed(color: Int) {

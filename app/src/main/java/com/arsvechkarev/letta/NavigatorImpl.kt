@@ -11,12 +11,8 @@ class NavigatorImpl(private var activity: MainActivity?) : Navigator {
   
   fun init(savedInstantState: Bundle?) {
     if (savedInstantState == null) {
-      openProjectsList()
+      goToFragment(ProjectsListFragment(), animate = false, addToBackStack = false)
     }
-  }
-  
-  private fun openProjectsList() {
-    goToFragment(ProjectsListFragment(), animate = false, addToBackStack = false)
   }
   
   fun allowPressBack(): Boolean {

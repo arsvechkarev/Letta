@@ -1,6 +1,5 @@
 package com.arsvechkarev.letta.features.drawing.presentation
 
-import android.graphics.Color
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.views.BrushDisplayer
@@ -19,14 +18,9 @@ class PaintContainer(
 ) {
   
   init {
-    val initialPercentSize = 0.3f
-    val initialColor = Color.parseColor("#4000FF")
-    verticalSeekbar.updatePercent(initialPercentSize)
-  
-    openGLDrawingView.updateBrushSize(2f)
-    openGLDrawingView.updateColor(Color.RED)
-  
-    verticalSeekbar.updateColorIfAllowed(initialColor)
+    val initialBrushPercent = 0.3f
+    verticalSeekbar.updatePercent(initialBrushPercent)
+    openGLDrawingView.updateBrushSize(initialBrushPercent.exponentiate())
   
     verticalSeekbar.onUp = {
       brushDisplayer.clear()
@@ -39,14 +33,14 @@ class PaintContainer(
       openGLDrawingView.updateColor(it)
     }
     verticalSeekbar.onPercentChanged = {
-      val width = it.exponentiate()
-      openGLDrawingView.updateBrushSize(width)
-      brushDisplayer.draw(openGLDrawingView.currentColor, width)
+      val size = it.exponentiate()
+      openGLDrawingView.updateBrushSize(size)
+      brushDisplayer.draw(openGLDrawingView.currentColor, size)
     }
   }
   
   private fun Float.exponentiate(): Float {
-    return this * 50 + (this * 6).pow(3.5f)
+    return this * 20 + (this * 4).pow(3.7f)
   }
   
   fun shutdown() {

@@ -4,7 +4,6 @@
   <dimen name="img_tool_size">40dp</dimen>
   <dimen name="img_tool_padding">8dp</dimen>
   <dimen name="img_tool_m_top">8dp</dimen>
-  <dimen name="img_tool_m_horizontal">8dp</dimen>
   <dimen name="img_undo_m_end">16dp</dimen>
   <dimen name="img_done_size">50dp</dimen>
   <dimen name="img_done_margin">16dp</dimen>
@@ -14,6 +13,7 @@
   <dimen name="palette_padding">8dp</dimen>
   <dimen name="vertical_seekbar_width">30dp</dimen>
   <dimen name="vertical_seekbar_height">280dp</dimen>
-  <dimen name="vertical_seekbar_corners_radius">16dp</dimen>
-  <dimen name="vertical_seekbar_offset">30dp</dimen>
+
+  <dimen name="brush_example_size">50dp</dimen>
+  <dimen name="brush_example_margin">16dp</dimen>
 </resources>

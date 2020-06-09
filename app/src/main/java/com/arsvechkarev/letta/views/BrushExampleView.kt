@@ -26,7 +26,7 @@ class BrushExampleView @JvmOverloads constructor(
   }
   
   private val selectionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = 0x33FFFFFF
+    color = 0x66FF0000
   }
   
   fun updateBitmap(brush: Brush) {
@@ -39,10 +39,10 @@ class BrushExampleView @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
-    val bitmap = bitmap ?: return
-    canvas.drawBitmap(bitmap, null, rect, bitmapPaint)
     if (isSelected) {
       canvas.drawRect(rect, selectionPaint)
     }
+    val bitmap = bitmap ?: return
+    canvas.drawBitmap(bitmap, null, rect, bitmapPaint)
   }
 }

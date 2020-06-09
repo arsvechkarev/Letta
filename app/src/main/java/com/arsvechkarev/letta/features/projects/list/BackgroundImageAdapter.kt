@@ -18,7 +18,7 @@ class BackgroundImageAdapter(
 ) : SingleSelectionAdapter<ImageModel, BackgroundImageViewHolder>(data) {
   
   fun disableSelection() {
-    val currentViewHolder = getSelectedView() ?: return
+    val currentViewHolder = getSelectedViewHolder() ?: return
     currentViewHolder.itemView.checkmark.isChecked = false
     selectedPosition = RecyclerView.NO_POSITION
   }
@@ -38,7 +38,7 @@ class BackgroundImageAdapter(
           onImageSelected(data[selectedPosition])
           return@setOnClickListener
         }
-        val previousViewHolder = getSelectedView()
+        val previousViewHolder = getSelectedViewHolder()
         if (previousViewHolder == this) {
           // Deselecting current view
           onImageSelected(null)

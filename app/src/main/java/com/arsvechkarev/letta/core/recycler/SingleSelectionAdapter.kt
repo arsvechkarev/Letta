@@ -9,7 +9,7 @@ abstract class SingleSelectionAdapter<D, VH : BaseViewHolder<D>>(
   protected var selectedPosition: Int = 0
   
   @Suppress("UNCHECKED_CAST")
-  fun getSelectedView(): VH? {
+  fun getSelectedViewHolder(): VH? {
     return recyclerView!!.findViewHolderForAdapterPosition(selectedPosition) as? VH
   }
 }

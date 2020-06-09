@@ -47,10 +47,10 @@ class PaintingViewGroup @JvmOverloads constructor(
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     // Recycler view is the only one who needs to be measured
-    val recyclerView = childWithClass<RecyclerView>()
-    recyclerView.measure(widthMeasureSpec, heightMeasureSpec)
-    recyclerView.measuredHeight
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+    childWithClass<RecyclerView>().measure(widthMeasureSpec,
+      MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.AT_MOST))
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -102,7 +102,7 @@ class PaintingViewGroup @JvmOverloads constructor(
     }
     
     childWithClass<RecyclerView>().withLayoutParams {
-      val measuredHeight = 200
+      val measuredHeight = this.measuredHeight
       doLayout(
         left = 0,
         top = b - measuredHeight,

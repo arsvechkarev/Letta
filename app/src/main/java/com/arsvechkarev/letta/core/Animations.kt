@@ -21,3 +21,17 @@ fun View.animateInvisibleAndScale() {
         alpha = 1f
       }
 }
+
+fun View.rotate(duration: Long = DURATION_DEFAULT) {
+  isClickable = false
+  animate()
+      .rotation(180f)
+      .withLayer()
+      .setDuration(duration)
+      .setInterpolator(AccelerateDecelerateInterpolator())
+      .doOnEnd {
+        isClickable = true
+        rotation = 0f
+      }
+      .start()
+}

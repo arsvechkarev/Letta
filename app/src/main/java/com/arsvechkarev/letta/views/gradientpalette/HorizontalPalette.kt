@@ -5,11 +5,9 @@ import android.graphics.Canvas
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Region
 import android.graphics.Shader
-import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import com.arsvechkarev.letta.core.model.Circle
 import com.arsvechkarev.letta.extensions.f
@@ -24,25 +22,15 @@ class HorizontalPalette : Palette {
   override fun initHolder(
     width: Int,
     height: Int,
-    swapper: Drawable,
-    swapperStroke: Drawable,
     padding: Padding
   ): ValuesHolder {
     this.width = width
     this.height = height
     val circleStrokeWidth = height / CIRCLE_STROKE_WIDTH
-    val swapperBounds = Rect(
-      width - swapper.intrinsicWidth, height / 2 - swapper.intrinsicHeight / 2,
-      width, height / 2 + swapper.intrinsicHeight / 2
-    )
-    val swapperStrokeBounds = Rect(
-      width - swapperStroke.intrinsicWidth, height / 2 - swapperStroke.intrinsicHeight / 2,
-      width, height / 2 + swapperStroke.intrinsicHeight / 2
-    )
     val gradientRectBounds = RectF(
       padding.left + circleStrokeWidth,
       padding.top,
-      width.f - padding.right - circleStrokeWidth - swapperBounds.width() * GRADIENT_RECT_BOTTOM_COEFF,
+      width.f - padding.right - circleStrokeWidth,
       height.f - padding.bottom
     )
     val roundRectRadius = height / 2f
@@ -56,8 +44,6 @@ class HorizontalPalette : Palette {
     val gradientOuterStrokeWidth = height / GRADIENT_OUTER_STROKE_WIDTH_COEFF
     val gradientStrokeWidth = gradientOuterStrokeWidth * GRADIENT_STROKE_WIDTH_COEFF
     return ValuesHolder(
-      swapperBounds = swapperBounds,
-      swapperStrokeBounds = swapperStrokeBounds,
       gradientRectBounds = gradientRectBounds,
       roundRectRadius = roundRectRadius,
       startAnimAxis = startAnimAxis,
@@ -83,9 +69,6 @@ class HorizontalPalette : Palette {
   override fun getCircleX(circle: Circle) = circle.y
   
   override fun getCircleY(circle: Circle) = circle.x
-  
-  override fun isNotInSwapper(event: MotionEvent, swapper: Drawable) =
-      event.x <= width - swapper.bounds.width()
   
   override fun updateAxisValue(event: MotionEvent, circle: Circle,
                                gradientRect: RectF, gradientSensitivity: Int): Float {

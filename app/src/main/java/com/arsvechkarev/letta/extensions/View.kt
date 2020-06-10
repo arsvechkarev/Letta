@@ -47,13 +47,13 @@ fun View.doLayout(left: Int, top: Int, right: Int, bottom: Int) {
 val View.marginParams: ViewGroup.MarginLayoutParams
   get() = layoutParams as ViewGroup.MarginLayoutParams
 
-val View.widthWithMargins: Int
+val View.totalWidth: Int
   get() {
     val params = layoutParams as ViewGroup.MarginLayoutParams
     return params.width + params.rightMargin + params.leftMargin
   }
 
-val View.heightWithMargins: Int
+val View.totalHeight: Int
   get() {
     val params = layoutParams as ViewGroup.MarginLayoutParams
     return params.height + params.topMargin + params.bottomMargin

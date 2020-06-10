@@ -22,6 +22,6 @@ class MiddleBlockInterpolator(
 fun ValueAnimator.addBouncyBackEffect(
   inTheMiddle: () -> Unit = {}
 ) {
-  setFloatValues(1f, 1.16f, 1f)
+  setFloatValues(1f, 1.20f, 1f)
   interpolator = MiddleBlockInterpolator(0.3f, inTheMiddle)
 }

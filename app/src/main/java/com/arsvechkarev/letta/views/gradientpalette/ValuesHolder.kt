@@ -1,11 +1,8 @@
 package com.arsvechkarev.letta.views.gradientpalette
 
-import android.graphics.Rect
 import android.graphics.RectF
 
 class ValuesHolder(
-  val swapperBounds: Rect,
-  val swapperStrokeBounds: Rect,
   val gradientRectBounds: RectF,
   val roundRectRadius: Float,
   val startAnimAxis: Float,

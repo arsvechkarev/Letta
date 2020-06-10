@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <dimen name="img_swapper">32dp</dimen>
+  <dimen name="img_swapper_padding">4dp</dimen>
+  <dimen name="img_swapper_m_end">20dp</dimen>
   <dimen name="img_tool_size">40dp</dimen>
   <dimen name="img_tool_padding">8dp</dimen>
   <dimen name="img_tool_m_top">8dp</dimen>

@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Region
-import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import com.arsvechkarev.letta.core.model.Circle
 
@@ -19,16 +18,13 @@ import com.arsvechkarev.letta.core.model.Circle
  */
 interface Palette {
   
-  fun initHolder(width: Int, height: Int, swapper: Drawable,
-                 swapperStroke: Drawable, padding: Padding): ValuesHolder
+  fun initHolder(width: Int, height: Int, padding: Padding): ValuesHolder
   
   fun drawGradientRect(canvas: Canvas, gradientRect: RectF, gradientOuterPaint: Paint)
   
   fun getCircleX(circle: Circle): Float
   
   fun getCircleY(circle: Circle): Float
-  
-  fun isNotInSwapper(event: MotionEvent, swapper: Drawable): Boolean
   
   fun updateAxisValue(event: MotionEvent, circle: Circle, gradientRect: RectF, gradientSensitivity: Int): Float
   

@@ -87,7 +87,7 @@ class Image @JvmOverloads constructor(
   }
   
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    if (!isEnabled) return true
+    if (!isEnabled || !isClickable) return true
     when (event.action) {
       ACTION_DOWN -> {
         animate(down = true)

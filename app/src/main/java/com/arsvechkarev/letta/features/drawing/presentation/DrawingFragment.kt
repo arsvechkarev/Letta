@@ -41,8 +41,9 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     paintingViewGroup.addDrawingView(openGLDrawingView)
     paintingViewGroup.assignImagesIds(imageUndo.id, imageDone.id)
     imageDone.setOnClickListener {
-      val bitmap = openGLDrawingView.getResultBitmap()
-      presenter.uploadBitmap(bitmap)
+      val b = openGLDrawingView.getResultBitmap()
+      println("sizes2 = ${b.width}, ${b.height}")
+      presenter.uploadBitmap(b)
     }
   }
   

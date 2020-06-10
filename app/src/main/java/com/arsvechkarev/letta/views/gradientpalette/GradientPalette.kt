@@ -135,6 +135,7 @@ class GradientPalette @JvmOverloads constructor(
   private val animatedFractionHolder = PropertyValuesHolder.ofFloat(FRACTION, 0f) // Put 0 as a stub
   
   var onColorChanged: (Int) -> Unit = {}
+  var onColorChangedByTouch: (Int) -> Unit = {}
   var currentColor = 0
     private set
   
@@ -265,6 +266,7 @@ class GradientPalette @JvmOverloads constructor(
     drawGradientBitmap()
     currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentMovingAxis)
     onColorChanged(currentColor)
+    onColorChangedByTouch(currentColor)
     circlePaint.color = currentColor
     invalidate()
   }
@@ -273,6 +275,7 @@ class GradientPalette @JvmOverloads constructor(
     currentMovingAxis = palette.updateAxisValue(event, circle, gradientRect, GRADIENT_SENSITIVITY)
     currentColor = palette.getColorFromBitmap(gradientBitmap, gradientRect, currentMovingAxis)
     onColorChanged(currentColor)
+    onColorChangedByTouch(currentColor)
     circlePaint.color = currentColor
   }
   
@@ -377,11 +380,24 @@ class GradientPalette @JvmOverloads constructor(
     )
   
     private val rainbowPositions = floatArrayOf(
-      0.00f, 0.07f, 0.20f, 0.25f, 0.37f,
-      0.45f, 0.53f, 0.63f, 0.76f, 0.88f, 0.99f
+      0.00f,
+      0.07f,
+      0.20f,
+      0.25f,
+      0.37f,
+      0.45f,
+      0.53f,
+      0.63f,
+      0.76f,
+      0.88f,
+      0.99f
     )
   
-    private val blackAndWhiteColors = intArrayOf(0xffffffff.toInt(), 0xff000000.toInt())
+    private val blackAndWhiteColors = intArrayOf(
+      0xffffffff.toInt(),
+      0xff000000.toInt()
+    )
+  
     private val blackAndWhitePositions = floatArrayOf(0f, 0.95f)
   }
 }

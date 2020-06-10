@@ -57,10 +57,12 @@ class PaintingViewGroup @JvmOverloads constructor(
     val height = b - t
     val imageDone = childWithId(imageDoneId)
     val imageUndo = childWithId(imageUndoId)
+    val recyclerBrushes = childWithClass<RecyclerView>()
+    val recyclerHeight = recyclerBrushes.measuredHeight
   
-    childWithClass<OpenGLDrawingView>().layout(0, 0, r, b)
+    childWithClass<OpenGLDrawingView>().layout(0, 0, r, b - recyclerHeight)
   
-    childWithClass<BrushDisplayer>().layout(0, 0, r, b)
+    childWithClass<BrushDisplayer>().layout(0, 0, r, b - recyclerHeight)
   
     imageDone.withLayoutParams { params ->
       doLayout(
@@ -70,7 +72,7 @@ class PaintingViewGroup @JvmOverloads constructor(
         bottom = params.height + params.topMargin
       )
     }
-    
+  
     imageUndo.withLayoutParams { params ->
       val left = r - imageDone.widthWithMargins - params.marginEnd - params.width
       val top = imageDone.height / 2 - params.height / 2 + imageDone.marginParams.topMargin
@@ -100,9 +102,8 @@ class PaintingViewGroup @JvmOverloads constructor(
         bottom = height / 2 + params.height / 2
       )
     }
-    
-    childWithClass<RecyclerView>().withLayoutParams {
-      val measuredHeight = this.measuredHeight
+  
+    recyclerBrushes.withLayoutParams {
       doLayout(
         left = 0,
         top = b - measuredHeight,

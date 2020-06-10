@@ -16,16 +16,11 @@ class ChooseBgContainer(
   private val backgroundImagesRecyclerView: RecyclerView
 ) {
   
-  private var colorChangingFirstTime = true
-  
   init {
     val adapter = initializeAdapter()
-    paletteBackground.onColorChanged = {
-      if (!colorChangingFirstTime) {
-        colorChangingFirstTime = false
-        adapter.disableSelection()
-        backgroundImageExample.updateColor(it)
-      }
+    paletteBackground.onColorChangedByTouch = {
+      adapter.disableSelection()
+      backgroundImageExample.updateColor(it)
     }
     backgroundImageExample.updateDrawable(R.drawable.bg1)
   }

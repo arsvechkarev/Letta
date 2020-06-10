@@ -108,17 +108,7 @@ class HorizontalPalette : Palette {
     currentCircle.set(currentAxisValue, currentAnimAxis, radius)
   }
   
-  override fun createBlackAndWhiteGradient(
-    gradientRect: RectF,
-    colors: IntArray,
-    positions: FloatArray
-  ) = LinearGradient(
-    0f, gradientRect.height() / 2,
-    gradientRect.width(), gradientRect.height() / 2,
-    colors, positions, Shader.TileMode.CLAMP
-  )
-  
-  override fun createRainbowGradient(gradientRect: RectF, colors: IntArray, positions: FloatArray) =
+  override fun createGradient(gradientRect: RectF, colors: IntArray, positions: FloatArray) =
       LinearGradient(
         0f, gradientRect.height() / 2,
         gradientRect.width(), gradientRect.height() / 2,

@@ -36,10 +36,7 @@ interface Palette {
   
   fun updateCircle(currentCircle: Circle, currentAxisValue: Float, currentAnimAxis: Float, radius: Float)
   
-  fun createBlackAndWhiteGradient(gradientRect: RectF, colors: IntArray,
-                                  positions: FloatArray): LinearGradient
-  
-  fun createRainbowGradient(gradientRect: RectF, colors: IntArray, positions: FloatArray): LinearGradient
+  fun createGradient(gradientRect: RectF, colors: IntArray, positions: FloatArray): LinearGradient
   
   fun drawGradientPath(canvas: Canvas, gradientRect: RectF, gradientPath: Path,
                        gradientPaint: Paint, gradientRegion: Region)

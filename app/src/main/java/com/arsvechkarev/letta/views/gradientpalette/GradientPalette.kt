@@ -34,6 +34,9 @@ import com.arsvechkarev.letta.extensions.doOnEnd
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.extensions.i
+import com.arsvechkarev.letta.views.gradientpalette.GradientPalette.SwapperMode.BLACK_AND_WHITE
+import com.arsvechkarev.letta.views.gradientpalette.GradientPalette.SwapperMode.RAINBOW
+import com.arsvechkarev.letta.views.gradientpalette.GradientPalette.SwapperMode.RAINBOW_DARK
 
 /**
  * Gradient palette for choosing colors
@@ -65,6 +68,7 @@ class GradientPalette @JvmOverloads constructor(
   private val gradientPath = Path()
   private val gradientRegion = Region()
   private lateinit var rainbowGradient: LinearGradient
+  private lateinit var rainbowDarkGradient: LinearGradient
   private lateinit var blackAndWhiteGradient: LinearGradient
   private lateinit var gradientBitmap: Bitmap
   private var touchInPalette = false
@@ -91,7 +95,7 @@ class GradientPalette @JvmOverloads constructor(
   private val radiusHolder = PropertyValuesHolder.ofFloat(RADIUS, 0f) // Put 0 as a stub
   
   // Swapper
-  private var swapperMode = SwapperMode.RAINBOW
+  private var swapperMode = RAINBOW
   private var currentSwapperRotation = 0f
   private val swapper = ContextCompat.getDrawable(context, R.drawable.ic_swap)!!.apply {
     colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
@@ -113,7 +117,6 @@ class GradientPalette @JvmOverloads constructor(
   }
   
   private val bouncyAnimator = ValueAnimator().apply {
-    addBouncyBackEffect(inTheMiddle = { changePaletteColors() })
     addUpdateListener {
       gradientScale = animatedValue as Float
       invalidate()
@@ -152,8 +155,7 @@ class GradientPalette @JvmOverloads constructor(
     swapper.bounds = holder.swapperBounds
     swapperStroke.bounds = holder.swapperStrokeBounds
     gradientRect.set(holder.gradientRectBounds)
-    initRainbowShader()
-    initBlackAndWhiteShader()
+    initGradients()
     gradientPaint.shader = rainbowGradient
     rectRadius = holder.roundRectRadius
     startAnimAxis = holder.startAnimAxis
@@ -244,9 +246,7 @@ class GradientPalette @JvmOverloads constructor(
   private fun startBouncyEffect() {
     with(bouncyAnimator) {
       cancelIfRunning()
-      addBouncyBackEffect(inTheMiddle = {
-        changePaletteColors()
-      })
+      addBouncyBackEffect(inTheMiddle = { changePaletteColors() })
       start()
     }
     with(swapperAnimator) {
@@ -256,10 +256,10 @@ class GradientPalette @JvmOverloads constructor(
   }
   
   private fun changePaletteColors() {
-    if (swapperMode == SwapperMode.RAINBOW) {
-      gradientPaint.shader = blackAndWhiteGradient
-    } else {
-      gradientPaint.shader = rainbowGradient
+    gradientPaint.shader = when (swapperMode) {
+      RAINBOW -> rainbowDarkGradient
+      RAINBOW_DARK -> blackAndWhiteGradient
+      BLACK_AND_WHITE -> rainbowGradient
     }
     swapperMode = swapperMode.swap()
     drawGradientBitmap()
@@ -310,13 +310,11 @@ class GradientPalette @JvmOverloads constructor(
     }
   }
   
-  private fun initRainbowShader() {
-    rainbowGradient = palette.createRainbowGradient(gradientRect, rainbowColors, rainbowPositions)
-  }
-  
-  private fun initBlackAndWhiteShader() {
-    blackAndWhiteGradient = palette.createBlackAndWhiteGradient(gradientRect,
-      blackAndWhiteColors, blackAndWhitePositions)
+  private fun initGradients() {
+    rainbowGradient = palette.createGradient(gradientRect, rainbowColors, rainbowPositions)
+    rainbowDarkGradient = palette.createGradient(gradientRect, rainbowDarkColors, rainbowPositions)
+    blackAndWhiteGradient = palette.createGradient(gradientRect, blackAndWhiteColors, blackAndWhitePositions)
+    
   }
   
   private fun drawGradientBitmap() {
@@ -328,10 +326,15 @@ class GradientPalette @JvmOverloads constructor(
   
   private enum class SwapperMode {
     RAINBOW,
+    RAINBOW_DARK,
     BLACK_AND_WHITE;
     
     fun swap(): SwapperMode {
-      return if (this == RAINBOW) BLACK_AND_WHITE else RAINBOW
+      return when (this) {
+        RAINBOW -> RAINBOW_DARK
+        RAINBOW_DARK -> BLACK_AND_WHITE
+        BLACK_AND_WHITE -> RAINBOW
+      }
     }
   }
   
@@ -356,10 +359,27 @@ class GradientPalette @JvmOverloads constructor(
       0xff2457ff.toInt(),
       0xff9d00ff.toInt(),
       0xffff00c3.toInt(),
-      0xff460A57.toInt()
+      0xff7a1496.toInt()
     )
-    private val rainbowPositions = floatArrayOf(0.00f, 0.07f, 0.20f, 0.25f, 0.37f,
-      0.45f, 0.53f, 0.63f, 0.76f, 0.88f, 0.99f)
+  
+    private val rainbowDarkColors = intArrayOf(
+      0xff944646.toInt(),
+      0xff8a0000.toInt(),
+      0xff8a7b0a.toInt(),
+      0xff999700.toInt(),
+      0xff45802a.toInt(),
+      0xff018f5b.toInt(),
+      0xff008a96.toInt(),
+      0xff001d7d.toInt(),
+      0xff590091.toInt(),
+      0xff8f006d.toInt(),
+      0xff350842.toInt()
+    )
+  
+    private val rainbowPositions = floatArrayOf(
+      0.00f, 0.07f, 0.20f, 0.25f, 0.37f,
+      0.45f, 0.53f, 0.63f, 0.76f, 0.88f, 0.99f
+    )
   
     private val blackAndWhiteColors = intArrayOf(0xffffffff.toInt(), 0xff000000.toInt())
     private val blackAndWhitePositions = floatArrayOf(0f, 0.95f)

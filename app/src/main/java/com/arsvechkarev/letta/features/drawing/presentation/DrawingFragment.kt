@@ -7,7 +7,7 @@ import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
 import com.arsvechkarev.letta.opengldrawing.UndoStore
-import com.arsvechkarev.letta.opengldrawing.brushes.EllipticalBrush
+import com.arsvechkarev.letta.opengldrawing.brushes.BRUSHES
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.opengldrawing.drawing.Renderer
 import com.arsvechkarev.letta.opengldrawing.drawing.Size
@@ -64,14 +64,13 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   }
   
   private fun createOpenGLDrawingView(undoStore: UndoStore): OpenGLDrawingView {
-    val initialBrush = EllipticalBrush
     val bitmap = getBitmapBy(requireContext(), arguments!!)
     val size = Size(bitmap.width.toFloat(), bitmap.height.toFloat())
     val renderer = object : Renderer {
       override fun shouldDraw() = true
     }
     return OpenGLDrawingView(
-      requireContext(), size, initialBrush, undoStore, bitmap, renderer
+      requireContext(), size, BRUSHES[0], undoStore, bitmap, renderer
     )
   }
 }

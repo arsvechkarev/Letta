@@ -64,6 +64,6 @@ class DrawingContainer(
   }
   
   private fun Float.exponentiate(): Float {
-    return this * 20 + (this * 4).pow(3.7f)
+    return this * 25 + (this * 3.5f).pow(4f)
   }
 }

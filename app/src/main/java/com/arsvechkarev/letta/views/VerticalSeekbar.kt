@@ -20,7 +20,6 @@ import com.arsvechkarev.letta.core.COLOR_BORDER_VERY_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.extensions.dp
 import com.arsvechkarev.letta.extensions.f
-import com.arsvechkarev.letta.extensions.isWhiterThan
 
 class VerticalSeekbar @JvmOverloads constructor(
   context: Context,
@@ -55,10 +54,8 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   fun updateColorIfAllowed(color: Int) {
-    if (colorChangeAllowed(color)) {
-      this.color = color
-      invalidate()
-    }
+    this.color = color.changeIfNecessary()
+    invalidate()
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -140,7 +137,19 @@ class VerticalSeekbar @JvmOverloads constructor(
     style = Paint.Style.FILL
   }
   
-  private fun colorChangeAllowed(color: Int): Boolean {
-    return !color.isWhiterThan(0xAA)
+  private fun Int.changeIfNecessary(): Int {
+    val r = this and 0x00FF0000 shr 16
+    val g = this and 0x0000FF00 shr 8
+    val b = this and 0x000000FF
+    val onBlackAndWhiteScale = r == g && r == b
+    if (onBlackAndWhiteScale) {
+      val maxChannel = 0x88
+      val maxR = r.coerceAtMost(maxChannel)
+      val maxG = g.coerceAtMost(maxChannel)
+      val maxB = b.coerceAtMost(maxChannel)
+      return (0xFF shl 24) or (maxR shl 16) or (maxG shl 8) or maxB
+    } else {
+      return this
+    }
   }
 }

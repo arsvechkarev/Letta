@@ -40,14 +40,6 @@ fun RectF.roundToInts() {
   bottom = ceil(bottom)
 }
 
-fun Int.isWhiterThan(limitChannel: Int): Boolean {
-  val r = this and 0x00FF0000 shr 16
-  val g = this and 0x0000FF00 shr 8
-  val b = this and 0x000000FF
-  return r > limitChannel && g > limitChannel && b > limitChannel
-      && r == g && r == b && g == b
-}
-
 fun lerpColor(startColor: Int, endColor: Int, fraction: Float): Int {
   val startA = (startColor shr 24 and 0xff) / 255.0f
   var startR = (startColor shr 16 and 0xff) / 255.0f

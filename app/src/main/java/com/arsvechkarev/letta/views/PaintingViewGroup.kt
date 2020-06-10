@@ -46,8 +46,8 @@ class PaintingViewGroup @JvmOverloads constructor(
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    // Recycler view is the only one who needs to be measured
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    // Recycler view is the only one who needs to be measured
     val heightSize = MeasureSpec.getSize(heightMeasureSpec)
     childWithClass<RecyclerView>().measure(widthMeasureSpec,
       MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.AT_MOST))

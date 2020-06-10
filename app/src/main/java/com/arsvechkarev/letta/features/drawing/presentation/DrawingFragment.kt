@@ -3,13 +3,10 @@ package com.arsvechkarev.letta.features.drawing.presentation
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
-import com.arsvechkarev.letta.features.drawing.list.BrushAdapter
 import com.arsvechkarev.letta.opengldrawing.UndoStore
-import com.arsvechkarev.letta.opengldrawing.brushes.BRUSHES
 import com.arsvechkarev.letta.opengldrawing.brushes.EllipticalBrush
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.opengldrawing.drawing.Renderer
@@ -26,27 +23,20 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   DrawingPresenter::class, R.layout.fragment_drawing
 ), DrawingMvpView {
   
-  private lateinit var paintContainer: PaintContainer
-  
-  private val brushAdapter = BrushAdapter(BRUSHES, onBrushSelected = {
-    paintContainer.updateBrush(it)
-  })
+  private lateinit var drawingContainer: DrawingContainer
   
   override fun createPresenter(): DrawingPresenter {
     return DrawingPresenter(ImageUploadingRepository(requireContext()))
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    recyclerBrushes.adapter = brushAdapter
-    recyclerBrushes.layoutManager = LinearLayoutManager(context,
-      LinearLayoutManager.HORIZONTAL, false)
     val undoStore = UndoStore(onHistoryChanged = {
-      paintContainer.onHistoryChanged()
+      drawingContainer.onHistoryChanged()
     })
     val openGLDrawingView = createOpenGLDrawingView(undoStore)
-    paintContainer = PaintContainer(undoStore, imageUndo,
-      openGLDrawingView, palette, verticalSeekbar,
-      paintDisplayer
+    drawingContainer = DrawingContainer(
+      undoStore, imageUndo, openGLDrawingView, palette,
+      verticalSeekbar, paintDisplayer, recyclerBrushes
     )
     paintingViewGroup.addDrawingView(openGLDrawingView)
     paintingViewGroup.assignImagesIds(imageUndo.id, imageDone.id)
@@ -69,7 +59,7 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   }
   
   override fun onDestroyView() {
-    paintContainer.shutdown()
+    drawingContainer.shutdown()
     super.onDestroyView()
   }
   

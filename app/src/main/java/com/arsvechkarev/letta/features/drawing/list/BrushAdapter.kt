@@ -1,5 +1,6 @@
 package com.arsvechkarev.letta.features.drawing.list
 
+import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import com.arsvechkarev.letta.R.dimen.brush_example_margin
@@ -14,6 +15,8 @@ class BrushAdapter(
   items: List<Brush>,
   private val onBrushSelected: (Brush) -> Unit
 ) : SingleSelectionAdapter<Brush, BrushViewHolder>(items) {
+  
+  private var selectionColor = Color.TRANSPARENT
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrushViewHolder {
     return BrushViewHolder(
@@ -42,7 +45,7 @@ class BrushAdapter(
           (previousViewHolder.itemView as BrushExampleView).isSelected = false
         }
         selectedPosition = adapterPosition
-        (itemView as BrushExampleView).isSelected = true
+        itemView.isSelected = true
         onBrushSelected(data[adapterPosition])
       }
     }

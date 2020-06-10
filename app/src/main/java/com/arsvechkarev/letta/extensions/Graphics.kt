@@ -9,6 +9,7 @@ import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.view.View
 import com.arsvechkarev.letta.BuildConfig
+import com.arsvechkarev.letta.core.assertThat
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.pow
@@ -83,10 +84,16 @@ fun lerpColor(startColor: Int, endColor: Int, fraction: Float): Int {
   return (a.roundToInt() shl 24) or (r.roundToInt() shl 16) or (g.roundToInt() shl 8) or b.roundToInt()
 }
 
+fun Int.withAlpha(alpha: Int): Int {
+  assertThat(alpha in 0..255) { "Incorrect alpha" }
+  val a = alpha shl 24
+  return this and 0x00FFFFFF or a
+}
+
 // Only in debug
 fun View.drawBounds(canvas: Canvas, color: Int = Color.RED) {
   if (!BuildConfig.DEBUG) {
-     throw IllegalStateException("Nope")
+    throw IllegalStateException("Nope")
   }
   canvas.drawRect(Rect(0, 0, width, height), Paint().apply {
     style = Paint.Style.STROKE

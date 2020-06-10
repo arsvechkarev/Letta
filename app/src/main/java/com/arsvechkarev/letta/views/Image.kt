@@ -13,6 +13,7 @@ import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
+import android.view.animation.OvershootInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.COLOR_DISABLED
@@ -33,7 +34,14 @@ class Image @JvmOverloads constructor(
   private val colorFilterDisabled = PorterDuffColorFilter(COLOR_DISABLED, PorterDuff.Mode.SRC_ATOP)
   private var image: Drawable?
   private var scaleFactor = 1f
-  private val scaleAnimator = ValueAnimator()
+  private val scaleAnimator = ValueAnimator().apply {
+    interpolator = OvershootInterpolator()
+    duration = DURATION_ON_CLICK
+    addUpdateListener {
+      scaleFactor = animatedValue as Float
+      invalidate()
+    }
+  }
   
   init {
     val arr = context.obtainStyledAttributes(attrs, R.styleable.Image, defStyleAttr, 0)
@@ -98,14 +106,7 @@ class Image @JvmOverloads constructor(
   
   private fun animate(down: Boolean = true) {
     val endScale = if (down) VIEW_CLICK_SCALE_FACTOR else 1.0f
-    with(scaleAnimator) {
-      setFloatValues(scaleFactor, endScale)
-      duration = DURATION_ON_CLICK
-      addUpdateListener {
-        scaleFactor = animatedValue as Float
-        invalidate()
-      }
-      start()
-    }
+    scaleAnimator.setFloatValues(scaleFactor, endScale)
+    scaleAnimator.start()
   }
 }

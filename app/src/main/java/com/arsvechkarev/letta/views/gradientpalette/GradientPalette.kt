@@ -29,6 +29,7 @@ import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.model.Circle
 import com.arsvechkarev.letta.extensions.addBouncyBackEffect
+import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.doOnEnd
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.f
@@ -99,8 +100,26 @@ class GradientPalette @JvmOverloads constructor(
       .apply {
         colorFilter = PorterDuffColorFilter(COLOR_BORDER_LIGHT, PorterDuff.Mode.SRC_ATOP)
       }
-  private val swapperAnimator = ValueAnimator()
-  private val bouncyAnimator = ValueAnimator()
+  
+  private val swapperAnimator = ValueAnimator().apply {
+    setFloatValues(currentSwapperRotation, 180f)
+    addUpdateListener {
+      currentSwapperRotation = animatedValue as Float
+      invalidate()
+    }
+    interpolator = DecelerateInterpolator()
+    doOnEnd { currentSwapperRotation = 0f }
+    duration = SWAP_ANIMATION_DURATION
+  }
+  
+  private val bouncyAnimator = ValueAnimator().apply {
+    addBouncyBackEffect(inTheMiddle = { changePaletteColors() })
+    addUpdateListener {
+      gradientScale = animatedValue as Float
+      invalidate()
+    }
+    duration = SWAP_ANIMATION_DURATION
+  }
   
   // Bezier path
   private val bezierShape = BezierShape()
@@ -224,27 +243,14 @@ class GradientPalette @JvmOverloads constructor(
   
   private fun startBouncyEffect() {
     with(bouncyAnimator) {
-      cancel()
-      addBouncyBackEffect(gradientScale, coefficient = 0.25f, inTheMiddle = {
+      cancelIfRunning()
+      addBouncyBackEffect(inTheMiddle = {
         changePaletteColors()
       })
-      addUpdateListener {
-        gradientScale = animatedValue as Float
-        invalidate()
-      }
-      duration = SWAP_ANIMATION_DURATION
       start()
     }
     with(swapperAnimator) {
-      cancel()
-      setFloatValues(currentSwapperRotation, 180f)
-      addUpdateListener {
-        currentSwapperRotation = animatedValue as Float
-        invalidate()
-      }
-      interpolator = DecelerateInterpolator()
-      doOnEnd { currentSwapperRotation = 0f }
-      duration = SWAP_ANIMATION_DURATION
+      cancelIfRunning()
       start()
     }
   }
@@ -332,7 +338,7 @@ class GradientPalette @JvmOverloads constructor(
   companion object {
     private const val GRADIENT_SENSITIVITY = 2
     private const val CIRCLE_ANIMATION_DURATION = 150L
-    private const val SWAP_ANIMATION_DURATION = 200L
+    private const val SWAP_ANIMATION_DURATION = 350L
   
     private const val FRACTION = "fraction"
     private const val AXIS = "axis"

@@ -14,6 +14,6 @@
   <dimen name="vertical_seekbar_width">30dp</dimen>
   <dimen name="vertical_seekbar_height">280dp</dimen>
 
-  <dimen name="brush_example_size">50dp</dimen>
-  <dimen name="brush_example_margin">16dp</dimen>
+  <dimen name="brush_example_size">60dp</dimen>
+  <dimen name="brush_example_margin">10dp</dimen>
 </resources>

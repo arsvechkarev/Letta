@@ -11,6 +11,7 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import com.arsvechkarev.letta.core.COLOR_GRAY_SELECTED
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 
@@ -20,13 +21,15 @@ class BrushExampleView @JvmOverloads constructor(
 ) : View(context, attrs) {
   
   private var bitmap: Bitmap? = null
-  private val rect = RectF()
+  private val bitmapRect = RectF()
   private val bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     colorFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
   }
   
+  private var cornersRadius = 0f
+  private val selectionRect = RectF()
   private val selectionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = 0x66FF0000
+    color = COLOR_GRAY_SELECTED
   }
   
   fun updateBitmap(brush: Brush) {
@@ -35,14 +38,18 @@ class BrushExampleView @JvmOverloads constructor(
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    rect.set(0f, 0f, w.f, h.f)
+    val size = minOf(w, h)
+    val offset = size / 10f
+    cornersRadius = size / 12f
+    selectionRect.set(0f, 0f, w.f, h.f)
+    bitmapRect.set(offset, offset, w - offset, h - offset)
   }
   
   override fun onDraw(canvas: Canvas) {
     if (isSelected) {
-      canvas.drawRect(rect, selectionPaint)
+      canvas.drawRoundRect(selectionRect, cornersRadius, cornersRadius, selectionPaint)
     }
     val bitmap = bitmap ?: return
-    canvas.drawBitmap(bitmap, null, rect, bitmapPaint)
+    canvas.drawBitmap(bitmap, null, bitmapRect, bitmapPaint)
   }
 }

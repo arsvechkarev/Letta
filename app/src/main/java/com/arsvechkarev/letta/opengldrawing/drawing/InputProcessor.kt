@@ -46,10 +46,7 @@ class InputProcessor(private val drawingView: OpenGLDrawingView) {
           pointsCount = 1
           clearBuffer = true
         } else {
-          if (!hasMoved) {
-            drawingView.onBeganDrawing()
-            hasMoved = true
-          }
+          hasMoved = true
           points[pointsCount] = location
           pointsCount++
           if (pointsCount == 3) {
@@ -60,10 +57,8 @@ class InputProcessor(private val drawingView: OpenGLDrawingView) {
       }
       ACTION_UP -> {
         if (!hasMoved) {
-          if (drawingView.isDrawAllowed) {
-            location.edge = true
-            paintPath(Path(arrayOf(location)))
-          }
+          location.edge = true
+          paintPath(Path(arrayOf(location)))
           reset()
         } else if (pointsCount > 0) {
           smoothAndPaintPoints(true)
@@ -71,7 +66,6 @@ class InputProcessor(private val drawingView: OpenGLDrawingView) {
         pointsCount = 0
         drawingView.painting!!.commitStroke(drawingView.currentColor)
         startedDrawing = false
-        drawingView.onFinishedDrawing(hasMoved)
       }
     }
   }

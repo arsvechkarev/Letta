@@ -21,8 +21,7 @@ class OpenGLDrawingView(
   paintingSize: Size,
   var currentBrush: Brush,
   private val undoStore: UndoStore,
-  private var backgroundBitmap: Bitmap,
-  private val renderer: Renderer
+  private var backgroundBitmap: Bitmap
 ) : TextureView(context) {
   
   private val transformedBitmap = false
@@ -93,11 +92,6 @@ class OpenGLDrawingView(
     }
   }
   
-  val isDrawAllowed: Boolean
-    get() {
-      return renderer.shouldDraw()
-    }
-  
   fun updateColor(value: Int) {
     currentColor = value
   }
@@ -109,14 +103,6 @@ class OpenGLDrawingView(
   fun updateBrush(brush: Brush) {
     currentBrush = brush
     painting!!.setBrush(currentBrush)
-  }
-  
-  fun onBeganDrawing() {
-    renderer.onBeganDrawing()
-  }
-  
-  fun onFinishedDrawing(moved: Boolean) {
-    renderer.onFinishedDrawing(moved)
   }
   
   fun performInEGLContext(action: () -> Unit) {

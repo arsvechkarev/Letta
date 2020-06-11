@@ -26,23 +26,36 @@ object BigDotsBrush : Brush {
   override val spacing = 0.4f
   override val alpha = 0.2f
   override val isAngleRandom = true
-  override val stamp = R.drawable.brush_big_dots
+  override val stamp = R.drawable.brush_dots_big
 }
 
 object SmallDotsBrush : Brush {
   override val spacing = 0.3f
   override val alpha = 0.4f
   override val isAngleRandom = true
-  override val stamp = R.drawable.brush_small_dots
+  override val stamp = R.drawable.brush_dots_small
 }
 
-object LinesBrush : Brush {
+object BigLinesBrush : Brush {
   override val spacing = 0.2f
   override val alpha = 0.3f
-  override val stamp = R.drawable.brush_lines
+  override val stamp = R.drawable.brush_lines_big
+}
+
+object MediumLinesBrush : Brush {
+  override val spacing = 0.1f
+  override val alpha = 0.2f
+  override val stamp = R.drawable.brush_lines_medium
+}
+
+object SmallLinesBrush : Brush {
+  override val spacing = 0.1f
+  override val alpha = 0.2f
+  override val stamp = R.drawable.brush_lines_small
 }
 
 val BRUSHES = listOf(
   CircleBrush, CircleBlurBrush, EllipticalBrush,
-  BigDotsBrush, SmallDotsBrush, LinesBrush
+  BigDotsBrush, SmallDotsBrush, BigLinesBrush,
+  MediumLinesBrush, SmallLinesBrush
 )

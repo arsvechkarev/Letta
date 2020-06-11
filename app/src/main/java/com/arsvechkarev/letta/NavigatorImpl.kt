@@ -37,6 +37,10 @@ class NavigatorImpl(private var activity: MainActivity?) : Navigator {
     goToFragment(fragment, animate = true, addToBackStack = true)
   }
   
+  override fun popBackStack() {
+    activity!!.supportFragmentManager.popBackStack()
+  }
+  
   private fun goToFragment(
     fragment: NavigableFragment,
     animate: Boolean = true,

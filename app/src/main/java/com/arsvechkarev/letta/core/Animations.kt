@@ -1,7 +1,10 @@
 package com.arsvechkarev.letta.core
 
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.arsvechkarev.letta.extensions.doOnEnd
 import com.arsvechkarev.letta.extensions.invisible
 
@@ -34,4 +37,16 @@ fun View.rotate(duration: Long = DURATION_DEFAULT) {
         rotation = 0f
       }
       .start()
+}
+
+fun View.animateColor(startColor: Int, endColor: Int, andThen: () -> Unit = {}) {
+  ObjectAnimator.ofObject(this,
+    "backgroundColor", ArgbEvaluator(), startColor, endColor).apply {
+    duration = DURATION_DEFAULT
+    interpolator = FastOutSlowInInterpolator()
+    if (andThen != {}) {
+      doOnEnd(andThen)
+    }
+    start()
+  }
 }

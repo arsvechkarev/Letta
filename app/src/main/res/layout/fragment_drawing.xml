@@ -7,7 +7,7 @@
   android:clipChildren="false">
 
   <com.arsvechkarev.letta.views.BrushDisplayer
-    android:id="@+id/paintDisplayer"
+    android:id="@+id/brushDisplayer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
@@ -55,5 +55,57 @@
     android:id="@+id/imageHideTools"
     android:layout_width="40dp"
     android:layout_height="40dp"/>
+
+  <com.arsvechkarev.letta.views.SimpleDialog
+    android:id="@+id/dialogDiscardChanges"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:background="@android:color/white"
+      android:padding="16dp">
+
+      <TextView
+        android:id="@+id/headerDialogDiscardChanges"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="You have unsaved changes.\nDo you want to discard them?"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_h4"/>
+
+      <com.arsvechkarev.letta.views.ClickableTextView
+        android:id="@+id/textDialogCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerDialogDiscardChanges"
+        android:layout_alignEnd="@id/headerDialogDiscardChanges"
+        android:layout_margin="4dp"
+        android:text="CANCEL"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_h5"
+        app:rippleColor="@color/ripple_dark"/>
+
+      <com.arsvechkarev.letta.views.ClickableTextView
+        android:id="@+id/textDialogDiscard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerDialogDiscardChanges"
+        android:layout_alignStart="@id/headerDialogDiscardChanges"
+        android:layout_margin="4dp"
+        android:text="DISCARD"
+        android:textColor="@color/failure"
+        android:textSize="@dimen/text_h4"
+        app:rippleColor="@color/ripple_failure"/>
+
+    </RelativeLayout>
+
+  </com.arsvechkarev.letta.views.SimpleDialog>
 
 </com.arsvechkarev.letta.views.PaintingViewGroup>

@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.IdRes
-import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.layoutNormal
 import com.arsvechkarev.letta.core.layoutWithLeftTop
 import com.arsvechkarev.letta.core.withParams
 import com.arsvechkarev.letta.extensions.findChild
+import com.arsvechkarev.letta.extensions.isNotGone
 import com.arsvechkarev.letta.extensions.totalHeight
 import com.arsvechkarev.letta.extensions.totalWidth
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
@@ -42,9 +42,10 @@ class PaintingViewGroup @JvmOverloads constructor(
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+    val atMostHeightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.AT_MOST)
   
-    childWithClass<RecyclerView>().measure(widthMeasureSpec,
-      MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.AT_MOST))
+    childWithId(R.id.recyclerBrushes).measure(widthMeasureSpec, atMostHeightMeasureSpec)
+    childWithId(R.id.dialogDiscardChanges).measure(widthMeasureSpec, heightMeasureSpec)
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -53,11 +54,11 @@ class PaintingViewGroup @JvmOverloads constructor(
     val imageDone = childWithId(R.id.imageDone)
     val imageUndo = childWithId(R.id.imageUndo)
     val imageSwapGradient = childWithId(R.id.imageSwapGradient)
-    val recyclerBrushes = childWithClass<RecyclerView>()
+    val recyclerBrushes = childWithId(R.id.recyclerBrushes)
   
     childWithClass<OpenGLDrawingView>().layout(0, 0, width, height)
   
-    childWithClass<BrushDisplayer>().layout(0, 0, width, height)
+    childWithId(R.id.brushDisplayer).layout(0, 0, width, height)
   
     val imageDoneOffset: Int
     imageDone.withParams { params ->
@@ -80,7 +81,7 @@ class PaintingViewGroup @JvmOverloads constructor(
       )
     }
   
-    childWithClass<VerticalSeekbar>().withParams { params ->
+    childWithId(R.id.verticalSeekbar).withParams { params ->
       layoutNormal(
         left = 0,
         top = height / 2 - params.height / 2,
@@ -124,7 +125,7 @@ class PaintingViewGroup @JvmOverloads constructor(
       )
     }
   
-    childWithClass<HideToolsView>().withParams { params ->
+    childWithId(R.id.imageHideTools).withParams { params ->
       val middleY = imageDone.bottom + (gradientPalette.top - imageDone.bottom) / 2
       layoutNormal(
         left = width - params.width - imageDoneOffset,
@@ -132,6 +133,11 @@ class PaintingViewGroup @JvmOverloads constructor(
         right = width - imageDoneOffset,
         bottom = middleY + params.height / 2
       )
+    }
+  
+    val dialog = childWithId(R.id.dialogDiscardChanges)
+    if (dialog.isNotGone) {
+      dialog.layout(0, 0, width, height)
     }
   }
   

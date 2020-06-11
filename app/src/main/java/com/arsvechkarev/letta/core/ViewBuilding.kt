@@ -39,6 +39,12 @@ fun View.layoutWithLeftTop(left: Int, top: Int, params: ViewGroup.LayoutParams) 
   layout(left, top, left + params.width, top + params.height)
 }
 
+fun View.layoutAroundMiddlePoint(middleX: Int, middleY: Int) {
+  val hw = measuredWidth / 2
+  val hh = measuredHeight / 2
+  layout(middleX - hw, middleY - hh, middleX + hw, middleY + hh)
+}
+
 fun View.layoutAroundMiddlePoint(middleX: Int, middleY: Int, params: ViewGroup.LayoutParams) {
   val hw = params.width / 2
   val hh = params.height / 2

@@ -6,20 +6,24 @@ import android.widget.Toast
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.core.rotate
+import com.arsvechkarev.letta.extensions.navigator
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.brushes.BRUSHES
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.opengldrawing.drawing.Size
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette.Companion.SWAP_ANIMATION_DURATION
+import kotlinx.android.synthetic.main.fragment_drawing.brushDisplayer
+import kotlinx.android.synthetic.main.fragment_drawing.dialogDiscardChanges
 import kotlinx.android.synthetic.main.fragment_drawing.imageDone
 import kotlinx.android.synthetic.main.fragment_drawing.imageHideTools
 import kotlinx.android.synthetic.main.fragment_drawing.imageSwapGradient
 import kotlinx.android.synthetic.main.fragment_drawing.imageUndo
-import kotlinx.android.synthetic.main.fragment_drawing.paintDisplayer
 import kotlinx.android.synthetic.main.fragment_drawing.paintingViewGroup
 import kotlinx.android.synthetic.main.fragment_drawing.paletteBrushColor
 import kotlinx.android.synthetic.main.fragment_drawing.recyclerBrushes
+import kotlinx.android.synthetic.main.fragment_drawing.textDialogCancel
+import kotlinx.android.synthetic.main.fragment_drawing.textDialogDiscard
 import kotlinx.android.synthetic.main.fragment_drawing.verticalSeekbar
 
 class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
@@ -39,7 +43,7 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     val openGLDrawingView = createOpenGLDrawingView(undoStore)
     drawingContainer = DrawingContainer(
       undoStore, openGLDrawingView, imageUndo, imageDone, imageHideTools, paletteBrushColor,
-      imageSwapGradient, verticalSeekbar, paintDisplayer, recyclerBrushes
+      imageSwapGradient, verticalSeekbar, brushDisplayer, recyclerBrushes
     )
     paintingViewGroup.addDrawingView(openGLDrawingView)
     initClickListeners(openGLDrawingView)
@@ -74,6 +78,12 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     imageHideTools.setOnClickListener {
       drawingContainer.toggleToolsVisibility()
     }
+    textDialogCancel.setOnClickListener {
+      dialogDiscardChanges.hide()
+    }
+    textDialogDiscard.setOnClickListener {
+      navigator.popBackStack()
+    }
   }
   
   private fun createOpenGLDrawingView(undoStore: UndoStore): OpenGLDrawingView {
@@ -82,5 +92,12 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     return OpenGLDrawingView(
       requireContext(), size, BRUSHES[0], undoStore, bitmap
     )
+  }
+  
+  override fun onBackPressed(): Boolean {
+    if (!dialogDiscardChanges.isOpened) {
+      dialogDiscardChanges.show()
+    }
+    return false
   }
 }

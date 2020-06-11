@@ -19,7 +19,8 @@ class ToolsAnimator(
   private val recyclerBrushes: RecyclerView
 ) {
   
-  private var toolsAreVisible = true
+  var toolsAreVisible = true
+    private set
   
   fun toggleVisibility() {
     if (toolsAreVisible) {

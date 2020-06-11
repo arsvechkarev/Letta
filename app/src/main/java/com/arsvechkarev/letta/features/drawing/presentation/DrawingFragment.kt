@@ -39,7 +39,7 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     })
     val openGLDrawingView = createOpenGLDrawingView(undoStore)
     drawingContainer = DrawingContainer(
-      undoStore, imageUndo, openGLDrawingView, imageDone, paletteBrushColor,
+      undoStore, openGLDrawingView, imageUndo, imageDone, imageHideTools, paletteBrushColor,
       imageSwapGradient, verticalSeekbar, paintDisplayer, recyclerBrushes
     )
     paintingViewGroup.addDrawingView(openGLDrawingView)

@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.DURATION_DEFAULT
+import com.arsvechkarev.letta.core.DURATION_SMALL
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.toBitmap
 
@@ -34,6 +35,18 @@ class HideToolsView @JvmOverloads constructor(
     }
   }
   
+  fun makeInvisible() {
+    animate().alpha(0f)
+        .setDuration(DURATION_SMALL)
+        .start()
+  }
+  
+  fun makeVisible() {
+    animate().alpha(1f)
+        .setDuration(DURATION_SMALL)
+        .start()
+  }
+  
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     drawable.setBounds(paddingLeft, paddingTop, w - paddingRight, h - paddingBottom)
     bitmap = drawable.toBitmap(w, h)
@@ -53,4 +66,5 @@ class HideToolsView @JvmOverloads constructor(
       drawBitmap(bitmap, bitmapMatrix, null)
     }
   }
+  
 }

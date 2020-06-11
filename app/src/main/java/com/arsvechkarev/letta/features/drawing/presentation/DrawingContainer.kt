@@ -8,6 +8,7 @@ import com.arsvechkarev.letta.opengldrawing.brushes.BRUSHES
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.views.BrushDisplayer
+import com.arsvechkarev.letta.views.HideToolsView
 import com.arsvechkarev.letta.views.Image
 import com.arsvechkarev.letta.views.VerticalSeekbar
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
@@ -15,9 +16,10 @@ import kotlin.math.pow
 
 class DrawingContainer(
   private val undoStore: UndoStore,
-  private val imageUndo: Image,
   private val openGLDrawingView: OpenGLDrawingView,
+  private val imageUndo: Image,
   imageDone: Image,
+  imageHideTools: HideToolsView,
   palette: GradientPalette,
   imageSwapGradient: Image,
   verticalSeekbar: VerticalSeekbar,
@@ -50,6 +52,12 @@ class DrawingContainer(
       val size = percent.exponentiate()
       openGLDrawingView.updateBrushSize(size)
       brushDisplayer.draw(openGLDrawingView.currentColor, size)
+    }
+    openGLDrawingView.onDown = {
+      if (!toolsAnimator.toolsAreVisible) imageHideTools.makeInvisible()
+    }
+    openGLDrawingView.onUp = {
+      if (!toolsAnimator.toolsAreVisible) imageHideTools.makeVisible()
     }
     recyclerBrushes.adapter = brushAdapter
     recyclerBrushes.layoutManager = LinearLayoutManager(openGLDrawingView.context,

@@ -13,6 +13,10 @@ operator fun View.contains(event: MotionEvent): Boolean {
   return x >= 0 && y >= 0 && x <= width && y <= height
 }
 
+fun View.visible() {
+  visibility = View.VISIBLE
+}
+
 fun View.invisible() {
   visibility = View.INVISIBLE
 }

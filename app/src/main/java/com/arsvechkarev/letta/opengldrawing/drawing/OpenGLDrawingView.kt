@@ -30,6 +30,9 @@ class OpenGLDrawingView(
   private var eglDrawer: EGLDrawer? = null
   private var shuttingDown = false
   
+  var onDown: () -> Unit = {}
+  var onUp: () -> Unit = {}
+  
   var currentWeight = 0f
     private set
   var currentColor = 0
@@ -137,6 +140,10 @@ class OpenGLDrawingView(
   }
   
   override fun onTouchEvent(event: MotionEvent): Boolean {
+    when (event.action) {
+      MotionEvent.ACTION_DOWN -> onDown()
+      MotionEvent.ACTION_UP -> onUp()
+    }
     val eglDrawer = eglDrawer ?: throwEx()
     if (event.pointerCount > 1) {
       return false

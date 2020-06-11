@@ -15,14 +15,20 @@ import kotlin.math.pow
 
 class DrawingContainer(
   private val undoStore: UndoStore,
-  private val undoImage: Image,
+  private val imageUndo: Image,
   private val openGLDrawingView: OpenGLDrawingView,
+  imageDone: Image,
   palette: GradientPalette,
+  imageSwapGradient: Image,
   verticalSeekbar: VerticalSeekbar,
   brushDisplayer: BrushDisplayer,
   recyclerBrushes: RecyclerView
 ) {
   
+  private val toolsAnimator = ToolsAnimator(
+    imageUndo, imageDone, palette, imageSwapGradient,
+    verticalSeekbar, recyclerBrushes
+  )
   
   private val brushAdapter = BrushAdapter(BRUSHES, onBrushSelected = {
     updateBrush(it)
@@ -32,10 +38,10 @@ class DrawingContainer(
     val initialBrushPercent = 0.3f
     verticalSeekbar.updatePercent(initialBrushPercent)
     openGLDrawingView.updateBrushSize(initialBrushPercent.exponentiate())
-    undoImage.isEnabled = false
+    imageUndo.isEnabled = false
     
     verticalSeekbar.onUp = { brushDisplayer.clear() }
-    undoImage.setOnClickListener { undoStore.undo() }
+    imageUndo.setOnClickListener { undoStore.undo() }
     palette.onColorChanged = { color ->
       verticalSeekbar.updateColorIfAllowed(color)
       openGLDrawingView.updateColor(color)
@@ -50,9 +56,13 @@ class DrawingContainer(
       LinearLayoutManager.HORIZONTAL, false)
   }
   
+  fun toggleToolsVisibility() {
+    toolsAnimator.toggleVisibility()
+  }
+  
   fun onHistoryChanged() {
     val canUndo = undoStore.canUndo
-    undoImage.isEnabled = canUndo
+    imageUndo.isEnabled = canUndo
   }
   
   fun shutdown() {

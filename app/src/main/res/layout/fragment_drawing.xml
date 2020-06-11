@@ -15,8 +15,6 @@
     android:id="@+id/imageDone"
     android:layout_width="@dimen/img_done_size"
     android:layout_height="@dimen/img_done_size"
-    android:layout_marginTop="@dimen/img_tool_m_top"
-    android:layout_marginEnd="@dimen/img_done_margin"
     android:padding="@dimen/img_tool_padding"
     app:imageSrc="@drawable/ic_checkmark"/>
 
@@ -24,8 +22,6 @@
     android:id="@+id/imageUndo"
     android:layout_width="@dimen/img_tool_size"
     android:layout_height="@dimen/img_tool_size"
-    android:layout_marginTop="@dimen/img_tool_m_top"
-    android:layout_marginEnd="@dimen/img_undo_m_end"
     android:padding="@dimen/img_tool_padding"
     app:imageSrc="@drawable/ic_undo"/>
 
@@ -45,7 +41,6 @@
     android:id="@+id/imageSwapGradient"
     android:layout_width="@dimen/img_swapper"
     android:layout_height="@dimen/img_swapper"
-    android:layout_marginTop="@dimen/img_tool_m_top"
     android:layout_marginEnd="@dimen/img_swapper_m_end"
     android:padding="@dimen/img_swapper_padding"
     app:imageSrc="@drawable/ic_swap"/>
@@ -55,5 +50,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background"/>
+
+  <com.arsvechkarev.letta.views.HideToolsView
+    android:id="@+id/imageHideTools"
+    android:layout_width="40dp"
+    android:layout_height="40dp"/>
 
 </com.arsvechkarev.letta.views.PaintingViewGroup>

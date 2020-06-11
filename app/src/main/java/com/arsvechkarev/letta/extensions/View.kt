@@ -36,17 +36,6 @@ inline fun ViewGroup.findChild(predicate: (View) -> Boolean): View {
   throw IllegalStateException("No child matching predicate")
 }
 
-inline fun View.withLayoutParams(block: View.(ViewGroup.MarginLayoutParams) -> Unit) {
-  block.invoke(this, layoutParams as ViewGroup.MarginLayoutParams)
-}
-
-fun View.doLayout(left: Int, top: Int, right: Int, bottom: Int) {
-  layout(left, top, right, bottom)
-}
-
-val View.marginParams: ViewGroup.MarginLayoutParams
-  get() = layoutParams as ViewGroup.MarginLayoutParams
-
 val View.totalWidth: Int
   get() {
     val params = layoutParams as ViewGroup.MarginLayoutParams

@@ -23,7 +23,7 @@ import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
 import com.arsvechkarev.letta.extensions.contains
 import com.arsvechkarev.letta.extensions.execute
 
-class Image @JvmOverloads constructor(
+open class Image @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0

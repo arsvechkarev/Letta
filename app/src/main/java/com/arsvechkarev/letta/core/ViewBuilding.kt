@@ -4,6 +4,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DimenRes
 import com.arsvechkarev.letta.extensions.getDimen
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 fun <V : View> V.withParams(
   @DimenRes width: Int,
@@ -18,4 +21,26 @@ fun <V : View> V.withParams(
   params.setMargins(margin, margin, margin, margin)
   layoutParams = params
   return this
+}
+
+@OptIn(ExperimentalContracts::class)
+inline fun View.withParams(block: View.(ViewGroup.MarginLayoutParams) -> Unit) {
+  contract {
+    callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+  }
+  block.invoke(this, layoutParams as ViewGroup.MarginLayoutParams)
+}
+
+fun View.layoutNormal(left: Int, top: Int, right: Int, bottom: Int) {
+  layout(left, top, right, bottom)
+}
+
+fun View.layoutWithLeftTop(left: Int, top: Int, params: ViewGroup.LayoutParams) {
+  layout(left, top, left + params.width, top + params.height)
+}
+
+fun View.layoutAroundMiddlePoint(middleX: Int, middleY: Int, params: ViewGroup.LayoutParams) {
+  val hw = params.width / 2
+  val hh = params.height / 2
+  layout(middleX - hw, middleY - hh, middleX + hw, middleY + hh)
 }

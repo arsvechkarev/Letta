@@ -6,9 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.os.Bundle
 import androidx.annotation.DrawableRes
-import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.model.Project
-import com.arsvechkarev.letta.extensions.getDimen
 
 private const val TYPE = "TYPE"
 private const val KEY_WIDTH = "KEY_WIDTH"
@@ -47,7 +45,7 @@ fun getBitmapBy(context: Context, arguments: Bundle): Bitmap {
     }
     COLOR -> {
       val width = arguments.getInt(KEY_WIDTH)
-      val height = getCorrectBitmapHeight(context, arguments)
+      val height = arguments.getInt(KEY_HEIGHT)
       val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
       val canvas = Canvas(bitmap)
       val color = arguments.getInt(COLOR)
@@ -56,7 +54,7 @@ fun getBitmapBy(context: Context, arguments: Bundle): Bitmap {
     }
     DRAWABLE_RES -> {
       val width = arguments.getInt(KEY_WIDTH)
-      val height = getCorrectBitmapHeight(context, arguments)
+      val height = arguments.getInt(KEY_HEIGHT)
       val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
       val canvas = Canvas(bitmap)
       val drawableRes = arguments.getInt(DRAWABLE_RES)
@@ -67,11 +65,4 @@ fun getBitmapBy(context: Context, arguments: Bundle): Bitmap {
     }
     else -> throw IllegalStateException("Unknown type")
   }
-}
-
-private fun getCorrectBitmapHeight(context: Context, arguments: Bundle): Int {
-  val brushExampleSize = context.getDimen(R.dimen.brush_example_size)
-  val brushExampleMargin = context.getDimen(R.dimen.brush_example_margin)
-  val recyclerBrushesHeight = (brushExampleSize + brushExampleMargin * 2).toInt()
-  return arguments.getInt(KEY_HEIGHT) - recyclerBrushesHeight
 }

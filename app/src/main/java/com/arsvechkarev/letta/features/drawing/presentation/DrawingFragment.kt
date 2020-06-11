@@ -14,6 +14,7 @@ import com.arsvechkarev.letta.opengldrawing.drawing.Renderer
 import com.arsvechkarev.letta.opengldrawing.drawing.Size
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette.Companion.SWAP_ANIMATION_DURATION
 import kotlinx.android.synthetic.main.fragment_drawing.imageDone
+import kotlinx.android.synthetic.main.fragment_drawing.imageHideTools
 import kotlinx.android.synthetic.main.fragment_drawing.imageSwapGradient
 import kotlinx.android.synthetic.main.fragment_drawing.imageUndo
 import kotlinx.android.synthetic.main.fragment_drawing.paintDisplayer
@@ -38,18 +39,11 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     })
     val openGLDrawingView = createOpenGLDrawingView(undoStore)
     drawingContainer = DrawingContainer(
-      undoStore, imageUndo, openGLDrawingView, paletteBrushColor,
-      verticalSeekbar, paintDisplayer, recyclerBrushes
+      undoStore, imageUndo, openGLDrawingView, imageDone, paletteBrushColor,
+      imageSwapGradient, verticalSeekbar, paintDisplayer, recyclerBrushes
     )
     paintingViewGroup.addDrawingView(openGLDrawingView)
-    imageDone.setOnClickListener {
-      val bitmap = openGLDrawingView.getResultBitmap()
-      presenter.uploadBitmap(bitmap)
-    }
-    imageSwapGradient.setOnClickListener {
-      imageSwapGradient.rotate(SWAP_ANIMATION_DURATION)
-      paletteBrushColor.swapGradientMode()
-    }
+    initClickListeners(openGLDrawingView)
   }
   
   override fun onStartUploadingImage() {
@@ -67,6 +61,20 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   override fun onDestroyView() {
     drawingContainer.shutdown()
     super.onDestroyView()
+  }
+  
+  private fun initClickListeners(openGLDrawingView: OpenGLDrawingView) {
+    imageDone.setOnClickListener {
+      val bitmap = openGLDrawingView.getResultBitmap()
+      presenter.uploadBitmap(bitmap)
+    }
+    imageSwapGradient.setOnClickListener {
+      imageSwapGradient.rotate(SWAP_ANIMATION_DURATION)
+      paletteBrushColor.swapGradientMode()
+    }
+    imageHideTools.setOnClickListener {
+      drawingContainer.toggleToolsVisibility()
+    }
   }
   
   private fun createOpenGLDrawingView(undoStore: UndoStore): OpenGLDrawingView {

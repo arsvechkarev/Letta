@@ -5,10 +5,7 @@
   <dimen name="img_swapper_m_end">20dp</dimen>
   <dimen name="img_tool_size">40dp</dimen>
   <dimen name="img_tool_padding">8dp</dimen>
-  <dimen name="img_tool_m_top">8dp</dimen>
-  <dimen name="img_undo_m_end">16dp</dimen>
   <dimen name="img_done_size">50dp</dimen>
-  <dimen name="img_done_margin">16dp</dimen>
   <dimen name="choose_bg_dialog_radius">12dp</dimen>
   <dimen name="palette_smallest_size">32dp</dimen>
   <dimen name="palette_biggest_size">280dp</dimen>

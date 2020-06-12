@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.arsvechkarev.letta.LettaApplication
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.COLOR_SHADOW
-import com.arsvechkarev.letta.core.MvpFragment
 import com.arsvechkarev.letta.core.animations.animateInvisibleAndScale
 import com.arsvechkarev.letta.core.model.BackgroundType.Color
 import com.arsvechkarev.letta.core.model.BackgroundType.DrawableRes
 import com.arsvechkarev.letta.core.model.Project
+import com.arsvechkarev.letta.core.mvp.MvpFragment
+import com.arsvechkarev.letta.core.navigation.navigator
 import com.arsvechkarev.letta.extensions.behavior
 import com.arsvechkarev.letta.extensions.lerpColor
-import com.arsvechkarev.letta.extensions.navigator
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createDrawableResArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createProjectArgs

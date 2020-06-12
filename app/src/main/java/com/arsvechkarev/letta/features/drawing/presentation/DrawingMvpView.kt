@@ -1,6 +1,6 @@
 package com.arsvechkarev.letta.features.drawing.presentation
 
-import com.arsvechkarev.letta.core.MvpView
+import com.arsvechkarev.letta.core.mvp.MvpView
 
 interface DrawingMvpView : MvpView {
   

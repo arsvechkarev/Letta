@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.core
+package com.arsvechkarev.letta.core.mvp
 
 import androidx.lifecycle.ViewModel
 import com.arsvechkarev.letta.core.async.Threader

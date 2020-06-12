@@ -1,13 +1,14 @@
-package com.arsvechkarev.letta
+package com.arsvechkarev.letta.core.navigation
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.arsvechkarev.letta.core.NavigableFragment
-import com.arsvechkarev.letta.core.Navigator
+import com.arsvechkarev.letta.MainActivity
+import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.features.drawing.presentation.DrawingFragment
 import com.arsvechkarev.letta.features.projects.presentation.ProjectsListFragment
 
-class NavigatorImpl(private var activity: MainActivity?) : Navigator {
+class NavigatorImpl(private var activity: MainActivity?) :
+  Navigator {
   
   fun init(savedInstantState: Bundle?) {
     if (savedInstantState == null) {

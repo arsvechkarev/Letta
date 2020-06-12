@@ -1,9 +1,9 @@
 package com.arsvechkarev.letta.features.drawing.presentation
 
 import android.graphics.Bitmap
-import com.arsvechkarev.letta.core.MvpPresenter
 import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
+import com.arsvechkarev.letta.core.mvp.MvpPresenter
 import com.arsvechkarev.letta.features.drawing.data.SavingProjectRepository
 import timber.log.Timber
 

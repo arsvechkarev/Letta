@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.core
+package com.arsvechkarev.letta.core.navigation
 
 /**
  * Fragment that interested in navigation events, such as onBackPressed

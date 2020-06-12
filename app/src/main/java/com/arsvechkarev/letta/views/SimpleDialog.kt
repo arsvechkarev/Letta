@@ -56,6 +56,7 @@ class SimpleDialog @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     dialogView.translationY = getTranslationForDialogView()
+    dialogView.scaleX = getScaleXDialogView()
   }
   
   fun show() {
@@ -70,6 +71,7 @@ class SimpleDialog @JvmOverloads constructor(
       shadowAnimator.start()
       dialogView.animate()
           .withLayer()
+          .scaleX(1f)
           .alpha(1f)
           .translationY(0f)
           .setDuration(DURATION_MEDIUM)
@@ -88,6 +90,7 @@ class SimpleDialog @JvmOverloads constructor(
       dialogView.animate()
           .withLayer()
           .alpha(0f)
+          .scaleX(getScaleXDialogView())
           .translationY(getTranslationForDialogView())
           .setDuration((DURATION_MEDIUM * 0.8).toLong())
           .setInterpolator(AccelerateDecelerateInterpolator)
@@ -115,5 +118,7 @@ class SimpleDialog @JvmOverloads constructor(
     return false
   }
   
-  private fun getTranslationForDialogView(): Float = dialogView.measuredHeight.f * 1.5f
+  private fun getTranslationForDialogView(): Float = dialogView.measuredHeight.f
+  
+  private fun getScaleXDialogView(): Float = 0.8f
 }

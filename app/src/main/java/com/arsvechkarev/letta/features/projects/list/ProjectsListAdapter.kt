@@ -24,6 +24,11 @@ class ProjectsListAdapter(
     notifyDataSetChanged()
   }
   
+  fun addProject(project: Project) {
+    (data as ArrayList<Project>).add(project)
+    notifyItemInserted(data.size - 1)
+  }
+  
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
     val image = ClickableSquareImage(parent.context)
     val params = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)

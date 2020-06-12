@@ -11,8 +11,7 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/Theme.AppCompat.NoActionBar">
-    <activity android:name="com.arsvechkarev.letta.MainActivity"
-      android:screenOrientation="portrait">
+    <activity android:name="com.arsvechkarev.letta.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <action android:name="android.intent.action.VIEW"/>

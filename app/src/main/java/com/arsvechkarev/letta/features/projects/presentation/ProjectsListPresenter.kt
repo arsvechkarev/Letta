@@ -1,6 +1,7 @@
 package com.arsvechkarev.letta.features.projects.presentation
 
 import com.arsvechkarev.letta.core.MvpPresenter
+import com.arsvechkarev.letta.core.ProjectsFilesObserver
 import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
 import com.arsvechkarev.letta.features.projects.data.ProjectsListRepository
@@ -8,7 +9,7 @@ import com.arsvechkarev.letta.features.projects.data.ProjectsListRepository
 class ProjectsListPresenter(
   private val repository: ProjectsListRepository,
   threader: Threader = AndroidThreader
-) : MvpPresenter<ProjectsListView>(threader) {
+) : MvpPresenter<ProjectsListView>(threader), ProjectsFilesObserver.Observer {
   
   fun startLoadingProjects() {
     onIoThread {
@@ -19,5 +20,18 @@ class ProjectsListPresenter(
         updateView { onLoadedProjects(projects) }
       }
     }
+  }
+  
+  override fun onViewAttached() {
+    ProjectsFilesObserver.setObserver(this)
+  }
+  
+  override fun onViewCleared() {
+    ProjectsFilesObserver.clearObserver()
+  }
+  
+  override fun onNewProjectCreated(projectFullPath: String) {
+    val project = repository.loadProject(projectFullPath)
+    updateView { onProjectAdded(project) }
   }
 }

@@ -1,7 +1,6 @@
 package com.arsvechkarev.letta.core
 
 import androidx.lifecycle.ViewModel
-import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
 
 abstract class MvpPresenter<V : MvpView>(
@@ -10,12 +9,18 @@ abstract class MvpPresenter<V : MvpView>(
   
   protected var view: V? = null
   
+  open fun onViewAttached() {}
+  
+  open fun onViewCleared() {}
+  
   fun attachView(view: V) {
     this.view = view
+    onViewAttached()
   }
   
   override fun onCleared() {
     this.view = null
+    onViewCleared()
   }
   
   protected fun onIoThread(action: () -> Unit) {

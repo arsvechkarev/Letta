@@ -7,5 +7,7 @@ interface ProjectsListView : MvpView {
   
   fun onLoadedProjects(list: List<Project>)
   
+  fun onProjectAdded(project: Project)
+  
   fun projectsAreEmpty()
 }

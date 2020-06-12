@@ -35,4 +35,13 @@ class ProjectsListRepository(
     }
     return emptyList()
   }
+  
+  fun loadProject(projectFullPath: String): Project {
+    val tempFile = File(projectFullPath)
+    val options = BitmapFactory.Options().apply {
+      inSampleSize = 4
+    }
+    val bitmap = BitmapFactory.decodeFile(tempFile.canonicalPath, options)
+    return Project(tempFile.canonicalPath, bitmap)
+  }
 }

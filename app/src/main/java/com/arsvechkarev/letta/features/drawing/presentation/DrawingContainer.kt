@@ -41,6 +41,7 @@ class DrawingContainer(
     verticalSeekbar.updatePercent(initialBrushPercent)
     openGLDrawingView.updateBrushSize(initialBrushPercent.exponentiate())
     imageUndo.isEnabled = false
+    imageDone.isEnabled = false
     
     verticalSeekbar.onUp = { brushDisplayer.clear() }
     imageUndo.setOnClickListener { undoStore.undo() }

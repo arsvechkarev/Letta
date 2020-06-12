@@ -54,10 +54,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     recyclerAllProjects.layoutManager = GridLayoutManager(requireContext(), 3,
       GridLayoutManager.VERTICAL, false)
     presenter.startLoadingProjects()
-    prepareBehavior()
-    createNewProjectButton.setOnClickListener {
-      openNewProject()
-    }
+    prepareNewProjectDialog()
     chooseBgContainer = ChooseBgContainer(backgroundImageExample, backgroundImagePalette,
       backgroundImagesRecyclerView)
   }
@@ -65,6 +62,10 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   override fun onLoadedProjects(list: List<Project>) {
     adapter.submitList(list)
     projectsLoadingProgressBar.animateInvisibleAndScale()
+  }
+  
+  override fun onProjectAdded(project: Project) {
+    adapter.addProject(project)
   }
   
   override fun projectsAreEmpty() {
@@ -86,7 +87,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   @SuppressLint("ClickableViewAccessibility")
-  private fun prepareBehavior() {
+  private fun prepareNewProjectDialog() {
     val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
     behavior.addSlideListener { slidePercent ->
       val color = lerpColor(0, COLOR_SHADOW, slidePercent)
@@ -103,6 +104,9 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
       } else {
         behavior.show()
       }
+    }
+    createNewProjectButton.setOnClickListener {
+      openNewProject()
     }
   }
   

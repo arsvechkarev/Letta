@@ -42,23 +42,20 @@ class BackgroundImageAdapter(
         if (previousViewHolder == this) {
           // Deselecting current view
           onImageSelected(null)
+          selectedPosition = RecyclerView.NO_POSITION
           itemView.checkmark.isChecked = false
           return@setOnClickListener
         }
         if (previousViewHolder == null) {
           // Holder is not found, just updating current view
-          itemView.checkmark.isChecked = true
-          val prevPosition = selectedPosition
-          selectedPosition = adapterPosition
-          onImageSelected(data[selectedPosition])
-          notifyItemChanged(prevPosition)
+          notifyItemChanged(selectedPosition)
         } else {
           // Animating both previous and current view
           previousViewHolder.itemView.checkmark?.isChecked = false
-          selectedPosition = adapterPosition
-          itemView.checkmark.isChecked = true
-          onImageSelected(data[selectedPosition])
         }
+        itemView.checkmark.isChecked = true
+        selectedPosition = adapterPosition
+        onImageSelected(data[selectedPosition])
       }
     }
     

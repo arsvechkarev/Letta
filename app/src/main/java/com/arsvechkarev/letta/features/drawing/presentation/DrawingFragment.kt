@@ -15,6 +15,7 @@ import com.arsvechkarev.letta.opengldrawing.drawing.Size
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette.Companion.SWAP_ANIMATION_DURATION
 import kotlinx.android.synthetic.main.fragment_drawing.brushDisplayer
 import kotlinx.android.synthetic.main.fragment_drawing.dialogDiscardChanges
+import kotlinx.android.synthetic.main.fragment_drawing.dialogLoading
 import kotlinx.android.synthetic.main.fragment_drawing.imageDone
 import kotlinx.android.synthetic.main.fragment_drawing.imageHideTools
 import kotlinx.android.synthetic.main.fragment_drawing.imageSwapGradient
@@ -30,6 +31,7 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   DrawingPresenter::class, R.layout.fragment_drawing
 ), DrawingMvpView {
   
+  private lateinit var undoStore: UndoStore
   private lateinit var drawingContainer: DrawingContainer
   
   override fun createPresenter(): DrawingPresenter {
@@ -37,24 +39,26 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    val undoStore = UndoStore(onHistoryChanged = {
+    undoStore = UndoStore(onHistoryChanged = {
       drawingContainer.onHistoryChanged()
     })
     val openGLDrawingView = createOpenGLDrawingView(undoStore)
     drawingContainer = DrawingContainer(
-      undoStore, openGLDrawingView, imageUndo, imageDone, imageHideTools, paletteBrushColor,
-      imageSwapGradient, verticalSeekbar, brushDisplayer, recyclerBrushes
+      undoStore, openGLDrawingView, imageUndo, imageDone,
+      imageHideTools, paletteBrushColor, imageSwapGradient,
+      verticalSeekbar, brushDisplayer, recyclerBrushes
     )
     paintingViewGroup.addDrawingView(openGLDrawingView)
     initClickListeners(openGLDrawingView)
   }
   
   override fun onStartUploadingImage() {
-    Toast.makeText(requireContext(), "Start uploading", Toast.LENGTH_SHORT).show()
+    dialogLoading.show()
   }
   
   override fun onImageUploaded() {
-    Toast.makeText(requireContext(), "Uploaded", Toast.LENGTH_SHORT).show()
+    dialogLoading.hide()
+    navigator.popBackStack()
   }
   
   override fun onImageUploadingError() {
@@ -64,6 +68,14 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   override fun onDestroyView() {
     drawingContainer.shutdown()
     super.onDestroyView()
+  }
+  
+  override fun onBackPressed(): Boolean {
+    if (undoStore.isEmpty) {
+      return true
+    }
+    dialogDiscardChanges.show()
+    return false
   }
   
   private fun initClickListeners(openGLDrawingView: OpenGLDrawingView) {
@@ -92,12 +104,5 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
     return OpenGLDrawingView(
       requireContext(), size, BRUSHES[0], undoStore, bitmap
     )
-  }
-  
-  override fun onBackPressed(): Boolean {
-    if (!dialogDiscardChanges.isOpened) {
-      dialogDiscardChanges.show()
-    }
-    return false
   }
 }

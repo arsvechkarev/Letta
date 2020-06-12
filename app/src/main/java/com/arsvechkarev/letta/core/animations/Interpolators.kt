@@ -7,4 +7,4 @@ import android.view.animation.OvershootInterpolator
 val LinearInterpolator = LinearInterpolator()
 val AccelerateDecelerateInterpolator = AccelerateDecelerateInterpolator()
 val EndOvershootInterpolator = OvershootInterpolator()
-val StartOvershootInterpolator = OvershootInterpolator(-4f)
+val StartOvershootInterpolator = OvershootInterpolator(-4.5f)

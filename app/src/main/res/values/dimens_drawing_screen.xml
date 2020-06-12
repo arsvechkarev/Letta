@@ -12,7 +12,10 @@
   <dimen name="palette_padding">8dp</dimen>
   <dimen name="vertical_seekbar_width">30dp</dimen>
   <dimen name="vertical_seekbar_height">280dp</dimen>
-
   <dimen name="brush_example_size">60dp</dimen>
   <dimen name="brush_example_margin">10dp</dimen>
+  <dimen name="img_hide_tools_size">40dp</dimen>
+  <dimen name="dialog_discard_changes_padding">20dp</dimen>
+  <dimen name="header_discard_m_horizontal">8dp</dimen>
+  <dimen name="header_discard_m_bottom">24dp</dimen>
 </resources>

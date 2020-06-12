@@ -7,7 +7,9 @@ class UndoStore(private val onHistoryChanged: Action = {}) {
   
   private val operations = ArrayList<Action>()
   
-  val canUndo get() = operations.isNotEmpty()
+  val isNotEmpty get() = operations.isNotEmpty()
+  
+  val isEmpty get() = operations.isEmpty()
   
   fun registerUndo(action: Action) {
     operations.add(action)

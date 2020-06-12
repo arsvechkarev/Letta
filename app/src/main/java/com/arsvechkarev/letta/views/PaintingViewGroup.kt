@@ -46,6 +46,7 @@ class PaintingViewGroup @JvmOverloads constructor(
   
     childWithId(R.id.recyclerBrushes).measure(widthMeasureSpec, atMostHeightMeasureSpec)
     childWithId(R.id.dialogDiscardChanges).measure(widthMeasureSpec, heightMeasureSpec)
+    childWithId(R.id.dialogLoading).measure(widthMeasureSpec, heightMeasureSpec)
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -135,7 +136,12 @@ class PaintingViewGroup @JvmOverloads constructor(
       )
     }
   
-    val dialog = childWithId(R.id.dialogDiscardChanges)
+    layoutDialog(R.id.dialogDiscardChanges, width, height)
+    layoutDialog(R.id.dialogLoading, width, height)
+  }
+  
+  private fun layoutDialog(resId: Int, width: Int, height: Int) {
+    val dialog = childWithId(resId)
     if (dialog.isNotGone) {
       dialog.layout(0, 0, width, height)
     }

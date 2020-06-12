@@ -12,8 +12,8 @@ import android.view.View
 import android.widget.FrameLayout
 import com.arsvechkarev.letta.core.COLOR_SHADOW
 import com.arsvechkarev.letta.core.DURATION_MEDIUM
+import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.core.animations.EndOvershootInterpolator
-import com.arsvechkarev.letta.core.animations.StartOvershootInterpolator
 import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.contains
@@ -32,6 +32,7 @@ class SimpleDialog @JvmOverloads constructor(
   private var wasNoMoveEvent = false
   private var currentShadowFraction = 0f
   private val shadowAnimator = ValueAnimator().apply {
+    interpolator = AccelerateDecelerateInterpolator
     duration = DURATION_MEDIUM
     addUpdateListener {
       currentShadowFraction = it.animatedValue as Float
@@ -88,8 +89,8 @@ class SimpleDialog @JvmOverloads constructor(
           .withLayer()
           .alpha(0f)
           .translationY(getTranslationForDialogView())
-          .setDuration(DURATION_MEDIUM)
-          .setInterpolator(StartOvershootInterpolator)
+          .setDuration((DURATION_MEDIUM * 0.8).toLong())
+          .setInterpolator(AccelerateDecelerateInterpolator)
           .doOnEnd { gone() }
           .start()
     }

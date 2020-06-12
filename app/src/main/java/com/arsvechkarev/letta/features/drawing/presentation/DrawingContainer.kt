@@ -18,7 +18,7 @@ class DrawingContainer(
   private val undoStore: UndoStore,
   private val openGLDrawingView: OpenGLDrawingView,
   private val imageUndo: Image,
-  imageDone: Image,
+  private val imageDone: Image,
   imageHideTools: HideToolsView,
   palette: GradientPalette,
   imageSwapGradient: Image,
@@ -69,8 +69,9 @@ class DrawingContainer(
   }
   
   fun onHistoryChanged() {
-    val canUndo = undoStore.canUndo
+    val canUndo = undoStore.isNotEmpty
     imageUndo.isEnabled = canUndo
+    imageDone.isEnabled = canUndo
   }
   
   fun shutdown() {

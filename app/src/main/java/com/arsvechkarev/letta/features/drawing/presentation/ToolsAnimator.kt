@@ -2,9 +2,9 @@ package com.arsvechkarev.letta.features.drawing.presentation
 
 import android.view.View
 import android.view.ViewPropertyAnimator
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.core.DURATION_DEFAULT
+import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.core.throwEx
 import com.arsvechkarev.letta.views.Image
 import com.arsvechkarev.letta.views.VerticalSeekbar
@@ -92,7 +92,7 @@ class ToolsAnimator(
   private fun View.animate(endAlpha: Float, block: ViewPropertyAnimator.(Float) -> Unit) {
     val distance = distanceOf(this)
     val animator = animate().apply {
-      interpolator = AccelerateDecelerateInterpolator()
+      interpolator = AccelerateDecelerateInterpolator
       duration = DURATION_DEFAULT
     }
     block(animator, distance)

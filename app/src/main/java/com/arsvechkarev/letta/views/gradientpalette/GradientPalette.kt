@@ -19,13 +19,13 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
 import com.arsvechkarev.letta.core.STROKE_PAINT
+import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
+import com.arsvechkarev.letta.core.animations.addBouncyBackEffect
 import com.arsvechkarev.letta.core.model.Circle
-import com.arsvechkarev.letta.extensions.addBouncyBackEffect
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.f
@@ -254,7 +254,7 @@ class GradientPalette @JvmOverloads constructor(
         palette.updateCircle(circle, currentMovingAxis, currentAnimAxis, currentAnimRadius)
         invalidate()
       }
-      interpolator = AccelerateDecelerateInterpolator()
+      interpolator = AccelerateDecelerateInterpolator
       duration = CIRCLE_ANIMATION_DURATION
       start()
     }

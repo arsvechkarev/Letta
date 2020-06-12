@@ -11,10 +11,10 @@ import android.graphics.Rect
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.DURATION_SMALL
+import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.i
 
 class CheckmarkView @JvmOverloads constructor(
@@ -62,7 +62,7 @@ class CheckmarkView @JvmOverloads constructor(
   
   private val animator = ValueAnimator().apply {
     duration = DURATION_SMALL
-    interpolator = AccelerateDecelerateInterpolator()
+    interpolator = AccelerateDecelerateInterpolator
     addUpdateListener {
       circlePaint.strokeWidth = it.animatedValue as Float
       invalidate()

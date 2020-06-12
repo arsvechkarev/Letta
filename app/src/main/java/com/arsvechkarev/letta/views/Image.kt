@@ -13,13 +13,13 @@ import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
-import android.view.animation.OvershootInterpolator
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.COLOR_DISABLED
 import com.arsvechkarev.letta.core.DURATION_ON_CLICK
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
+import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.contains
 import com.arsvechkarev.letta.extensions.execute
 
@@ -35,7 +35,7 @@ open class Image @JvmOverloads constructor(
   private var image: Drawable?
   private var scaleFactor = 1f
   private val scaleAnimator = ValueAnimator().apply {
-    interpolator = OvershootInterpolator()
+    interpolator = AccelerateDecelerateInterpolator
     duration = DURATION_ON_CLICK
     addUpdateListener {
       scaleFactor = animatedValue as Float

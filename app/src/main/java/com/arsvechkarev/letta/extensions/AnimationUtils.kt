@@ -12,6 +12,7 @@ fun Animator.doOnEnd(block: () -> Unit) {
   addListener(object : AnimatorListenerAdapter() {
     override fun onAnimationEnd(animation: Animator?) {
       block()
+      removeListener(this)
     }
   })
 }
@@ -20,6 +21,7 @@ fun ViewPropertyAnimator.doOnEnd(block: () -> Unit): ViewPropertyAnimator {
   setListener(object : AnimatorListenerAdapter() {
     override fun onAnimationEnd(animation: Animator?) {
       block()
+      setListener(null)
     }
   })
   return this

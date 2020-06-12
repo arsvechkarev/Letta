@@ -87,13 +87,13 @@ open class RoundedCornersDrawable(
     
     fun ofBitmap(context: Context, bitmap: Bitmap): RoundedCornersDrawable {
       return RoundedCornersDrawable(bitmap, COLOR_BORDER_LIGHT, context.getDimen(R.dimen.border_width),
-        context.getDimen(R.dimen.corners_radius_default))
+        context.getDimen(R.dimen.corners_radius_big))
     }
     
     fun ofResource(
       context: Context,
       resId: Int,
-      corners: Float = context.getDimen(R.dimen.corners_radius_default)
+      corners: Float = context.getDimen(R.dimen.corners_radius_big)
     ): RoundedCornersDrawable {
       return RoundedCornersDrawable(
         context.getDrawable(resId)!!.toBitmap(),

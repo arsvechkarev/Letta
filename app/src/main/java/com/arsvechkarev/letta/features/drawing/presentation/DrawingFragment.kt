@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Toast
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.MvpFragment
-import com.arsvechkarev.letta.core.rotate
+import com.arsvechkarev.letta.core.animations.rotate
 import com.arsvechkarev.letta.extensions.navigator
 import com.arsvechkarev.letta.features.drawing.data.ImageUploadingRepository
 import com.arsvechkarev.letta.opengldrawing.UndoStore

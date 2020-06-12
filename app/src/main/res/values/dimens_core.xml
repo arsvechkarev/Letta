@@ -5,8 +5,11 @@
 
   <dimen name="border_width">0.6dp</dimen>
 
-  <dimen name="corners_radius_default">8dp</dimen>
+  <dimen name="corners_radius_big">8dp</dimen>
+  <dimen name="corners_radius_default">4dp</dimen>
   <dimen name="corners_radius_small">2dp</dimen>
+
+  <dimen name="clickable_text_view_margin">8dp</dimen>
 
   <dimen name="text_h5">16sp</dimen>
   <dimen name="text_h4">18sp</dimen>

@@ -6,10 +6,10 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.util.AttributeSet
-import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.DURATION_DEFAULT
 import com.arsvechkarev.letta.core.DURATION_SMALL
+import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.toBitmap
 
@@ -27,7 +27,7 @@ class HideToolsView @JvmOverloads constructor(
   
   private val animator = ValueAnimator().apply {
     duration = DURATION_DEFAULT
-    interpolator = AccelerateDecelerateInterpolator()
+    interpolator = AccelerateDecelerateInterpolator
     addUpdateListener {
       rotationCoeff = it.animatedValue as Float
       bitmapMatrix.setScale(rotationCoeff, 1f, width / 2f, height / 2f)

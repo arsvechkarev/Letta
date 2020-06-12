@@ -1,12 +1,12 @@
-package com.arsvechkarev.letta.extensions
+package com.arsvechkarev.letta.core.animations
 
 import android.animation.ValueAnimator
-import android.view.animation.OvershootInterpolator
+import android.view.animation.AccelerateDecelerateInterpolator
 
 class MiddleBlockInterpolator(
   private val middlePercent: Float,
   private val inTheMiddle: () -> Unit
-) : OvershootInterpolator() {
+) : AccelerateDecelerateInterpolator() {
   
   private var middleBlockExecuted = false
   
@@ -22,6 +22,6 @@ class MiddleBlockInterpolator(
 fun ValueAnimator.addBouncyBackEffect(
   inTheMiddle: () -> Unit = {}
 ) {
-  setFloatValues(1f, 1.20f, 1f)
-  interpolator = MiddleBlockInterpolator(0.3f, inTheMiddle)
+  setFloatValues(1f, 1.16f, 0.96f, 1.02f, 1f)
+  interpolator = MiddleBlockInterpolator(0.33f, inTheMiddle)
 }

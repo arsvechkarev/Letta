@@ -1,8 +1,8 @@
 package com.arsvechkarev.letta.views
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
@@ -10,13 +10,17 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.widget.FrameLayout
-import com.arsvechkarev.letta.core.DURATION_DEFAULT
-import com.arsvechkarev.letta.core.animateColor
+import com.arsvechkarev.letta.core.COLOR_SHADOW
+import com.arsvechkarev.letta.core.DURATION_MEDIUM
+import com.arsvechkarev.letta.core.animations.EndOvershootInterpolator
+import com.arsvechkarev.letta.core.animations.StartOvershootInterpolator
 import com.arsvechkarev.letta.core.assertThat
+import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.contains
 import com.arsvechkarev.letta.extensions.doOnEnd
+import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.extensions.gone
-import com.arsvechkarev.letta.extensions.invisible
+import com.arsvechkarev.letta.extensions.lerpColor
 import com.arsvechkarev.letta.extensions.visible
 
 class SimpleDialog @JvmOverloads constructor(
@@ -26,6 +30,15 @@ class SimpleDialog @JvmOverloads constructor(
   
   private lateinit var dialogView: View
   private var wasNoMoveEvent = false
+  private var currentShadowFraction = 0f
+  private val shadowAnimator = ValueAnimator().apply {
+    duration = DURATION_MEDIUM
+    addUpdateListener {
+      currentShadowFraction = it.animatedValue as Float
+      val color = lerpColor(Color.TRANSPARENT, COLOR_SHADOW, currentShadowFraction)
+      setBackgroundColor(color)
+    }
+  }
   
   var isOpened = false
     private set
@@ -38,7 +51,10 @@ class SimpleDialog @JvmOverloads constructor(
     super.onFinishInflate()
     assertThat(childCount == 1) { "Only one child for dialog is allowed" }
     dialogView = getChildAt(0)
-    invisible()
+  }
+  
+  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    dialogView.translationY = getTranslationForDialogView()
   }
   
   fun show() {
@@ -48,15 +64,16 @@ class SimpleDialog @JvmOverloads constructor(
       visible()
       dialogView.alpha = 0f
       dialogView.visible()
-      animateColor(0x00000000, 0x70000000)
-      val translateAnimation = ObjectAnimator.ofFloat(dialogView, View.TRANSLATION_Y,
-        dialogView.height / 3f, 0f)
-      val alphaAnimation = ObjectAnimator.ofFloat(dialogView, View.ALPHA, 0f, 1f)
-      AnimatorSet().apply {
-        duration = DURATION_DEFAULT
-        playTogether(translateAnimation, alphaAnimation)
-        start()
-      }
+      shadowAnimator.cancelIfRunning()
+      shadowAnimator.setFloatValues(currentShadowFraction, 1f)
+      shadowAnimator.start()
+      dialogView.animate()
+          .withLayer()
+          .alpha(1f)
+          .translationY(0f)
+          .setDuration(DURATION_MEDIUM)
+          .setInterpolator(EndOvershootInterpolator)
+          .start()
     }
   }
   
@@ -64,16 +81,17 @@ class SimpleDialog @JvmOverloads constructor(
     if (!isOpened) return
     isOpened = false
     post {
-      animateColor(0x70000000, 0x00000000, andThen = { gone() })
-      val translateAnimation = ObjectAnimator.ofFloat(dialogView, View.TRANSLATION_Y,
-        0f, dialogView.height / 3f)
-      val alphaAnimation = ObjectAnimator.ofFloat(dialogView, View.ALPHA, 1f, 0f)
-      AnimatorSet().apply {
-        duration = DURATION_DEFAULT
-        playTogether(translateAnimation, alphaAnimation)
-        start()
-        doOnEnd { gone() }
-      }
+      shadowAnimator.cancelIfRunning()
+      shadowAnimator.setFloatValues(currentShadowFraction, 0f)
+      shadowAnimator.start()
+      dialogView.animate()
+          .withLayer()
+          .alpha(0f)
+          .translationY(getTranslationForDialogView())
+          .setDuration(DURATION_MEDIUM)
+          .setInterpolator(StartOvershootInterpolator)
+          .doOnEnd { gone() }
+          .start()
     }
   }
   
@@ -95,4 +113,6 @@ class SimpleDialog @JvmOverloads constructor(
     }
     return false
   }
+  
+  private fun getTranslationForDialogView(): Float = dialogView.measuredHeight.f * 1.5f
 }

@@ -65,8 +65,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
-      android:background="@android:color/white"
-      android:padding="16dp">
+      android:background="@drawable/bg_dialog"
+      android:padding="20dp">
 
       <TextView
         android:id="@+id/headerDialogDiscardChanges"
@@ -74,9 +74,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
+        android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:text="You have unsaved changes.\nDo you want to discard them?"
+        android:text="@string/text_you_have_unsaved_changes"
         android:textColor="@android:color/black"
         android:textSize="@dimen/text_h4"/>
 
@@ -85,9 +86,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/headerDialogDiscardChanges"
-        android:layout_alignEnd="@id/headerDialogDiscardChanges"
-        android:layout_margin="4dp"
-        android:text="CANCEL"
+        android:layout_toStartOf="@id/textDialogDiscard"
+        android:text="@string/text_cancel"
         android:textColor="@android:color/black"
         android:textSize="@dimen/text_h5"
         app:rippleColor="@color/ripple_dark"/>
@@ -97,11 +97,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/headerDialogDiscardChanges"
-        android:layout_alignStart="@id/headerDialogDiscardChanges"
-        android:layout_margin="4dp"
-        android:text="DISCARD"
+        android:layout_alignEnd="@id/headerDialogDiscardChanges"
+        android:text="@string/text_discard"
         android:textColor="@color/failure"
-        android:textSize="@dimen/text_h4"
+        android:textSize="@dimen/text_h5"
         app:rippleColor="@color/ripple_failure"/>
 
     </RelativeLayout>

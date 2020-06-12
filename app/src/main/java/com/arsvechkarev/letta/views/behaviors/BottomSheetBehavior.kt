@@ -5,9 +5,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.arsvechkarev.letta.core.DURATION_DEFAULT
+import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.doOnEnd
 import java.lang.ref.WeakReference
@@ -25,7 +25,7 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
   
   private val animator = ValueAnimator().apply {
     duration = DURATION_DEFAULT
-    interpolator = AccelerateDecelerateInterpolator()
+    interpolator = AccelerateDecelerateInterpolator
     addUpdateListener {
       val child = viewReference?.get() ?: return@addUpdateListener
       child.top = it.animatedValue as Int

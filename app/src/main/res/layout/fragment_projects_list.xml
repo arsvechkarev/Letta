@@ -28,7 +28,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/rubik_medium"
-        android:text="All projects"
+        android:text="@string/text_all_projects"
         android:textColor="@color/text_header"
         android:textSize="@dimen/text_h0"/>
 

@@ -10,9 +10,8 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.DURATION_LONG
-import com.arsvechkarev.letta.extensions.dp
-import com.arsvechkarev.letta.extensions.dpInt
+import com.arsvechkarev.letta.core.DURATION_MEDIUM
+import com.arsvechkarev.letta.extensions.getDimen
 
 class ClickableTextView @JvmOverloads constructor(
   context: Context,
@@ -29,11 +28,13 @@ class ClickableTextView @JvmOverloads constructor(
     isClickable = true
     isFocusable = true
     typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
-    setPadding(16.dpInt, 8.dpInt, 16.dpInt, 8.dpInt)
+    val verticalMargin = context.getDimen(R.dimen.clickable_text_view_margin).toInt()
+    val horizontalMargin = (verticalMargin * 1.8f).toInt()
+    setPadding(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin)
   }
   
   private fun setRipple(rippleColor: Int) {
-    val r = 4.dp
+    val r = context.getDimen(R.dimen.corners_radius_default)
     val roundRectShape = RoundRectShape(floatArrayOf(r, r, r, r, r, r, r, r), null, null)
     val backgroundRect = ShapeDrawable().apply {
       shape = roundRectShape
@@ -48,7 +49,7 @@ class ClickableTextView @JvmOverloads constructor(
   
   override fun performClick(): Boolean {
     isClickable = false
-    postDelayed({ isClickable = true }, DURATION_LONG)
+    postDelayed({ isClickable = true }, DURATION_MEDIUM)
     return super.performClick()
   }
 }

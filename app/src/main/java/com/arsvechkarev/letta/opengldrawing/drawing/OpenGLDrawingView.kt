@@ -80,10 +80,10 @@ class OpenGLDrawingView(
       override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
         eglDrawer ?: return true
         if (!shuttingDown) {
-          painting!!.onPause {
+          painting!!.onPause(completionAction = {
             eglDrawer!!.shutdown()
             eglDrawer = null
-          }
+          })
         }
         return true
       }

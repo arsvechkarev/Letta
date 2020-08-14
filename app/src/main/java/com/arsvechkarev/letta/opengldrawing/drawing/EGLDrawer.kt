@@ -105,8 +105,8 @@ class EGLDrawer(
     val bitmaps = arrayOfNulls<Bitmap>(1)
     postRunnable {
       val data = painting.getPaintingData(
-        RectF(0f, 0f, painting.size.width, painting.size.height),
-        false)
+        RectF(0f, 0f, painting.size.width, painting.size.height), false
+      )
       bitmaps[0] = data.bitmap
       latch.countDown()
     }

@@ -33,13 +33,13 @@ class BottomSheetBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
     }
   }
   
+  @Suppress("unused") // Accessible through xml
+  constructor(context: Context, attrs: AttributeSet) : this()
+  
   private fun notifyListeners(child: V) {
     val percent = 1 - (child.top - childMaxTop).toFloat() / (parentBottom - childMaxTop)
     slideListeners.forEach { listener -> listener.invoke(percent) }
   }
-  
-  @Suppress("unused") // Accessible through xml
-  constructor(context: Context, attrs: AttributeSet) : this()
   
   val isShown: Boolean get() = currentState == State.EXPANDED
   

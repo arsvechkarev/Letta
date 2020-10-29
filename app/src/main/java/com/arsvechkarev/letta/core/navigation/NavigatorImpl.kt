@@ -7,8 +7,7 @@ import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.features.drawing.presentation.DrawingFragment
 import com.arsvechkarev.letta.features.projects.presentation.ProjectsListFragment
 
-class NavigatorImpl(private var activity: MainActivity?) :
-  Navigator {
+class NavigatorImpl(private var activity: MainActivity?) : Navigator {
   
   fun init(savedInstantState: Bundle?) {
     if (savedInstantState == null) {
@@ -16,7 +15,7 @@ class NavigatorImpl(private var activity: MainActivity?) :
     }
   }
   
-  fun allowPressBack(): Boolean {
+  fun allowBackPress(): Boolean {
     val fragments = activity!!.supportFragmentManager.fragments
     var resultFragment: NavigableFragment? = null
     for (fragment in fragments) {

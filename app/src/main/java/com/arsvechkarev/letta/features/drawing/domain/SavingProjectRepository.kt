@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.features.drawing.data
+package com.arsvechkarev.letta.features.drawing.domain
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -20,7 +20,7 @@ class BrushAdapter(
       BrushExampleView(parent.context).withParams(
         width = brush_example_size,
         height = brush_example_size,
-        margins = brush_example_margin
+        margin = brush_example_margin
       )
     )
   }

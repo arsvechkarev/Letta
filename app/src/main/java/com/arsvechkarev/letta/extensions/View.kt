@@ -57,3 +57,11 @@ val View.totalHeight: Int
     val params = layoutParams as ViewGroup.MarginLayoutParams
     return params.height + params.topMargin + params.bottomMargin
   }
+
+inline fun <reified T : CoordinatorLayout.Behavior<*>> View.getBehavior(): T {
+  return (layoutParams as CoordinatorLayout.LayoutParams).behavior as T
+}
+
+inline fun <reified T : CoordinatorLayout.Behavior<*>> View.hasBehavior(): Boolean {
+  return (layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? T != null
+}

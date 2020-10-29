@@ -13,7 +13,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.DURATION_SMALL
+import com.arsvechkarev.letta.core.DURATION_SHORT
 import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.i
 
@@ -27,10 +27,10 @@ class CheckmarkView @JvmOverloads constructor(
     color = ContextCompat.getColor(context, R.color.checkmark)
     style = Paint.Style.STROKE
   }
-  private val checkmarkAppear = context.getDrawable(
+  private val checkmarkAppear = ContextCompat.getDrawable(context,
     R.drawable.avd_chechmark_appear) as AnimatedVectorDrawable
   
-  private val checkmarkDisappear = context.getDrawable(
+  private val checkmarkDisappear = ContextCompat.getDrawable(context,
     R.drawable.avd_chechmark_disappear) as AnimatedVectorDrawable
   
   private var currentDrawable = checkmarkDisappear
@@ -61,7 +61,7 @@ class CheckmarkView @JvmOverloads constructor(
   }
   
   private val animator = ValueAnimator().apply {
-    duration = DURATION_SMALL
+    duration = DURATION_SHORT
     interpolator = AccelerateDecelerateInterpolator
     addUpdateListener {
       circlePaint.strokeWidth = it.animatedValue as Float

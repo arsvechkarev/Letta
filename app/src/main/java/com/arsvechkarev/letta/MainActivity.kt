@@ -6,9 +6,7 @@ import com.arsvechkarev.letta.core.navigation.NavigatorImpl
 
 class MainActivity : AppCompatActivity() {
   
-  val navigator by lazy {
-    NavigatorImpl(this@MainActivity)
-  }
+  val navigator by lazy { NavigatorImpl(this@MainActivity) }
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -18,7 +16,7 @@ class MainActivity : AppCompatActivity() {
   }
   
   override fun onBackPressed() {
-    if (navigator.allowPressBack()) {
+    if (navigator.allowBackPress()) {
       super.onBackPressed()
     }
   }

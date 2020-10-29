@@ -1,10 +1,11 @@
-package com.arsvechkarev.letta.features.projects.data
+package com.arsvechkarev.letta.features.projects.domain
 
 import android.content.Context
 import android.graphics.BitmapFactory
 import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.extensions.allProjectsDirectory
+import com.arsvechkarev.letta.extensions.forEachReversed
 import com.arsvechkarev.letta.extensions.hasProjectFiles
 import timber.log.Timber
 import java.io.File
@@ -20,7 +21,7 @@ class ProjectsListRepository(
         val allProjectsDir = context.allProjectsDirectory
         val directories = allProjectsDir.list()
         assertThat(directories != null)
-        directories.forEach { filename ->
+        directories.forEachReversed { filename ->
           val tempFile = File(allProjectsDir, filename)
           val options = BitmapFactory.Options().apply {
             inSampleSize = 4

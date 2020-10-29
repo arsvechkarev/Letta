@@ -135,10 +135,7 @@
       <com.arsvechkarev.letta.views.ProgressBar
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:text="@string/text_cancel"
-        android:textColor="@color/text_primary"
-        android:textSize="@dimen/text_h5"/>
+        android:layout_gravity="center"/>
 
     </LinearLayout>
 

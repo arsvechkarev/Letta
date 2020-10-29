@@ -4,7 +4,7 @@ import com.arsvechkarev.letta.core.ProjectsFilesObserver
 import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
 import com.arsvechkarev.letta.core.mvp.MvpPresenter
-import com.arsvechkarev.letta.features.projects.data.ProjectsListRepository
+import com.arsvechkarev.letta.features.projects.domain.ProjectsListRepository
 
 class ProjectsListPresenter(
   private val repository: ProjectsListRepository,

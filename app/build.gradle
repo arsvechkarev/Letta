@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-  compileSdkVersion 29
+  compileSdkVersion 30
   buildToolsVersion "29.0.3"
   defaultConfig {
     applicationId "com.arsvechkarev.letta"
     minSdkVersion 21
-    targetSdkVersion 29
+    targetSdkVersion 30
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "androidx.benchmark.junit4.AndroidBenchmarkRunner"
@@ -24,20 +24,12 @@ android {
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-  def appCompatVersion = '1.1.0'
-  def lifecycleVersion = '2.2.0'
-  def materialVersion = '1.1.0'
-  def timberVersion = '4.7.1'
+  implementation "androidx.appcompat:appcompat:1.2.0"
+  implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+  implementation "androidx.recyclerview:recyclerview:1.1.0"
+  implementation "com.google.android.material:material:1.2.1"
 
-  def leakCanaryVersion = '2.2'
-  def junitVersion = '4.12'
-
-  implementation "androidx.appcompat:appcompat:$appCompatVersion"
-  implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-  implementation "androidx.recyclerview:recyclerview:$appCompatVersion"
-  implementation "com.google.android.material:material:$materialVersion"
-
-  implementation "com.jakewharton.timber:timber:$timberVersion"
-  debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-  testImplementation "junit:junit:$junitVersion"
+  implementation "com.jakewharton.timber:timber:4.7.1"
+  debugImplementation "com.squareup.leakcanary:leakcanary-android:2.2"
+  testImplementation "junit:junit:4.13"
 }

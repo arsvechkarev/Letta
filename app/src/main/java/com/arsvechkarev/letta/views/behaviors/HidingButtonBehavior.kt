@@ -4,52 +4,57 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.arsvechkarev.letta.extensions.doOnEnd
+import androidx.recyclerview.widget.RecyclerView
 
-class NewProjectButtonBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
+class HidingButtonBehavior(context: Context? = null, attrs: AttributeSet? = null) :
+  CoordinatorLayout.Behavior<View>() {
   
   private var scrolled = 0
   private var isAnimating = false
-  
-  @Suppress("unused") // Accessible through xml
-  constructor(context: Context, attrs: AttributeSet) : this()
+  private var alreadyStartedScrolling = false
   
   override fun onStartNestedScroll(
     coordinatorLayout: CoordinatorLayout,
-    child: V,
+    child: View,
     directTargetChild: View,
     target: View,
     axes: Int,
     type: Int
   ): Boolean {
-    return axes and View.SCROLL_AXIS_VERTICAL != 0
+    if (alreadyStartedScrolling) return true
+    if (target is RecyclerView) {
+      if (target.allowRecyclerScrolling()) {
+        alreadyStartedScrolling = true
+        return true
+      }
+    }
+    return true
   }
   
   override fun onNestedPreScroll(
     coordinatorLayout: CoordinatorLayout,
-    child: V,
+    child: View,
     target: View,
     dx: Int,
     dy: Int,
     consumed: IntArray,
     type: Int
   ) {
-    val range = getRange(child)
-    scrolled = (scrolled + dy).coerceIn(-range.toInt(), range.toInt())
+    scrolled += dy
     val isScrollingDown = dy > 0
     animateIfNeeded(child, isScrollingDown)
   }
   
   override fun onStopNestedScroll(
     coordinatorLayout: CoordinatorLayout,
-    child: V,
+    child: View,
     target: View,
     type: Int
   ) {
     scrolled = 0
   }
   
-  private fun animateIfNeeded(child: V, isScrollingDown: Boolean) {
+  private fun animateIfNeeded(child: View, isScrollingDown: Boolean) {
     if (isAnimating) return
     val range = getRange(child)
     if (isScrollingDown) {
@@ -64,16 +69,16 @@ class NewProjectButtonBehavior<V : View>() : CoordinatorLayout.Behavior<V>() {
     }
   }
   
-  private fun performAnimation(child: V, translation: Float) {
+  private fun performAnimation(child: View, translation: Float) {
     scrolled = 0
     isAnimating = true
     child.animate()
         .translationYBy(translation)
-        .doOnEnd { isAnimating = false }
+        .withEndAction { isAnimating = false }
         .start()
   }
   
-  private fun getRange(child: V): Float {
+  private fun getRange(child: View): Float {
     return child.height * 1.5f
   }
 }

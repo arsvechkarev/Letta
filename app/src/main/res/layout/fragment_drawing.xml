@@ -49,7 +49,7 @@
     android:id="@+id/recyclerBrushes"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"/>
+    android:background="?colorBackground"/>
 
   <com.arsvechkarev.letta.views.HideToolsView
     android:id="@+id/imageHideTools"
@@ -88,9 +88,9 @@
         android:layout_below="@id/headerDialogDiscardChanges"
         android:layout_toStartOf="@id/textDialogDiscard"
         android:text="@string/text_cancel"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/light_text_primary"
         android:textSize="@dimen/text_h5"
-        app:rippleColor="@color/ripple_dark"/>
+        app:rippleColor="@color/light_ripple_dark"/>
 
       <com.arsvechkarev.letta.views.ClickableTextView
         android:id="@+id/textDialogDiscard"
@@ -99,9 +99,9 @@
         android:layout_below="@id/headerDialogDiscardChanges"
         android:layout_alignEnd="@id/headerDialogDiscardChanges"
         android:text="@string/text_discard"
-        android:textColor="@color/failure"
+        android:textColor="@color/light_failure"
         android:textSize="@dimen/text_h5"
-        app:rippleColor="@color/ripple_failure"/>
+        app:rippleColor="@color/light_ripple_failure"/>
 
     </RelativeLayout>
 

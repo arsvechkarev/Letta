@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.arsvechkarev.letta.core.COLOR_BORDER_DARK
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.extensions.dp
 import com.arsvechkarev.letta.extensions.f
 
@@ -20,7 +20,7 @@ class BrushDisplayer @JvmOverloads constructor(
   private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.STROKE
     strokeWidth = 1.dp
-    color = COLOR_BORDER_DARK
+    color = Colors.BorderDark
     maskFilter = BlurMaskFilter(2.dp, BlurMaskFilter.Blur.NORMAL)
   }
   private var radius = 0f

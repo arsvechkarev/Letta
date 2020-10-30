@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <declare-styleable name="GradientPalette">
-    <attr name="android:orientation">
-      <enum name="horizontal" value="0"/>
-      <enum name="vertical" value="1"/>
-    </attr>
-  </declare-styleable>
-
-  <declare-styleable name="ClickableTextView">
-    <attr name="rippleColor" format="color"/>
-  </declare-styleable>
-
-  <declare-styleable name="Image">
-    <attr name="backgroundColor" format="color"/>
-    <attr name="drawStroke" format="boolean"/>
-    <attr name="imageSrc" format="reference"/>
-  </declare-styleable>
-
-  <declare-styleable name="ProgressBar">
-    <attr name="trackWidth" format="dimension"/>
-    <attr name="color" format="color"/>
-  </declare-styleable>
+  <attr name="colorBackground" format="color"/>
+  <attr name="colorBottomSheet" format="color"/>
+  <attr name="colorIconDefault" format="color"/>
+  <attr name="colorIconOpposite" format="color"/>
+  <attr name="colorButton" format="color"/>
+  <attr name="colorButtonGradientStart" format="color"/>
+  <attr name="colorButtonGradientEnd" format="color"/>
+  <attr name="colorTextPrimary" format="color"/>
+  <attr name="colorTextOnButton" format="color"/>
+  <attr name="colorCheckmark" format="color"/>
+  <attr name="colorDivider" format="color"/>
+  <attr name="colorShadow" format="color"/>
+  <attr name="colorFailure" format="color"/>
+  <attr name="colorRipple" format="color"/>
+  <attr name="colorRippleFailure" format="color"/>
+  <attr name="colorRippleDark" format="color"/>
 </resources>

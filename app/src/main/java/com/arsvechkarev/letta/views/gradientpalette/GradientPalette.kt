@@ -21,7 +21,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.core.animations.addBouncyBackEffect
@@ -53,7 +53,7 @@ class GradientPalette @JvmOverloads constructor(
   
   private var gradientMode = RAINBOW
   private val gradientOuterStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = COLOR_BORDER_LIGHT
+    color = Colors.BorderLight
     style = Paint.Style.STROKE
   }
   private val gradientStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -72,7 +72,7 @@ class GradientPalette @JvmOverloads constructor(
   
   // Circle
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = ContextCompat.getColor(context, R.color.background)
+    color = ContextCompat.getColor(context, R.color.light_background)
     style = Paint.Style.STROKE
   }
   
@@ -263,7 +263,8 @@ class GradientPalette @JvmOverloads constructor(
   private fun initGradients() {
     rainbowGradient = palette.createGradient(gradientRect, rainbowColors, rainbowPositions)
     rainbowDarkGradient = palette.createGradient(gradientRect, rainbowDarkColors, rainbowPositions)
-    blackAndWhiteGradient = palette.createGradient(gradientRect, blackAndWhiteColors, blackAndWhitePositions)
+    blackAndWhiteGradient = palette.createGradient(gradientRect, blackAndWhiteColors,
+      blackAndWhitePositions)
   }
   
   private fun drawGradientBitmap() {

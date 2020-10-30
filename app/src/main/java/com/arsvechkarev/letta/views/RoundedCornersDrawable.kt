@@ -12,8 +12,9 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
+import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.COLOR_BORDER_LIGHT
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.extensions.getDimen
 import com.arsvechkarev.letta.extensions.toBitmap
@@ -86,7 +87,8 @@ open class RoundedCornersDrawable(
   companion object {
     
     fun ofBitmap(context: Context, bitmap: Bitmap): RoundedCornersDrawable {
-      return RoundedCornersDrawable(bitmap, COLOR_BORDER_LIGHT, context.getDimen(R.dimen.border_width),
+      return RoundedCornersDrawable(bitmap, Colors.BorderLight,
+        context.getDimen(R.dimen.border_width),
         context.getDimen(R.dimen.corners_radius_big))
     }
     
@@ -96,8 +98,8 @@ open class RoundedCornersDrawable(
       corners: Float = context.getDimen(R.dimen.corners_radius_big)
     ): RoundedCornersDrawable {
       return RoundedCornersDrawable(
-        context.getDrawable(resId)!!.toBitmap(),
-        COLOR_BORDER_LIGHT,
+        ContextCompat.getDrawable(context, resId)!!.toBitmap(),
+        Colors.BorderLight,
         context.getDimen(R.dimen.border_width),
         corners
       )

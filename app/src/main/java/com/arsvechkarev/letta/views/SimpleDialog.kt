@@ -10,7 +10,7 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.widget.FrameLayout
-import com.arsvechkarev.letta.core.COLOR_SHADOW
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.DURATION_MEDIUM
 import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.core.animations.EndOvershootInterpolator
@@ -36,7 +36,7 @@ class SimpleDialog @JvmOverloads constructor(
     duration = DURATION_MEDIUM
     addUpdateListener {
       currentShadowFraction = it.animatedValue as Float
-      val color = lerpColor(Color.TRANSPARENT, COLOR_SHADOW, currentShadowFraction)
+      val color = lerpColor(Color.TRANSPARENT, Colors.Shadow, currentShadowFraction)
       setBackgroundColor(color)
     }
   }

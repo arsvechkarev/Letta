@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-  android:color="@color/ripple">
+  android:color="?colorRipple">
   <item android:id="@android:id/background">
     <shape android:shape="rectangle">
-      <corners android:radius="24dp"/>
+      <corners android:radius="@dimen/create_project_corners"/>
       <gradient
-        android:angle="225"
-        android:endColor="@color/primary"
-        android:startColor="@color/primary_light"/>
+        android:angle="45"
+        android:endColor="@color/light_button_gradient_end"
+        android:startColor="@color/light_button_gradient_start"/>
     </shape>
   </item>
 </ripple>

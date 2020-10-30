@@ -15,7 +15,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.COLOR_DISABLED
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.DURATION_ON_CLICK
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
@@ -31,7 +31,7 @@ open class Image @JvmOverloads constructor(
   
   private val drawStroke: Boolean
   private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val colorFilterDisabled = PorterDuffColorFilter(COLOR_DISABLED, PorterDuff.Mode.SRC_ATOP)
+  private val colorFilterDisabled = PorterDuffColorFilter(Colors.Disabled, PorterDuff.Mode.SRC_ATOP)
   private var image: Drawable?
   private var scaleFactor = 1f
   private val scaleAnimator = ValueAnimator().apply {
@@ -46,7 +46,7 @@ open class Image @JvmOverloads constructor(
   init {
     val arr = context.obtainStyledAttributes(attrs, R.styleable.Image, defStyleAttr, 0)
     image = arr.getDrawable(R.styleable.Image_imageSrc)?.mutate()
-    val defaultColor = ContextCompat.getColor(context, R.color.background)
+    val defaultColor = ContextCompat.getColor(context, R.color.light_background)
     backgroundPaint.color = arr.getColor(R.styleable.Image_backgroundColor, defaultColor)
     drawStroke = arr.getBoolean(R.styleable.Image_drawStroke, true)
     arr.recycle()

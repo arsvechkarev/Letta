@@ -24,7 +24,7 @@ class CheckmarkView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
   
   private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = ContextCompat.getColor(context, R.color.checkmark)
+    color = ContextCompat.getColor(context, R.color.light_checkmark)
     style = Paint.Style.STROKE
   }
   private val checkmarkAppear = ContextCompat.getDrawable(context,

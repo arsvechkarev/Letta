@@ -16,7 +16,7 @@ import android.view.View
 import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.COLOR_BORDER_VERY_LIGHT
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.extensions.dp
 import com.arsvechkarev.letta.extensions.f
@@ -27,7 +27,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
   
-  private val backgroundColor = ContextCompat.getColor(context, R.color.background)
+  private val backgroundColor = ContextCompat.getColor(context, R.color.light_background)
   private val path = Path()
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.FILL
@@ -127,7 +127,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   private fun Paint.setLineStyle() {
-    color = COLOR_BORDER_VERY_LIGHT
+    color = Colors.BorderVeryLight
     strokeWidth = lineWidth
     strokeCap = Paint.Cap.ROUND
   }

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="ic_size_default">24dp</dimen>
-  <dimen name="ic_size_big">40dp</dimen>
-
-  <dimen name="border_width">0.6dp</dimen>
-
-  <dimen name="corners_radius_big">8dp</dimen>
-  <dimen name="corners_radius_default">4dp</dimen>
-  <dimen name="corners_radius_small">2dp</dimen>
-
-  <dimen name="clickable_text_view_margin">8dp</dimen>
-
   <dimen name="text_h5">16sp</dimen>
   <dimen name="text_h4">18sp</dimen>
   <dimen name="text_h3">20sp</dimen>
   <dimen name="text_h2">22sp</dimen>
   <dimen name="text_h1">24sp</dimen>
   <dimen name="text_h0">26sp</dimen>
+
+  <dimen name="ic_size_default">24dp</dimen>
+  <dimen name="ic_size_big">40dp</dimen>
+  <dimen name="border_width">0.6dp</dimen>
+  <dimen name="clickable_text_view_margin">8dp</dimen>
+  <dimen name="corners_radius_big">8dp</dimen>
+  <dimen name="corners_radius_default">4dp</dimen>
+  <dimen name="corners_radius_small">2dp</dimen>
+
+  <dimen name="divider_height">1dp</dimen>
+  <dimen name="divider_margin">8dp</dimen>
 </resources>

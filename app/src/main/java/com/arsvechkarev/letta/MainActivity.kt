@@ -2,6 +2,7 @@ package com.arsvechkarev.letta
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.navigation.NavigatorImpl
 
 class MainActivity : AppCompatActivity() {
@@ -10,7 +11,9 @@ class MainActivity : AppCompatActivity() {
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    LettaApplication.initDensities(resources.displayMetrics.density, resources.displayMetrics.scaledDensity)
+    LettaApplication.initDensities(resources.displayMetrics.density,
+      resources.displayMetrics.scaledDensity)
+    Colors.init(this)
     setContentView(R.layout.activity_main)
     navigator.init(savedInstanceState)
   }

@@ -4,7 +4,7 @@
   android:id="@+id/projectsListRoot"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/background">
+  android:background="?colorBackground">
 
   <LinearLayout
     android:id="@+id/header"
@@ -17,17 +17,17 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center|start"
-      android:padding="12dp"
+      android:padding="@dimen/text_title_padding"
       android:text="@string/text_all_projects"
-      android:textColor="@color/text_primary"
+      android:textColor="?colorTextPrimary"
       android:textSize="@dimen/text_h0"
       android:textStyle="bold"/>
 
     <View
       android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:layout_marginHorizontal="8dp"
-      android:background="#999999"/>
+      android:layout_height="@dimen/divider_height"
+      android:layout_marginHorizontal="@dimen/divider_margin"
+      android:background="?colorDivider"/>
 
   </LinearLayout>
 
@@ -39,8 +39,8 @@
 
   <com.arsvechkarev.letta.views.ProgressBar
     android:id="@+id/projectsProgressBar"
-    android:layout_width="60dp"
-    android:layout_height="60dp"
+    android:layout_width="@dimen/project_progress_bar_size"
+    android:layout_height="@dimen/project_progress_bar_size"
     android:layout_gravity="center"/>
 
   <View
@@ -65,15 +65,15 @@
       android:layout_marginTop="@dimen/text_choose_background_m_top"
       android:gravity="center"
       android:text="@string/text_choose_background"
-      android:textColor="@color/text_primary"
+      android:textColor="?colorTextPrimary"
       android:textSize="@dimen/text_h3"
       android:textStyle="bold"/>
 
     <com.arsvechkarev.letta.views.BorderImageView
       android:id="@+id/backgroundImageExample"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:layout_margin="24dp"
+      android:layout_width="@dimen/image_example_size"
+      android:layout_height="@dimen/image_example_size"
+      android:layout_margin="@dimen/image_example_margin"
       android:scaleType="fitXY"/>
 
     <com.arsvechkarev.letta.views.gradientpalette.GradientPalette
@@ -95,26 +95,26 @@
       android:id="@+id/createNewProjectButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="24dp"
+      android:layout_marginBottom="@dimen/create_project_button_m_bottom"
       android:background="@drawable/bg_create_project"
       android:clickable="true"
       android:focusable="true"
       android:gravity="center"
-      android:padding="6dp">
+      android:padding="@dimen/create_project_button_padding">
 
       <ImageView
-        android:layout_width="26dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="6dp"
+        android:layout_width="@dimen/create_project_icon_size"
+        android:layout_height="@dimen/create_project_icon_size"
+        android:layout_marginStart="@dimen/create_project_margin_horizontal"
         android:src="@drawable/ic_new_project"/>
 
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="6dp"
+        android:layout_marginHorizontal="@dimen/create_project_margin_horizontal"
         android:fontFamily="@font/rubik_medium"
-        android:text="Create project"
-        android:textColor="@color/text_action"
+        android:text="@string/text_create_project"
+        android:textColor="?colorTextOnButton"
         android:textSize="@dimen/text_h4"/>
 
     </LinearLayout>
@@ -123,12 +123,12 @@
 
   <com.arsvechkarev.letta.views.Image
     android:id="@+id/buttonNewProject"
-    android:layout_width="60dp"
-    android:layout_height="60dp"
+    android:layout_width="@dimen/new_project_button_size"
+    android:layout_height="@dimen/new_project_button_size"
     android:layout_gravity="end|bottom"
-    android:layout_margin="16dp"
-    android:padding="8dp"
-    app:backgroundColor="@color/primary"
+    android:layout_margin="@dimen/new_project_button_margin"
+    android:padding="@dimen/new_project_button_padding"
+    app:backgroundColor="?colorButtonGradientStart"
     app:drawStroke="false"
     app:imageSrc="@drawable/ic_new_project"
     app:layout_behavior=".views.behaviors.HidingButtonBehavior"/>

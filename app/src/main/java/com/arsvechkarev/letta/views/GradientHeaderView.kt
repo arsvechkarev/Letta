@@ -18,8 +18,8 @@ class GradientHeaderView @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
   
-  private val primaryColor = ContextCompat.getColor(context, R.color.primary)
-  private val secondaryColor = ContextCompat.getColor(context, R.color.primary_light)
+  private val primaryColor = ContextCompat.getColor(context, R.color.light_button_gradient_start)
+  private val secondaryColor = ContextCompat.getColor(context, R.color.light_button_gradient_end)
   
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val path = Path()

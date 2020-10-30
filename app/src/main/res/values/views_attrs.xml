@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="GradientPalette">
+    <attr name="android:orientation">
+      <enum name="horizontal" value="0"/>
+      <enum name="vertical" value="1"/>
+    </attr>
+  </declare-styleable>
+
+  <declare-styleable name="ClickableTextView">
+    <attr name="rippleColor" format="color"/>
+  </declare-styleable>
+
+  <declare-styleable name="Image">
+    <attr name="backgroundColor" format="color"/>
+    <attr name="drawStroke" format="boolean"/>
+    <attr name="imageSrc" format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="ProgressBar">
+    <attr name="trackWidth" format="dimension"/>
+    <attr name="color" format="color"/>
+  </declare-styleable>
+</resources>

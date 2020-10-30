@@ -11,7 +11,7 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import com.arsvechkarev.letta.core.COLOR_GRAY_SELECTED
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 
@@ -29,7 +29,7 @@ class BrushExampleView @JvmOverloads constructor(
   private var cornersRadius = 0f
   private val selectionRect = RectF()
   private val selectionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = COLOR_GRAY_SELECTED
+    color = Colors.GraySelected
   }
   
   fun updateBitmap(brush: Brush) {

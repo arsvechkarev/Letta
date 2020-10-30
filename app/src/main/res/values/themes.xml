@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <item name="android:windowBackground">?colorBackground</item>
+  </style>
+
+  <style name="AppTheme.Light">
+    <item name="colorBackground">@color/light_background</item>
+    <item name="colorBottomSheet">@color/light_bottom_sheet</item>
+    <item name="colorIconDefault">@color/light_icon_default</item>
+    <item name="colorIconOpposite">@color/light_icon_opposite</item>
+    <item name="colorButton">@color/light_button</item>
+    <item name="colorButtonGradientStart">@color/light_button_gradient_start</item>
+    <item name="colorButtonGradientEnd">@color/light_button_gradient_end</item>
+    <item name="colorTextPrimary">@color/light_text_primary</item>
+    <item name="colorTextOnButton">@color/light_text_on_button</item>
+    <item name="colorCheckmark">@color/light_checkmark</item>
+    <item name="colorDivider">@color/light_divider</item>
+    <item name="colorShadow">@color/light_shadow</item>
+    <item name="colorFailure">@color/light_failure</item>
+    <item name="colorRipple">@color/light_ripple</item>
+    <item name="colorRippleFailure">@color/light_ripple_failure</item>
+    <item name="colorRippleDark">@color/light_ripple_dark</item>
+  </style>
+</resources>

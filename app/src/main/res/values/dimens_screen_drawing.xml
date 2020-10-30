@@ -6,7 +6,7 @@
   <dimen name="img_tool_size">40dp</dimen>
   <dimen name="img_tool_padding">8dp</dimen>
   <dimen name="img_done_size">50dp</dimen>
-  <dimen name="choose_bg_dialog_radius">12dp</dimen>
+  <dimen name="choose_bg_dialog_radius">32dp</dimen>
   <dimen name="palette_smallest_size">32dp</dimen>
   <dimen name="palette_biggest_size">280dp</dimen>
   <dimen name="palette_padding">8dp</dimen>

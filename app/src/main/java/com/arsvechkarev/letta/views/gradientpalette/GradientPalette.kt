@@ -2,7 +2,6 @@ package com.arsvechkarev.letta.views.gradientpalette
 
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -174,26 +173,22 @@ class GradientPalette @JvmOverloads constructor(
     }
   }
   
-  @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
     when (event.action) {
       ACTION_DOWN -> {
         updateValues(event)
         updateCircleAnimation(animateBack = false)
-        return true
       }
       ACTION_MOVE -> {
         updateValues(event)
         invalidate()
-        return true
       }
       ACTION_UP, ACTION_CANCEL -> {
         updateValues(event)
         updateCircleAnimation(animateBack = true)
-        return true
       }
     }
-    return false
+    return true
   }
   
   fun swapGradientMode() {

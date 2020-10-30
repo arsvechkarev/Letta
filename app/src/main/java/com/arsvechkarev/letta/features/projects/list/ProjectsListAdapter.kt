@@ -25,8 +25,8 @@ class ProjectsListAdapter(
   }
   
   fun addProject(project: Project) {
-    (data as ArrayList<Project>).add(0, project)
-    notifyItemInserted(0)
+    (data as ArrayList<Project>).add(project)
+    notifyItemInserted(data.lastIndex)
   }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {

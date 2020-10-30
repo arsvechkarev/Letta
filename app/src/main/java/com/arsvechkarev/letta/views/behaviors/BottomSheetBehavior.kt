@@ -19,8 +19,8 @@ import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.State.HIDDEN
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.State.SHOWN
 import kotlin.math.abs
 
-class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
-  CoordinatorLayout.Behavior<V>() {
+class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
+  CoordinatorLayout.Behavior<View>() {
   
   enum class State {
     SHOWN, HIDDEN
@@ -33,6 +33,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
   private var latestY = -1
   private var velocityTracker: VelocityTracker? = null
   private var bottomSheetOffsetHelper: BottomSheetOffsetHelper? = null
+  private val offsetListeners = ArrayList<((percentageOpened: Float) -> Unit)>()
   
   private var currentState = HIDDEN
   private var bottomSheet: View? = null
@@ -53,10 +54,9 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
   fun show() {
     bottomSheet!!.post {
       if (currentState == SHOWN || slideAnimator.isRunning) return@post
-      currentState = SHOWN
       slideAnimator.duration = DURATION_SLIDE
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight - slideRange)
-      slideAnimator.doOnEnd(onShow)
+      slideAnimator.doOnEnd { currentState = SHOWN; onShow() }
       slideAnimator.start()
     }
   }
@@ -64,30 +64,43 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
   fun hide() {
     bottomSheet!!.post {
       if (currentState == HIDDEN || slideAnimator.isRunning) return@post
-      currentState = HIDDEN
       slideAnimator.duration = DURATION_SLIDE
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
-      slideAnimator.doOnEnd(onHide)
+      slideAnimator.doOnEnd { currentState = HIDDEN; onHide() }
       slideAnimator.start()
     }
   }
   
-  override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
-    child.layout(0, parent.height - child.measuredHeight, parent.width, parent.height)
+  fun addSlideListener(listener: (percentageOpened: Float) -> Unit) {
+    offsetListeners.add(listener)
+  }
+  
+  override fun onLayoutChild(
+    parent: CoordinatorLayout,
+    child: View,
+    layoutDirection: Int
+  ): Boolean {
+    val top: Int
+    when (currentState) {
+      HIDDEN -> top = parent.height
+      SHOWN -> top = parent.height - child.measuredHeight
+    }
+    child.layout(0, top, parent.width, top + child.measuredHeight)
     bottomSheet = child
-    slideRange = child.height
     parentHeight = parent.height
-    if (bottomSheetOffsetHelper == null) {
-      bottomSheetOffsetHelper = BottomSheetOffsetHelper(child)
-    }
-    bottomSheetOffsetHelper!!.onViewLayout(parentHeight)
-    if (currentState == HIDDEN) {
-      bottomSheet!!.top = parentHeight
-    }
+    slideRange = child.measuredHeight
+    bottomSheetOffsetHelper?.release()
+    bottomSheetOffsetHelper = BottomSheetOffsetHelper(
+      child, parentHeight, parentHeight - child.measuredHeight, ::notifyOffsetListeners,
+    )
     return true
   }
   
-  override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
+  override fun onInterceptTouchEvent(
+    parent: CoordinatorLayout,
+    child: View,
+    event: MotionEvent
+  ): Boolean {
     if (slideAnimator.isRunning) return false
     val action = event.action
     if (action == ACTION_MOVE && isBeingDragged) {
@@ -129,7 +142,11 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
     return isBeingDragged
   }
   
-  override fun onTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
+  override fun onTouchEvent(
+    parent: CoordinatorLayout,
+    child: View,
+    event: MotionEvent
+  ): Boolean {
     if (slideAnimator.isRunning) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
@@ -219,11 +236,15 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
     velocityTracker = null
   }
   
+  private fun notifyOffsetListeners(percentageOpened: Float) {
+    offsetListeners.forEach { it.invoke(percentageOpened) }
+  }
+  
   companion object {
+    
     private const val DURATION_SLIDE = 225L
     private const val FLING_VELOCITY_THRESHOLD = 0.18f
     
-    val View.asBottomSheet: BottomSheetBehavior<*>
-      get() = getBehavior()
+    val View.asBottomSheet get() = getBehavior<BottomSheetBehavior>()
   }
 }

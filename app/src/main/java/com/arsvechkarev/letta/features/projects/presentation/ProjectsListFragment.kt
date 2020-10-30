@@ -5,23 +5,25 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.arsvechkarev.letta.LettaApplication
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.model.BackgroundType.Color
 import com.arsvechkarev.letta.core.model.BackgroundType.DrawableRes
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
 import com.arsvechkarev.letta.extensions.animateInvisibleAndScale
-import com.arsvechkarev.letta.extensions.behavior
+import com.arsvechkarev.letta.extensions.lerpColor
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createDrawableResArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createProjectArgs
 import com.arsvechkarev.letta.features.projects.domain.ProjectsListRepository
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter
-import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior
+import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.State.SHOWN
 import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImageExample
 import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImagePalette
 import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImagesRecyclerView
+import kotlinx.android.synthetic.main.fragment_projects_list.bottomSheetShadowView
 import kotlinx.android.synthetic.main.fragment_projects_list.buttonNewProject
 import kotlinx.android.synthetic.main.fragment_projects_list.createNewProjectButton
 import kotlinx.android.synthetic.main.fragment_projects_list.dialogProjectBackground
@@ -69,9 +71,9 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   override fun onBackPressed(): Boolean {
-    val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
-    if (behavior.state == SHOWN) {
-      behavior.hide()
+    val bottomSheet = dialogProjectBackground.asBottomSheet
+    if (bottomSheet.state == SHOWN) {
+      bottomSheet.hide()
       return false
     }
     return true
@@ -83,9 +85,18 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   private fun prepareNewProjectDialog() {
-    val behavior = dialogProjectBackground.behavior<BottomSheetBehavior<*>>()
-    buttonNewProject.setOnClickListener { behavior.show() }
+    val bottomSheet = dialogProjectBackground.asBottomSheet
+    buttonNewProject.setOnClickListener { bottomSheet.show() }
     createNewProjectButton.setOnClickListener { openNewProject() }
+    bottomSheet.addSlideListener { percentageOpened ->
+      val color = lerpColor(Colors.Transparent, Colors.Shadow, percentageOpened)
+      bottomSheetShadowView.setBackgroundColor(color)
+    }
+    bottomSheet.addSlideListener { percentageOpened ->
+      buttonNewProject.alpha = 1 - percentageOpened
+      buttonNewProject.translationY = (buttonNewProject.measuredHeight / 2f) * percentageOpened
+      buttonNewProject.isClickable = buttonNewProject.alpha != 0f
+    }
   }
   
   private fun openNewProject() {

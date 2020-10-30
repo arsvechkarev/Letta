@@ -6,6 +6,7 @@ import com.arsvechkarev.letta.extensions.getAttrColor
 
 object Colors {
   
+  const val Transparent = 0
   const val Disabled = 0xFF999999.toInt()
   const val GraySelected = 0xFFAAAAAA.toInt()
   const val BorderDark = 0xFF555555.toInt()

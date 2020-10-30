@@ -35,11 +35,6 @@ fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
   return LayoutInflater.from(context).inflate(layoutRes, this, false)
 }
 
-@Suppress("UNCHECKED_CAST")
-fun <T : CoordinatorLayout.Behavior<*>> View.behavior(): T {
-  return (layoutParams as CoordinatorLayout.LayoutParams).behavior as T
-}
-
 inline fun ViewGroup.findChild(predicate: (View) -> Boolean): View {
   for (i in 0 until childCount) {
     val child = getChildAt(i)

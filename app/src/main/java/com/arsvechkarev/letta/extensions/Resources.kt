@@ -4,9 +4,7 @@ import android.content.Context
 import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
-import androidx.core.content.res.ResourcesCompat
 import com.arsvechkarev.letta.LettaApplication
 
 val Int.dp get() = this * LettaApplication.density
@@ -25,8 +23,4 @@ fun Context.getAttrColor(@AttrRes resId: Int): Int {
 
 fun Context.getDimen(@DimenRes resId: Int): Float {
   return resources.getDimension(resId)
-}
-
-fun Context.retrieveColor(@ColorRes resId: Int): Int {
-  return ResourcesCompat.getColor(resources, resId, theme)
 }

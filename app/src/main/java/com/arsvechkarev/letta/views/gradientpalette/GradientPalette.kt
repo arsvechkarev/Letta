@@ -19,13 +19,12 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
-import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.STROKE_PAINT
-import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
-import com.arsvechkarev.letta.core.animations.addBouncyBackEffect
+import com.arsvechkarev.letta.core.addBouncyBackEffect
 import com.arsvechkarev.letta.core.model.Circle
+import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.f
@@ -72,7 +71,7 @@ class GradientPalette @JvmOverloads constructor(
   
   // Circle
   private val circleStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = ContextCompat.getColor(context, R.color.light_background)
+    color = Colors.Background
     style = Paint.Style.STROKE
   }
   

@@ -14,8 +14,6 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.annotation.FloatRange
-import androidx.core.content.ContextCompat
-import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.extensions.dp
@@ -27,7 +25,6 @@ class VerticalSeekbar @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
   
-  private val backgroundColor = ContextCompat.getColor(context, R.color.light_background)
   private val path = Path()
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.FILL
@@ -122,7 +119,7 @@ class VerticalSeekbar @JvmOverloads constructor(
   }
   
   private fun Paint.setPathStyle() {
-    color = backgroundColor
+    color = Colors.Background
     style = Paint.Style.FILL
   }
   

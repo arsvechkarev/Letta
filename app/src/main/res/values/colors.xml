@@ -10,7 +10,7 @@
   <color name="light_text_primary">#000000</color>
   <color name="light_text_on_button">#FFFFFF</color>
   <color name="light_checkmark">#00CC2C</color>
-  <color name="light_divider">#979797</color>
+  <color name="light_divider">#BCBCBC</color>
   <color name="light_shadow">#66000000</color>
   <color name="light_failure">#E64545</color>
   <color name="light_ripple">#99FFFFFF</color>

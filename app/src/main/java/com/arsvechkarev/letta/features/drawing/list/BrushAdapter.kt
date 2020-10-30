@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.arsvechkarev.letta.R.dimen.brush_example_margin
 import com.arsvechkarev.letta.R.dimen.brush_example_size
 import com.arsvechkarev.letta.core.recycler.SingleSelectionAdapter
-import com.arsvechkarev.letta.core.withParams
+import com.arsvechkarev.letta.extensions.withParams
 import com.arsvechkarev.letta.features.drawing.list.BrushAdapter.BrushViewHolder
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 import com.arsvechkarev.letta.views.BrushExampleView
@@ -20,7 +20,7 @@ class BrushAdapter(
       BrushExampleView(parent.context).withParams(
         width = brush_example_size,
         height = brush_example_size,
-        margin = brush_example_margin
+        marginRes = brush_example_margin
       )
     )
   }

@@ -12,12 +12,11 @@ import android.view.View
 import android.widget.FrameLayout
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.DURATION_MEDIUM
-import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
-import com.arsvechkarev.letta.core.animations.EndOvershootInterpolator
 import com.arsvechkarev.letta.core.assertThat
+import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
+import com.arsvechkarev.letta.extensions.EndOvershootInterpolator
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.contains
-import com.arsvechkarev.letta.extensions.doOnEnd
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.extensions.gone
 import com.arsvechkarev.letta.extensions.lerpColor
@@ -94,7 +93,7 @@ class SimpleDialog @JvmOverloads constructor(
           .translationY(getTranslationForDialogView())
           .setDuration((DURATION_MEDIUM * 0.8).toLong())
           .setInterpolator(AccelerateDecelerateInterpolator)
-          .doOnEnd { gone() }
+          .withEndAction { gone() }
           .start()
     }
   }

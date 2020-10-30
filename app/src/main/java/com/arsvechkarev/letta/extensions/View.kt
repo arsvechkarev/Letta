@@ -4,8 +4,12 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DimenRes
 import androidx.annotation.LayoutRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 operator fun View.contains(event: MotionEvent): Boolean {
   val x = event.x
@@ -64,4 +68,35 @@ inline fun <reified T : CoordinatorLayout.Behavior<*>> View.getBehavior(): T {
 
 inline fun <reified T : CoordinatorLayout.Behavior<*>> View.hasBehavior(): Boolean {
   return (layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? T != null
+}
+
+fun <V : View> V.withParams(
+  @DimenRes width: Int,
+  @DimenRes height: Int,
+  @DimenRes marginRes: Int
+): V {
+  val params = ViewGroup.MarginLayoutParams(
+    context.getDimen(width).toInt(),
+    context.getDimen(height).toInt()
+  )
+  val margin = context.getDimen(marginRes).toInt()
+  params.setMargins(margin, margin, margin, margin)
+  layoutParams = params
+  return this
+}
+
+@OptIn(ExperimentalContracts::class)
+inline fun View.withParams(block: View.(ViewGroup.MarginLayoutParams) -> Unit) {
+  contract {
+    callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+  }
+  block.invoke(this, layoutParams as ViewGroup.MarginLayoutParams)
+}
+
+fun View.layoutNormal(left: Int, top: Int, right: Int, bottom: Int) {
+  layout(left, top, right, bottom)
+}
+
+fun View.layoutWithLeftTop(left: Int, top: Int, params: ViewGroup.LayoutParams) {
+  layout(left, top, left + params.width, top + params.height)
 }

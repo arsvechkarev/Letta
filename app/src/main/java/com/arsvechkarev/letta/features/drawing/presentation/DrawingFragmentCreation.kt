@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.os.Bundle
 import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.core.model.Project
 
 private const val TYPE = "TYPE"
@@ -58,7 +59,7 @@ fun getBitmapBy(context: Context, arguments: Bundle): Bitmap {
       val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
       val canvas = Canvas(bitmap)
       val drawableRes = arguments.getInt(DRAWABLE_RES)
-      val drawable = context.getDrawable(drawableRes)!!
+      val drawable = ContextCompat.getDrawable(context, drawableRes)!!
       drawable.setBounds(0, 0, width, height)
       drawable.draw(canvas)
       return bitmap

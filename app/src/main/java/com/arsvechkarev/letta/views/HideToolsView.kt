@@ -9,7 +9,7 @@ import android.util.AttributeSet
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.DURATION_DEFAULT
 import com.arsvechkarev.letta.core.DURATION_SHORT
-import com.arsvechkarev.letta.core.animations.AccelerateDecelerateInterpolator
+import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.toBitmap
 

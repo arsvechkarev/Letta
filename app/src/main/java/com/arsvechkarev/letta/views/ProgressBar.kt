@@ -9,7 +9,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.animations.LinearInterpolator
+import com.arsvechkarev.letta.extensions.LinearInterpolator
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.dpInt
 import com.arsvechkarev.letta.extensions.execute

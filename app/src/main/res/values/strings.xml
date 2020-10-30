@@ -4,6 +4,7 @@
   <string name="text_choose_background">Choose background</string>
   <string name="text_all_projects">All projects</string>
   <string name="text_you_have_unsaved_changes">You have unsaved changes.\nDo you want to discard them?</string>
+  <string name="text_saving_image">Saving image…</string>
   <string name="text_cancel">CANCEL</string>
   <string name="text_discard">DISCARD</string>
 </resources>

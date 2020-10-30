@@ -5,12 +5,12 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.arsvechkarev.letta.LettaApplication
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.animations.animateInvisibleAndScale
 import com.arsvechkarev.letta.core.model.BackgroundType.Color
 import com.arsvechkarev.letta.core.model.BackgroundType.DrawableRes
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
+import com.arsvechkarev.letta.extensions.animateInvisibleAndScale
 import com.arsvechkarev.letta.extensions.behavior
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createDrawableResArgs
@@ -30,8 +30,7 @@ import kotlinx.android.synthetic.main.fragment_projects_list.projectsProgressBar
 import kotlinx.android.synthetic.main.fragment_projects_list.recyclerAllProjects
 
 class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter>(
-  ProjectsListPresenter::class,
-  layout = R.layout.fragment_projects_list
+  ProjectsListPresenter::class, R.layout.fragment_projects_list
 ), ProjectsListView {
   
   private lateinit var chooseBgContainer: ChooseBgContainer

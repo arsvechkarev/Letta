@@ -18,4 +18,5 @@
   <dimen name="dialog_discard_changes_padding">20dp</dimen>
   <dimen name="header_discard_m_horizontal">8dp</dimen>
   <dimen name="header_discard_m_bottom">24dp</dimen>
+  <dimen name="dialog_saving_image_progress_size">40dp</dimen>
 </resources>

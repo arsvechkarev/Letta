@@ -2,13 +2,9 @@ package com.arsvechkarev.letta.extensions
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
-import android.view.View
-import com.arsvechkarev.letta.BuildConfig
 import com.arsvechkarev.letta.core.assertThat
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -80,16 +76,4 @@ fun Int.withAlpha(alpha: Int): Int {
   assertThat(alpha in 0..255) { "Incorrect alpha" }
   val a = alpha shl 24
   return this and 0x00FFFFFF or a
-}
-
-// Only in debug
-fun View.drawBounds(canvas: Canvas, color: Int = Color.RED) {
-  if (!BuildConfig.DEBUG) {
-    throw IllegalStateException("Nope")
-  }
-  canvas.drawRect(Rect(0, 0, width, height), Paint().apply {
-    style = Paint.Style.STROKE
-    this.color = color
-    strokeWidth = 5f
-  })
 }

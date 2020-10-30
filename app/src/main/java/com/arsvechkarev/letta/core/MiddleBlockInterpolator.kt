@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.core.animations
+package com.arsvechkarev.letta.core
 
 import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator

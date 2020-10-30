@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 
 interface Brush {
+  
   val spacing: Float
   val alpha: Float
   val stamp: Int

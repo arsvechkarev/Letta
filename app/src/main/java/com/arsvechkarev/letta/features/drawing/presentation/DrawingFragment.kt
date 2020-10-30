@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.animations.rotate
 import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
+import com.arsvechkarev.letta.extensions.rotate
 import com.arsvechkarev.letta.features.drawing.domain.SavingProjectRepository
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.brushes.BRUSHES

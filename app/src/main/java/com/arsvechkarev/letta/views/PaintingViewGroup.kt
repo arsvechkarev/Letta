@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.IdRes
 import com.arsvechkarev.letta.R
-import com.arsvechkarev.letta.core.layoutNormal
-import com.arsvechkarev.letta.core.layoutWithLeftTop
-import com.arsvechkarev.letta.core.withParams
 import com.arsvechkarev.letta.extensions.findChild
 import com.arsvechkarev.letta.extensions.isNotGone
+import com.arsvechkarev.letta.extensions.layoutNormal
+import com.arsvechkarev.letta.extensions.layoutWithLeftTop
 import com.arsvechkarev.letta.extensions.totalHeight
 import com.arsvechkarev.letta.extensions.totalWidth
+import com.arsvechkarev.letta.extensions.withParams
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 

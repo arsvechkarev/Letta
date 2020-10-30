@@ -78,7 +78,7 @@
         android:layout_marginBottom="@dimen/header_discard_m_bottom"
         android:gravity="center"
         android:text="@string/text_you_have_unsaved_changes"
-        android:textColor="@android:color/black"
+        android:textColor="?colorTextPrimary"
         android:textSize="@dimen/text_h4"/>
 
       <com.arsvechkarev.letta.views.ClickableTextView
@@ -88,9 +88,9 @@
         android:layout_below="@id/headerDialogDiscardChanges"
         android:layout_toStartOf="@id/textDialogDiscard"
         android:text="@string/text_cancel"
-        android:textColor="@color/light_text_primary"
+        android:textColor="?colorTextPrimary"
         android:textSize="@dimen/text_h5"
-        app:rippleColor="@color/light_ripple_dark"/>
+        app:rippleColor="?colorRippleDark"/>
 
       <com.arsvechkarev.letta.views.ClickableTextView
         android:id="@+id/textDialogDiscard"
@@ -99,9 +99,9 @@
         android:layout_below="@id/headerDialogDiscardChanges"
         android:layout_alignEnd="@id/headerDialogDiscardChanges"
         android:text="@string/text_discard"
-        android:textColor="@color/light_failure"
+        android:textColor="?colorFailure"
         android:textSize="@dimen/text_h5"
-        app:rippleColor="@color/light_ripple_failure"/>
+        app:rippleColor="?colorRippleFailure"/>
 
     </RelativeLayout>
 
@@ -127,14 +127,14 @@
         android:layout_marginHorizontal="@dimen/header_discard_m_horizontal"
         android:layout_marginBottom="@dimen/header_discard_m_bottom"
         android:gravity="center"
-        android:text="Saving image..."
-        android:textColor="@android:color/black"
+        android:text="@string/text_saving_image"
+        android:textColor="?colorTextPrimary"
         android:textSize="@dimen/text_h4"
         android:textStyle="bold"/>
 
       <com.arsvechkarev.letta.views.ProgressBar
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/dialog_saving_image_progress_size"
+        android:layout_height="@dimen/dialog_saving_image_progress_size"
         android:layout_gravity="center"/>
 
     </LinearLayout>

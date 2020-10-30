@@ -95,3 +95,16 @@ fun View.layoutNormal(left: Int, top: Int, right: Int, bottom: Int) {
 fun View.layoutWithLeftTop(left: Int, top: Int, params: ViewGroup.LayoutParams) {
   layout(left, top, left + params.width, top + params.height)
 }
+
+fun View.paddings(
+  start: Int = 0,
+  top: Int = 0,
+  end: Int = 0,
+  bottom: Int = 0
+) {
+  if (isLayoutLeftToRight) {
+    setPadding(start, top, end, bottom)
+  } else {
+    setPadding(end, top, start, bottom)
+  }
+}

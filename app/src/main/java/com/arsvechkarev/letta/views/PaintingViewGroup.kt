@@ -8,6 +8,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.IdRes
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.extensions.findChild
+import com.arsvechkarev.letta.extensions.getStatusBarHeight
 import com.arsvechkarev.letta.extensions.isNotGone
 import com.arsvechkarev.letta.extensions.layoutNormal
 import com.arsvechkarev.letta.extensions.layoutWithLeftTop
@@ -52,6 +53,7 @@ class PaintingViewGroup @JvmOverloads constructor(
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     val height = b - t
     val width = r - l
+    val statusBarHeight = context.getStatusBarHeight()
     val imageDone = childWithId(R.id.imageDone)
     val imageUndo = childWithId(R.id.imageUndo)
     val imageSwapGradient = childWithId(R.id.imageSwapGradient)
@@ -66,9 +68,9 @@ class PaintingViewGroup @JvmOverloads constructor(
       imageDoneOffset = maxOf(params.width, params.height) / 5
       layoutNormal(
         left = width - params.width - imageDoneOffset,
-        top = imageDoneOffset,
+        top = imageDoneOffset + statusBarHeight,
         right = width - imageDoneOffset,
-        bottom = imageDoneOffset + params.height
+        bottom = imageDoneOffset + statusBarHeight + params.height
       )
     }
   
@@ -76,9 +78,9 @@ class PaintingViewGroup @JvmOverloads constructor(
       val imageUndoOffset = maxOf(params.width, params.height) / 4
       layoutNormal(
         left = imageUndoOffset,
-        top = imageUndoOffset,
+        top = imageUndoOffset + statusBarHeight,
         right = imageUndoOffset + params.width,
-        bottom = imageUndoOffset + params.height
+        bottom = imageUndoOffset + statusBarHeight + params.height
       )
     }
   

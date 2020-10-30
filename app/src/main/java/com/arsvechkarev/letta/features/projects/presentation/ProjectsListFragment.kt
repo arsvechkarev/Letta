@@ -12,7 +12,10 @@ import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
 import com.arsvechkarev.letta.extensions.animateInvisibleAndScale
+import com.arsvechkarev.letta.extensions.getDimen
+import com.arsvechkarev.letta.extensions.getStatusBarHeight
 import com.arsvechkarev.letta.extensions.lerpColor
+import com.arsvechkarev.letta.extensions.paddings
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createDrawableResArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createProjectArgs
@@ -30,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_projects_list.dialogProjectBackgr
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsListRoot
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsProgressBar
 import kotlinx.android.synthetic.main.fragment_projects_list.recyclerAllProjects
+import kotlinx.android.synthetic.main.fragment_projects_list.titleAllProjects
 
 class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter>(
   ProjectsListPresenter::class, R.layout.fragment_projects_list
@@ -48,9 +52,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    recyclerAllProjects.adapter = adapter
-    recyclerAllProjects.layoutManager = GridLayoutManager(requireContext(), 3,
-      GridLayoutManager.VERTICAL, false)
+    initViews()
     presenter.startLoadingProjects()
     prepareNewProjectDialog()
     chooseBgContainer = ChooseBgContainer(backgroundImageExample, backgroundImagePalette,
@@ -82,6 +84,18 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   override fun onDestroyView() {
     super.onDestroyView()
     recyclerAllProjects.adapter = null
+  }
+  
+  private fun initViews() {
+    recyclerAllProjects.adapter = adapter
+    recyclerAllProjects.layoutManager = GridLayoutManager(requireContext(), 3,
+      GridLayoutManager.VERTICAL, false)
+    val padding = requireContext().getDimen(R.dimen.text_title_padding).toInt()
+    titleAllProjects.paddings(
+      top = requireContext().getStatusBarHeight() + padding,
+      start = padding,
+      bottom = padding,
+    )
   }
   
   private fun prepareNewProjectDialog() {

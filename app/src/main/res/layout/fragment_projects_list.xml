@@ -3,8 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/projectsListRoot"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="?colorBackground">
+  android:layout_height="match_parent">
 
   <LinearLayout
     android:id="@+id/header"
@@ -14,6 +13,7 @@
     app:layout_behavior=".views.behaviors.HeaderBehavior">
 
     <TextView
+      android:id="@+id/titleAllProjects"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center|start"
@@ -112,7 +112,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/create_project_margin_horizontal"
-        android:fontFamily="@font/rubik_medium"
         android:text="@string/text_create_project"
         android:textColor="?colorTextOnButton"
         android:textSize="@dimen/text_h4"/>

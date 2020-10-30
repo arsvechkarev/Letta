@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+  <style name="BaseTheme" parent="Theme.AppCompat.NoActionBar">
+    <item name="android:windowTranslucentStatus">true</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
+  </style>
+
+  <style name="AppTheme" parent="BaseTheme">
     <item name="android:windowBackground">?colorBackground</item>
+    <item name="android:textViewStyle">@style/TextView</item>
   </style>
 
   <style name="AppTheme.Light">

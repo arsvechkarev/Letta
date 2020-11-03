@@ -5,7 +5,9 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
+import android.view.ViewConfiguration
 import com.arsvechkarev.letta.extensions.findParent
+import kotlin.math.abs
 
 class NewProjectButton @JvmOverloads constructor(
   context: Context,
@@ -19,6 +21,8 @@ class NewProjectButton @JvmOverloads constructor(
   private var isAnimating = false
   private var latestY = 0f
   
+  var allowAnimating = true
+  
   private val motionListener: (MotionEvent) -> Unit = { event ->
     when (event.action) {
       ACTION_DOWN -> {
@@ -26,10 +30,12 @@ class NewProjectButton @JvmOverloads constructor(
       }
       ACTION_MOVE -> {
         val dy = event.y - latestY
-        if (dy < 0) {
-          animate(isScrollingDown = true)
-        } else {
-          animate(isScrollingDown = false)
+        if (abs(dy) > ViewConfiguration.get(context).scaledTouchSlop) {
+          if (dy < 0) {
+            animate(isScrollingDown = true)
+          } else {
+            animate(isScrollingDown = false)
+          }
         }
       }
     }
@@ -46,7 +52,7 @@ class NewProjectButton @JvmOverloads constructor(
   }
   
   private fun animate(isScrollingDown: Boolean) {
-    if (isAnimating) return
+    if (isAnimating || !allowAnimating) return
     val range = getRange()
     if (isScrollingDown) {
       if (translationY <= 0f) {
@@ -62,7 +68,7 @@ class NewProjectButton @JvmOverloads constructor(
   private fun performAnimation(translation: Float) {
     isAnimating = true
     animate()
-        .yBy(translation)
+        .translationYBy(translation)
         .withEndAction { isAnimating = false }
         .start()
   }

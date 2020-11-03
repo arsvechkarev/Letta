@@ -112,6 +112,8 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   
   private fun prepareNewProjectDialog() {
     val bottomSheet = dialogProjectBackground.asBottomSheet
+    bottomSheet.onShow = { buttonNewProject.allowAnimating = false }
+    bottomSheet.onHide = { buttonNewProject.allowAnimating = true }
     buttonNewProject.setOnClickListener { bottomSheet.show() }
     createNewProjectButton.setOnClickListener { openNewProject() }
     bottomSheet.addSlideListener { percentageOpened ->

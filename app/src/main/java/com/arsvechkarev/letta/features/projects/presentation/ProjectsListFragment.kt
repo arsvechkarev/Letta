@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.GridLayoutManager
-import com.arsvechkarev.letta.LettaApplication
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.model.BackgroundType.Color
 import com.arsvechkarev.letta.core.model.BackgroundType.DrawableRes
+import com.arsvechkarev.letta.core.model.LoadingMoreProjects
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
@@ -20,13 +20,9 @@ import com.arsvechkarev.letta.extensions.paddings
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createDrawableResArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createProjectArgs
-import com.arsvechkarev.letta.features.projects.domain.ProjectsListRepository
-import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter
+import com.arsvechkarev.letta.features.projects.di.ProjectsListDi
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.State.SHOWN
-import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImageExample
-import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImagePalette
-import kotlinx.android.synthetic.main.fragment_projects_list.backgroundImagesRecyclerView
 import kotlinx.android.synthetic.main.fragment_projects_list.bottomSheetShadowView
 import kotlinx.android.synthetic.main.fragment_projects_list.buttonNewProject
 import kotlinx.android.synthetic.main.fragment_projects_list.createNewProjectButton
@@ -41,25 +37,30 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   ProjectsListPresenter::class, R.layout.fragment_projects_list
 ), ProjectsListView {
   
-  private lateinit var chooseBgContainer: ChooseBgContainer
+  private val chooseBgContainer by lazy {
+    ProjectsListDi.provideChooseBgContainer(this)
+  }
   
-  private val adapter = ProjectsListAdapter(onProjectClick = { project ->
-    navigator.openProject(createProjectArgs(
-      project, projectsListRoot.width, projectsListRoot.height
-    ))
-  })
+  private val adapter by lazy {
+    ProjectsListDi.provideAdapter(onProjectClick = { project ->
+      navigator.openProject(createProjectArgs(
+        project, projectsListRoot.width, projectsListRoot.height
+      ))
+    }, onReadyToLoadFurtherData = {
+      presenter.loadProjects()
+    })
+  }
   
   override fun createPresenter(): ProjectsListPresenter {
-    return ProjectsListPresenter(ProjectsListRepository(LettaApplication.appContext))
+    return ProjectsListDi.providePresenter(this)
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     StatusBar.setLightStatusBar(requireActivity())
     initViews()
-    presenter.startLoadingProjects()
+    presenter.loadProjects()
+    chooseBgContainer.initialize()
     prepareNewProjectDialog()
-    chooseBgContainer = ChooseBgContainer(backgroundImageExample, backgroundImagePalette,
-      backgroundImagesRecyclerView)
   }
   
   override fun onSwitchToSelectionMode() {
@@ -70,13 +71,21 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     adapter.switchBackFromSelectionMode()
   }
   
-  override fun onLoadedProjects(list: List<Project>) {
+  override fun onLoadedFirstProjects(list: List<Project>) {
     adapter.submitList(list)
     projectsProgressBar.animateInvisibleAndScale()
   }
   
-  override fun onProjectAdded(project: Project) {
-    adapter.addProject(project)
+  override fun onLoadingMoreProjects() {
+    adapter.addLoadingItem(LoadingMoreProjects)
+  }
+  
+  override fun onLoadedMoreProjects(list: List<Project>) {
+    adapter.removeLastAndAdd(list)
+  }
+  
+  override fun onProjectCreated(project: Project) {
+    adapter.addItem(project)
   }
   
   override fun projectsAreEmpty() {

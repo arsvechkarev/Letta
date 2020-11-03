@@ -16,7 +16,7 @@ class ChooseBgContainer(
   private val backgroundImagesRecyclerView: RecyclerView
 ) {
   
-  init {
+  fun initialize() {
     val adapter = initializeAdapter()
     paletteBackground.onColorChangedByTouch = {
       adapter.disableSelection()

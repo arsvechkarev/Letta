@@ -9,6 +9,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.extensions.LinearInterpolator
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.dpInt
@@ -48,7 +49,7 @@ class ProgressBar @JvmOverloads constructor(
   init {
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.ProgressBar, 0, 0)
     trackWidth = attributes.getDimension(R.styleable.ProgressBar_trackWidth, -1f)
-    paint.color = attributes.getColor(R.styleable.ProgressBar_color, Color.BLACK)
+    paint.color = attributes.getColor(R.styleable.ProgressBar_color, Colors.ProgressBar)
     attributes.recycle()
   }
   

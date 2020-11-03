@@ -26,6 +26,7 @@
     <item name="colorRipple">@color/light_ripple</item>
     <item name="colorRippleFailure">@color/light_ripple_failure</item>
     <item name="colorRippleDark">@color/light_ripple_dark</item>
+    <item name="colorProgressBar">@color/light_progress_bar</item>
     <item name="colorStatusBar">@color/light_status_bar</item>
   </style>
 </resources>

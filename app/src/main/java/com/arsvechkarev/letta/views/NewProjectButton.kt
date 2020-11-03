@@ -6,7 +6,10 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.ViewConfiguration
+import androidx.recyclerview.widget.RecyclerView
+import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.extensions.findParent
+import com.arsvechkarev.letta.views.behaviors.allowRecyclerScrolling
 import kotlin.math.abs
 
 class NewProjectButton @JvmOverloads constructor(
@@ -29,8 +32,10 @@ class NewProjectButton @JvmOverloads constructor(
         latestY = event.y
       }
       ACTION_MOVE -> {
+        val recycler = customCoordinatorLayout.findViewById<RecyclerView>(R.id.recyclerAllProjects)
         val dy = event.y - latestY
-        if (abs(dy) > ViewConfiguration.get(context).scaledTouchSlop) {
+        if (recycler.allowRecyclerScrolling()
+            && abs(dy) > ViewConfiguration.get(context).scaledTouchSlop) {
           if (dy < 0) {
             animate(isScrollingDown = true)
           } else {

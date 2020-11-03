@@ -55,8 +55,8 @@
 
   <com.arsvechkarev.letta.views.ProgressBar
     android:id="@+id/projectsProgressBar"
-    android:layout_width="@dimen/project_progress_bar_size"
-    android:layout_height="@dimen/project_progress_bar_size"
+    android:layout_width="@dimen/project_progress_bar_big_size"
+    android:layout_height="@dimen/project_progress_bar_big_size"
     android:layout_gravity="center"/>
 
   <View

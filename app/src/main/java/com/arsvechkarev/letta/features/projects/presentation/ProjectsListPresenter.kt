@@ -12,14 +12,25 @@ class ProjectsListPresenter(
 ) : MvpPresenter<ProjectsListView>(threader), ProjectsFilesObserver.Observer {
   
   private var selectionMode = false
+  private var currentItemIndex = 0
   
-  fun startLoadingProjects() {
+  fun loadProjects() {
     onIoThread {
-      val projects = repository.getAllProjects()
-      if (projects.isEmpty()) {
-        updateView { projectsAreEmpty() }
-      } else {
-        updateView { onLoadedProjects(projects) }
+      if (repository.hasMoreProjects(currentItemIndex)) {
+        if (currentItemIndex > 0) {
+          updateView { onLoadingMoreProjects() }
+        }
+        val projects = repository.getProjects(currentItemIndex, AMOUNT_PER_LOADING)
+        if (projects.isEmpty()) {
+          updateView { projectsAreEmpty() }
+        } else {
+          if (currentItemIndex == 0) {
+            updateView { onLoadedFirstProjects(projects) }
+          } else {
+            updateView { onLoadedMoreProjects(projects) }
+          }
+          currentItemIndex += AMOUNT_PER_LOADING
+        }
       }
     }
   }
@@ -43,6 +54,11 @@ class ProjectsListPresenter(
   
   override fun onNewProjectCreated(projectFullPath: String) {
     val project = repository.loadProject(projectFullPath)
-    updateView { onProjectAdded(project) }
+    updateView { onProjectCreated(project) }
+  }
+  
+  companion object {
+    
+    private const val AMOUNT_PER_LOADING = 30
   }
 }

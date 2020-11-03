@@ -13,19 +13,20 @@ abstract class MvpFragment<V : MvpView, P : MvpPresenter<V>>(
   @LayoutRes layout: Int = 0
 ) : Fragment(layout), MvpView, NavigableFragment {
   
-  protected lateinit var presenter: P
-    private set
+  private lateinit var _presenter: P
+  
+  val presenter: P get() = _presenter
   
   abstract fun createPresenter(): P
   
   @Suppress("UNCHECKED_CAST")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    presenter = ViewModelProvider(this, object : ViewModelProvider.Factory {
+    _presenter = ViewModelProvider(this, object : ViewModelProvider.Factory {
       override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return createPresenter() as T
       }
     }).get(presenterClass.java)
-    presenter.attachView(this as V)
+    _presenter.attachView(this as V)
   }
 }

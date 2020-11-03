@@ -9,9 +9,13 @@ interface ProjectsListView : MvpView {
   
   fun onSwitchBackFromSelectionMode()
   
-  fun onLoadedProjects(list: List<Project>)
+  fun onLoadedFirstProjects(list: List<Project>)
   
-  fun onProjectAdded(project: Project)
+  fun onLoadingMoreProjects()
+  
+  fun onLoadedMoreProjects(list: List<Project>)
+  
+  fun onProjectCreated(project: Project)
   
   fun projectsAreEmpty()
 }

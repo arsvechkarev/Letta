@@ -14,7 +14,7 @@ object Colors {
   const val BorderLight = 0xFFAAAAAA.toInt()
   const val BorderVeryLight = 0xFFDDDDDD.toInt()
   
-  private val colors = IntArray(17) { 0 }
+  private val colors = IntArray(18) { 0 }
   
   val Background get() = colors[0]
   val BottomSheet get() = colors[1]
@@ -32,7 +32,8 @@ object Colors {
   val Ripple get() = colors[13]
   val RippleFailure get() = colors[14]
   val RippleDark get() = colors[15]
-  val StatusBar get() = colors[16]
+  val ProgressBar get() = colors[16]
+  val StatusBar get() = colors[17]
   
   fun init(context: Context) {
     colors[0] = context.getAttrColor(R.attr.colorBackground)
@@ -51,6 +52,7 @@ object Colors {
     colors[13] = context.getAttrColor(R.attr.colorRipple)
     colors[14] = context.getAttrColor(R.attr.colorRippleFailure)
     colors[15] = context.getAttrColor(R.attr.colorRippleDark)
-    colors[16] = context.getAttrColor(R.attr.colorStatusBar)
+    colors[16] = context.getAttrColor(R.attr.colorProgressBar)
+    colors[17] = context.getAttrColor(R.attr.colorStatusBar)
   }
 }

@@ -23,6 +23,8 @@ class ClickableSquareImage @JvmOverloads constructor(
   private var scaleFactor = 1f
   private val scaleAnimator = ValueAnimator()
   
+  var scaleOnTouch = true
+  
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val width = MeasureSpec.getSize(widthMeasureSpec)
     val height = MeasureSpec.getSize(heightMeasureSpec)
@@ -56,6 +58,9 @@ class ClickableSquareImage @JvmOverloads constructor(
   }
   
   private fun animate(down: Boolean = true) {
+    if (!scaleOnTouch) {
+      return
+    }
     val endScale = if (down) VIEW_CLICK_SCALE_FACTOR else 1.0f
     with(scaleAnimator) {
       cancel()

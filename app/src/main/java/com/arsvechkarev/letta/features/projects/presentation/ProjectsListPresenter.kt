@@ -11,6 +11,8 @@ class ProjectsListPresenter(
   threader: Threader = AndroidThreader
 ) : MvpPresenter<ProjectsListView>(threader), ProjectsFilesObserver.Observer {
   
+  private var selectionMode = false
+  
   fun startLoadingProjects() {
     onIoThread {
       val projects = repository.getAllProjects()
@@ -19,6 +21,15 @@ class ProjectsListPresenter(
       } else {
         updateView { onLoadedProjects(projects) }
       }
+    }
+  }
+  
+  fun onMoreButtonClicked() {
+    selectionMode = !selectionMode
+    if (selectionMode) {
+      updateView { onSwitchToSelectionMode() }
+    } else {
+      updateView { onSwitchBackFromSelectionMode() }
     }
   }
   

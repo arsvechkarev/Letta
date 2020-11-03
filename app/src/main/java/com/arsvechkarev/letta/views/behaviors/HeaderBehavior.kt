@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ScrollingView
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.core.DURATION_SHORT
@@ -20,7 +19,7 @@ import com.arsvechkarev.letta.extensions.getBehavior
 class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
   CoordinatorLayout.Behavior<View>() {
   
-  private var viewOffsetHelper: ViewOffsetHelper? = null
+  private var headerViewOffsetHelper: HeaderViewOffsetHelper? = null
   private var offsetFromPreviousLayout = 0
   private var alreadyStartedScrolling = false
   
@@ -29,7 +28,7 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
     interpolator = AccelerateDecelerateInterpolator
     addUpdateListener {
       val offset = it.animatedValue as Int
-      updateTopBottomOffset(viewOffsetHelper!!.topAndBottomOffset - offset)
+      updateTopBottomOffset(headerViewOffsetHelper!!.topAndBottomOffset - offset)
     }
   }
   
@@ -41,7 +40,7 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
       if (slideRangeCoefficient == 1f) {
         slideRangeCoefficient = calculateSlideRangeCoefficient()
       }
-      return ((viewOffsetHelper?.view?.height ?: 0) * (1f - slideRangeCoefficient)).toInt()
+      return ((headerViewOffsetHelper?.view?.height ?: 0) * (1f - slideRangeCoefficient)).toInt()
     }
   
   /**
@@ -58,7 +57,7 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
   var slideRangeCoefficient = 1f
     set(value) {
       assertThat(value in 0f..1f) { "Range should be in range 0..1" }
-      viewOffsetHelper?.slideRangeCoefficient = value
+      headerViewOffsetHelper?.slideRangeCoefficient = value
       field = value
     }
   
@@ -82,12 +81,12 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
   
   override fun onLayoutChild(parent: CoordinatorLayout,
                              child: View, layoutDirection: Int): Boolean {
-    offsetFromPreviousLayout = viewOffsetHelper?.topAndBottomOffset ?: 0
-    if (viewOffsetHelper == null) {
+    offsetFromPreviousLayout = headerViewOffsetHelper?.topAndBottomOffset ?: 0
+    if (headerViewOffsetHelper == null) {
       if (slideRangeCoefficient == 1f) {
         slideRangeCoefficient = calculateSlideRangeCoefficient()
       }
-      viewOffsetHelper = ViewOffsetHelper(child, slideRangeCoefficient)
+      headerViewOffsetHelper = HeaderViewOffsetHelper(parent, child, slideRangeCoefficient)
     }
     parent.onLayoutChild(child, layoutDirection)
     ViewCompat.offsetTopAndBottom(child, offsetFromPreviousLayout)
@@ -103,11 +102,10 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
     type: Int
   ): Boolean {
     if (alreadyStartedScrolling && allowScrolling) return true
-    if (target is RecyclerView) {
-      if (target.allowRecyclerScrolling()) {
-        alreadyStartedScrolling = true
-        return true
-      }
+    assertThat(target is RecyclerView)
+    if (target.allowRecyclerScrolling()) {
+      alreadyStartedScrolling = true
+      return true
     }
     return allowScrolling
   }
@@ -121,8 +119,11 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
     consumed: IntArray,
     type: Int
   ) {
-    val targetViewOffset = (target as? ScrollingView)?.computeVerticalScrollOffset()
-    if (allowScrolling && targetViewOffset == 0) {
+    assertThat(target is RecyclerView)
+    val targetViewOffset = target.computeVerticalScrollOffset()
+    if (alreadyStartedScrolling && allowScrolling && targetViewOffset == 0) {
+      consumed[1] = updateTopBottomOffset(dy)
+    } else if (allowScrolling && targetViewOffset == 0 && target.allowRecyclerScrolling()) {
       consumed[1] = updateTopBottomOffset(dy)
     }
   }
@@ -138,13 +139,16 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
     type: Int,
     consumed: IntArray
   ) {
-    if (allowScrolling && dyUnconsumed < 0) {
+    assertThat(target is RecyclerView)
+    if (alreadyStartedScrolling && allowScrolling && dyUnconsumed < 0) {
+      consumed[1] = updateTopBottomOffset(dyUnconsumed)
+    } else if (allowScrolling && dyUnconsumed < 0 && target.allowRecyclerScrolling()) {
       consumed[1] = updateTopBottomOffset(dyUnconsumed)
     }
   }
   
   private fun updateTopBottomOffset(dy: Int): Int {
-    return viewOffsetHelper!!.updateOffset(dy)
+    return headerViewOffsetHelper!!.updateOffset(dy)
   }
   
   private val allowScrolling get() = !scrollAnimator.isRunning && isScrollable

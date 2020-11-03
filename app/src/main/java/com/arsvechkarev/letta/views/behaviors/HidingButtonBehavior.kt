@@ -27,7 +27,7 @@ class HidingButtonBehavior(context: Context? = null, attrs: AttributeSet? = null
         return true
       }
     }
-    return true
+    return false
   }
   
   override fun onNestedPreScroll(

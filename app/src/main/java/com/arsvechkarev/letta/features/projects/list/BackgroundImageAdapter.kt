@@ -8,7 +8,7 @@ import com.arsvechkarev.letta.core.model.ImageModel
 import com.arsvechkarev.letta.core.recycler.SingleSelectionAdapter
 import com.arsvechkarev.letta.extensions.inflate
 import com.arsvechkarev.letta.features.projects.list.BackgroundImageAdapter.BackgroundImageViewHolder
-import com.arsvechkarev.letta.views.RoundedCornersDrawable
+import com.arsvechkarev.letta.views.drawables.RoundedCornersDrawable
 import kotlinx.android.synthetic.main.item_bg_image.view.checkmark
 import kotlinx.android.synthetic.main.item_bg_image.view.image
 
@@ -63,7 +63,7 @@ class BackgroundImageAdapter(
       val drawable = RoundedCornersDrawable.ofResource(itemView.context, item.drawableRes)
       itemView.image.setImageDrawable(drawable)
       val isChecked = selectedPosition == adapterPosition
-      itemView.checkmark.updateWithoutAnimation(isChecked)
+      itemView.checkmark.updateCheckedStateWithoutAnimation(isChecked)
     }
   }
 }

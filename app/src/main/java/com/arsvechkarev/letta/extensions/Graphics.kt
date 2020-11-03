@@ -11,6 +11,10 @@ import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
+val TEMP_RECT_F = RectF()
+
+val TEMP_RECT = Rect()
+
 fun Drawable.toBitmap(width: Int = intrinsicWidth, height: Int = intrinsicHeight): Bitmap {
   val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
   val canvas = Canvas(bitmap)

@@ -3,7 +3,7 @@ package com.arsvechkarev.letta.core.recycler
 import com.arsvechkarev.letta.core.recycler.BaseAdapter.BaseViewHolder
 
 abstract class SingleSelectionAdapter<D, VH : BaseViewHolder<D>>(
-  data: List<D> = emptyList()
+  data: List<D> = ArrayList()
 ) : BaseAdapter<D, VH>(data) {
   
   protected var selectedPosition: Int = 0

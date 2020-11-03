@@ -10,7 +10,6 @@ import androidx.annotation.DimenRes
 import com.arsvechkarev.letta.LettaApplication
 import java.util.Locale
 
-
 val Int.dp get() = this * LettaApplication.density
 
 val Float.dp get() = this * LettaApplication.density
@@ -32,11 +31,12 @@ fun Context.getDimen(@DimenRes resId: Int): Float {
   return resources.getDimension(resId)
 }
 
-fun Context.getStatusBarHeight(): Int {
-  var result = 0
-  val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-  if (resourceId > 0) {
-    result = resources.getDimensionPixelSize(resourceId)
+val Context.statusBarHeight: Int
+  get() {
+    var result = 0
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+      result = resources.getDimensionPixelSize(resourceId)
+    }
+    return result
   }
-  return result
-}

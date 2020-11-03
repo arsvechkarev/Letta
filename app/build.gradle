@@ -24,12 +24,23 @@ android {
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-  implementation "androidx.appcompat:appcompat:1.2.0"
-  implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-  implementation "androidx.recyclerview:recyclerview:1.1.0"
-  implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+  def appCompatVersion = "1.2.0"
+  def lifecycleVersion = "2.2.0"
+  def recyclerViewVersion = "1.1.0"
+  def coordinatorLayoutVersion = "1.1.0"
+  def constraintLayoutVersion = "2.0.4"
+  def timberVersion = "4.7.1"
 
-  implementation "com.jakewharton.timber:timber:4.7.1"
-  debugImplementation "com.squareup.leakcanary:leakcanary-android:2.2"
-  testImplementation "junit:junit:4.13.1"
+  implementation "androidx.appcompat:appcompat:$appCompatVersion"
+  implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+  implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
+  implementation "androidx.coordinatorlayout:coordinatorlayout:$coordinatorLayoutVersion"
+  implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+  implementation "com.jakewharton.timber:timber:$timberVersion"
+
+  def leakCanaryVersion = "2.2"
+  def junitVersion = "4.13.1"
+
+  debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+  testImplementation "junit:junit:$junitVersion"
 }

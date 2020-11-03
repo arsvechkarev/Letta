@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <style name="BaseTheme" parent="Theme.AppCompat.NoActionBar">
-    <item name="android:windowTranslucentStatus">true</item>
     <item name="android:statusBarColor">@android:color/transparent</item>
   </style>
 
@@ -27,5 +26,6 @@
     <item name="colorRipple">@color/light_ripple</item>
     <item name="colorRippleFailure">@color/light_ripple_failure</item>
     <item name="colorRippleDark">@color/light_ripple_dark</item>
+    <item name="colorStatusBar">@color/light_status_bar</item>
   </style>
 </resources>

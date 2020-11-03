@@ -16,4 +16,5 @@
   <attr name="colorRipple" format="color"/>
   <attr name="colorRippleFailure" format="color"/>
   <attr name="colorRippleDark" format="color"/>
+  <attr name="colorStatusBar" format="color"/>
 </resources>

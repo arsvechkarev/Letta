@@ -17,8 +17,9 @@ import com.arsvechkarev.letta.extensions.f
 
 class ProgressBar @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : View(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
   
   private val innerStartedAngle = 50f
   private val outerStartedAngle = 120f

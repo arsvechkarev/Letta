@@ -24,8 +24,9 @@ import com.arsvechkarev.letta.extensions.visible
 
 class SimpleDialog @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : FrameLayout(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
   
   private lateinit var dialogView: View
   private var wasNoMoveEvent = false

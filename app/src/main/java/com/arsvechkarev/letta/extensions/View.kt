@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.DimenRes
 import androidx.annotation.LayoutRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -43,6 +45,12 @@ inline fun ViewGroup.findChild(predicate: (View) -> Boolean): View {
     }
   }
   throw IllegalStateException("No child matching predicate")
+}
+
+inline fun ViewGroup.forEachChild(block: (View) -> Unit) {
+  for (i in 0 until childCount) {
+    block(getChildAt(i))
+  }
 }
 
 val View.totalWidth: Int
@@ -107,4 +115,24 @@ fun View.paddings(
   } else {
     setPadding(end, top, start, bottom)
   }
+}
+
+fun View.tag(tag: String) {
+  this.tag = tag
+}
+
+fun View.childView(tag: String): View {
+  return findViewWithTag(tag)
+}
+
+fun View.childTextView(tag: String): TextView {
+  return findViewWithTag(tag) as TextView
+}
+
+fun View.childImageView(tag: String): ImageView {
+  return findViewWithTag(tag) as ImageView
+}
+
+fun <T : View> View.childViewAs(tag: String): T {
+  return findViewWithTag(tag)
 }

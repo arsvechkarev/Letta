@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseAdapter<D, VH : BaseAdapter.BaseViewHolder<D>>(
-  data: List<D> = emptyList()
+  data: List<D> = ArrayList()
 ) : RecyclerView.Adapter<VH>() {
   
   var recyclerView: RecyclerView? = null

@@ -5,6 +5,10 @@ import com.arsvechkarev.letta.core.mvp.MvpView
 
 interface ProjectsListView : MvpView {
   
+  fun onSwitchToSelectionMode()
+  
+  fun onSwitchBackFromSelectionMode()
+  
   fun onLoadedProjects(list: List<Project>)
   
   fun onProjectAdded(project: Project)

@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.util.AttributeSet
+import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.DURATION_DEFAULT
 import com.arsvechkarev.letta.core.DURATION_SHORT
@@ -21,7 +22,7 @@ class HideToolsView @JvmOverloads constructor(
   
   private var mirrored = false
   private var rotationCoeff = 1f
-  private val drawable = context.getDrawable(R.drawable.ic_arrow_right)!!
+  private val drawable = ContextCompat.getDrawable(context, R.drawable.ic_arrow_right)!!
   private val bitmapMatrix = Matrix()
   private lateinit var bitmap: Bitmap
   

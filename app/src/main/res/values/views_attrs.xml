@@ -11,6 +11,10 @@
     <attr name="rippleColor" format="color"/>
   </declare-styleable>
 
+  <declare-styleable name="Checkmark">
+    <attr name="drawBorder" format="boolean"/>
+  </declare-styleable>
+
   <declare-styleable name="Image">
     <attr name="backgroundColor" format="color"/>
     <attr name="drawStroke" format="boolean"/>

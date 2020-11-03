@@ -13,7 +13,6 @@ import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
 import com.arsvechkarev.letta.extensions.animateInvisibleAndScale
 import com.arsvechkarev.letta.extensions.getDimen
-import com.arsvechkarev.letta.extensions.getStatusBarHeight
 import com.arsvechkarev.letta.extensions.lerpColor
 import com.arsvechkarev.letta.extensions.paddings
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
@@ -30,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_projects_list.bottomSheetShadowVi
 import kotlinx.android.synthetic.main.fragment_projects_list.buttonNewProject
 import kotlinx.android.synthetic.main.fragment_projects_list.createNewProjectButton
 import kotlinx.android.synthetic.main.fragment_projects_list.dialogProjectBackground
+import kotlinx.android.synthetic.main.fragment_projects_list.imageMore
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsListRoot
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsProgressBar
 import kotlinx.android.synthetic.main.fragment_projects_list.recyclerAllProjects
@@ -57,6 +57,14 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     prepareNewProjectDialog()
     chooseBgContainer = ChooseBgContainer(backgroundImageExample, backgroundImagePalette,
       backgroundImagesRecyclerView)
+  }
+  
+  override fun onSwitchToSelectionMode() {
+    adapter.switchToSelectionMode()
+  }
+  
+  override fun onSwitchBackFromSelectionMode() {
+    adapter.switchBackFromSelectionMode()
   }
   
   override fun onLoadedProjects(list: List<Project>) {
@@ -92,10 +100,11 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
       GridLayoutManager.VERTICAL, false)
     val padding = requireContext().getDimen(R.dimen.text_title_padding).toInt()
     titleAllProjects.paddings(
-      top = requireContext().getStatusBarHeight() + padding,
+      top = padding,
       start = padding,
       bottom = padding,
     )
+    imageMore.setOnClickListener { presenter.onMoreButtonClicked() }
   }
   
   private fun prepareNewProjectDialog() {

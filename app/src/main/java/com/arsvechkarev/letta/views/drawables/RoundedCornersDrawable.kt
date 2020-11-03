@@ -1,4 +1,4 @@
-package com.arsvechkarev.letta.views
+package com.arsvechkarev.letta.views.drawables
 
 import android.content.Context
 import android.graphics.Bitmap

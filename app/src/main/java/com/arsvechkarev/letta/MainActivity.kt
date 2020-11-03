@@ -1,6 +1,7 @@
 package com.arsvechkarev.letta
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.navigation.NavigatorImpl
@@ -11,6 +12,9 @@ class MainActivity : AppCompatActivity() {
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    @Suppress("DEPRECATION")
+    window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     LettaApplication.initDensities(resources.displayMetrics.density,
       resources.displayMetrics.scaledDensity)
     Colors.init(this)

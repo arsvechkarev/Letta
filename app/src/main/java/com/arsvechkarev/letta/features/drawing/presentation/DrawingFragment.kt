@@ -87,15 +87,9 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
       imageSwapGradient.rotate(SWAP_ANIMATION_DURATION)
       paletteBrushColor.swapGradientMode()
     }
-    imageHideTools.setOnClickListener {
-      drawingContainer.toggleToolsVisibility()
-    }
-    textDialogCancel.setOnClickListener {
-      dialogDiscardChanges.hide()
-    }
-    textDialogDiscard.setOnClickListener {
-      navigator.popBackStack()
-    }
+    imageHideTools.setOnClickListener { drawingContainer.toggleToolsVisibility() }
+    textDialogCancel.setOnClickListener { dialogDiscardChanges.hide() }
+    textDialogDiscard.setOnClickListener { navigator.popBackStack() }
   }
   
   private fun createOpenGLDrawingView(undoStore: UndoStore): OpenGLDrawingView {

@@ -1,6 +1,7 @@
 package com.arsvechkarev.letta.views
 
 import android.content.Context
+import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,10 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.IdRes
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.extensions.findChild
-import com.arsvechkarev.letta.extensions.getStatusBarHeight
 import com.arsvechkarev.letta.extensions.isNotGone
 import com.arsvechkarev.letta.extensions.layoutNormal
 import com.arsvechkarev.letta.extensions.layoutWithLeftTop
+import com.arsvechkarev.letta.extensions.statusBarHeight
 import com.arsvechkarev.letta.extensions.totalHeight
 import com.arsvechkarev.letta.extensions.totalWidth
 import com.arsvechkarev.letta.extensions.withParams
@@ -53,7 +54,7 @@ class PaintingViewGroup @JvmOverloads constructor(
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     val height = b - t
     val width = r - l
-    val statusBarHeight = context.getStatusBarHeight()
+    val statusBarHeight = context.statusBarHeight
     val imageDone = childWithId(R.id.imageDone)
     val imageUndo = childWithId(R.id.imageUndo)
     val imageSwapGradient = childWithId(R.id.imageSwapGradient)
@@ -140,6 +141,11 @@ class PaintingViewGroup @JvmOverloads constructor(
   
     layoutDialog(R.id.dialogDiscardChanges, width, height)
     layoutDialog(R.id.dialogLoading, width, height)
+  }
+  
+  override fun dispatchDraw(canvas: Canvas) {
+    super.dispatchDraw(canvas)
+    StatusBarBackground.drawItself(context, canvas)
   }
   
   private fun layoutDialog(resId: Int, width: Int, height: Int) {

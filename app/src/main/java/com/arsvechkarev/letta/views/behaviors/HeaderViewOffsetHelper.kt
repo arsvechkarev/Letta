@@ -3,7 +3,11 @@ package com.arsvechkarev.letta.views.behaviors
 import android.view.View
 import androidx.core.view.ViewCompat
 
-class ViewOffsetHelper(val view: View, var slideRangeCoefficient: Float) {
+class HeaderViewOffsetHelper(
+  val parent: View,
+  val view: View,
+  var slideRangeCoefficient: Float
+) {
   
   var topAndBottomOffset = 0
     private set
@@ -16,7 +20,7 @@ class ViewOffsetHelper(val view: View, var slideRangeCoefficient: Float) {
     if (dy != 0) {
       val resultOffset = (topAndBottomOffset - dy).coerceIn(maxScrollingRange, 0)
       topAndBottomOffset = resultOffset
-      ViewCompat.offsetTopAndBottom(view, topAndBottomOffset - view.top)
+      ViewCompat.offsetTopAndBottom(view, (topAndBottomOffset - view.top) + parent.paddingTop)
     }
     return prefOffset - topAndBottomOffset
   }

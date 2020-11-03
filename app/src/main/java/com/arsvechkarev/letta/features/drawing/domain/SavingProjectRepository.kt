@@ -10,6 +10,7 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 
 class SavingProjectRepository(
   private val context: Context
@@ -19,12 +20,14 @@ class SavingProjectRepository(
     val directory = context.allProjectsDirectory
     directory.mkdirs()
     val dateFormat = SimpleDateFormat("yyyy_MM_dd-HH_mm_ss", Locale.getDefault())
-    val timestamp = dateFormat.format(Date())
-    val projectFile = File(directory, "Project_$timestamp.png")
-    Timber.d("Saving project, file = ${projectFile.path}")
-    FileOutputStream(projectFile).use {
-      bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+    repeat(10) {
+      val timestamp = dateFormat.format(Date()) + UUID.randomUUID().toString()
+      val projectFile = File(directory, "Project_$timestamp.png")
+      Timber.d("Saving project, file = ${projectFile.path}")
+      FileOutputStream(projectFile).use {
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+      }
+      ProjectsFilesObserver.notifyProjectCreated(projectFile.canonicalPath)
     }
-    ProjectsFilesObserver.notifyProjectCreated(projectFile.canonicalPath)
   }
 }

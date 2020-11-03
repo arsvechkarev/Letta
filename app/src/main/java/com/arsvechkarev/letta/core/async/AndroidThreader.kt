@@ -10,7 +10,7 @@ object AndroidThreader : Threader {
   private val backgroundWorker = Executors.newSingleThreadExecutor()
   private val ioWorker = Executors.newFixedThreadPool(4)
   
-  private val handler = Handler(Looper.getMainLooper())
+  val handler = Handler(Looper.getMainLooper())
   
   override fun onBackground(block: () -> Unit): Future<*> {
     return backgroundWorker.submit(block)

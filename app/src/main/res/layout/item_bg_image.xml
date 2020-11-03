@@ -10,7 +10,7 @@
     android:layout_height="@dimen/item_bg_image_size"
     android:layout_gravity="center"/>
 
-  <com.arsvechkarev.letta.views.CheckmarkView
+  <com.arsvechkarev.letta.views.Checkmark
     android:id="@+id/checkmark"
     android:layout_width="@dimen/item_bg_image_checkmark_size"
     android:layout_height="@dimen/item_bg_image_checkmark_size"

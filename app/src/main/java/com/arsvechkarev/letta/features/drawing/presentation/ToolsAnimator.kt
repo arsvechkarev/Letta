@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.core.DURATION_DEFAULT
 import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.throwEx
-import com.arsvechkarev.letta.views.Image
+import com.arsvechkarev.letta.views.ImageButton
 import com.arsvechkarev.letta.views.VerticalSeekbar
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 
 class ToolsAnimator(
-  private val imageUndo: Image,
-  private val imageDone: Image,
+  private val buttonUndo: ImageButton,
+  private val buttonDone: ImageButton,
   private val palette: GradientPalette,
-  private val imageSwapGradient: Image,
+  private val buttonSwapGradient: ImageButton,
   private val verticalSeekbar: VerticalSeekbar,
   private val recyclerBrushes: RecyclerView
 ) {
@@ -32,12 +32,12 @@ class ToolsAnimator(
   }
   
   private fun animateInvisible() {
-    imageUndo.animateInvisible { distance ->
+    buttonUndo.animateInvisible { distance ->
       translationYBy(-distance)
       translationXBy(-distance)
     }
-    
-    imageDone.animateInvisible { distance ->
+  
+    buttonDone.animateInvisible { distance ->
       translationYBy(-distance)
       translationXBy(distance)
     }
@@ -45,8 +45,8 @@ class ToolsAnimator(
     palette.animateInvisible { distance ->
       translationXBy(distance)
     }
-    
-    imageSwapGradient.animateInvisible { distance ->
+  
+    buttonSwapGradient.animateInvisible { distance ->
       translationXBy(distance)
     }
     
@@ -60,19 +60,19 @@ class ToolsAnimator(
   }
   
   private fun animateVisible() {
-    imageUndo.animateVisible()
-    imageDone.animateVisible()
+    buttonUndo.animateVisible()
+    buttonDone.animateVisible()
     palette.animateVisible()
-    imageSwapGradient.animateVisible()
+    buttonSwapGradient.animateVisible()
     verticalSeekbar.animateVisible()
     recyclerBrushes.animateVisible()
   }
   
   private fun distanceOf(view: View): Float = when (view) {
-    imageUndo -> imageUndo.height / 3f
-    imageDone -> imageDone.height / 3f
+    buttonUndo -> buttonUndo.height / 3f
+    buttonDone -> buttonDone.height / 3f
     palette -> palette.width / 2f
-    imageSwapGradient -> imageSwapGradient.width / 2f
+    buttonSwapGradient -> buttonSwapGradient.width / 2f
     verticalSeekbar -> verticalSeekbar.width / 2f
     recyclerBrushes -> recyclerBrushes.height / 2f
     else -> throwEx()

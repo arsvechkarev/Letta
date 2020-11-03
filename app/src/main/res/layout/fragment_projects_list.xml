@@ -32,7 +32,7 @@
       android:background="?colorDivider"
       app:layout_constraintTop_toBottomOf="@id/titleAllProjects"/>
 
-    <com.arsvechkarev.letta.views.Image
+    <com.arsvechkarev.letta.views.ImageButton
       android:id="@+id/imageMore"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
 
   </LinearLayout>
 
-  <com.arsvechkarev.letta.views.Image
+  <com.arsvechkarev.letta.views.NewProjectButton
     android:id="@+id/buttonNewProject"
     android:layout_width="@dimen/new_project_button_size"
     android:layout_height="@dimen/new_project_button_size"
@@ -145,7 +145,6 @@
     android:padding="@dimen/new_project_button_padding"
     app:backgroundColor="?colorButtonGradientStart"
     app:drawStroke="false"
-    app:imageSrc="@drawable/ic_new_project"
-    app:layout_behavior=".views.behaviors.HidingButtonBehavior"/>
+    app:imageSrc="@drawable/ic_new_project"/>
 
 </com.arsvechkarev.letta.views.CustomCoordinatorLayout>

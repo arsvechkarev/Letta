@@ -22,7 +22,7 @@ import com.arsvechkarev.letta.extensions.STROKE_PAINT
 import com.arsvechkarev.letta.extensions.contains
 import com.arsvechkarev.letta.extensions.execute
 
-open class Image @JvmOverloads constructor(
+open class ImageButton @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
@@ -43,11 +43,11 @@ open class Image @JvmOverloads constructor(
   }
   
   init {
-    val arr = context.obtainStyledAttributes(attrs, R.styleable.Image, defStyleAttr, 0)
-    image = arr.getDrawable(R.styleable.Image_imageSrc)?.mutate()
+    val arr = context.obtainStyledAttributes(attrs, R.styleable.ImageButton, defStyleAttr, 0)
+    image = arr.getDrawable(R.styleable.ImageButton_imageSrc)?.mutate()
     val defaultColor = Colors.Background
-    backgroundPaint.color = arr.getColor(R.styleable.Image_backgroundColor, defaultColor)
-    drawStroke = arr.getBoolean(R.styleable.Image_drawStroke, true)
+    backgroundPaint.color = arr.getColor(R.styleable.ImageButton_backgroundColor, defaultColor)
+    drawStroke = arr.getBoolean(R.styleable.ImageButton_drawStroke, true)
     arr.recycle()
   }
   

@@ -9,7 +9,7 @@ import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.views.BrushDisplayer
 import com.arsvechkarev.letta.views.HideToolsView
-import com.arsvechkarev.letta.views.Image
+import com.arsvechkarev.letta.views.ImageButton
 import com.arsvechkarev.letta.views.VerticalSeekbar
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 import kotlin.math.pow
@@ -17,18 +17,18 @@ import kotlin.math.pow
 class DrawingContainer(
   private val undoStore: UndoStore,
   private val openGLDrawingView: OpenGLDrawingView,
-  private val imageUndo: Image,
-  private val imageDone: Image,
+  private val buttonUndo: ImageButton,
+  private val buttonDone: ImageButton,
   imageHideTools: HideToolsView,
   palette: GradientPalette,
-  imageSwapGradient: Image,
+  buttonSwapGradient: ImageButton,
   verticalSeekbar: VerticalSeekbar,
   brushDisplayer: BrushDisplayer,
   recyclerBrushes: RecyclerView
 ) {
   
   private val toolsAnimator = ToolsAnimator(
-    imageUndo, imageDone, palette, imageSwapGradient,
+    buttonUndo, buttonDone, palette, buttonSwapGradient,
     verticalSeekbar, recyclerBrushes
   )
   
@@ -40,11 +40,11 @@ class DrawingContainer(
     val initialBrushPercent = 0.3f
     verticalSeekbar.updatePercent(initialBrushPercent)
     openGLDrawingView.updateBrushSize(initialBrushPercent.exponentiate())
-    imageUndo.isEnabled = false
-    imageDone.isEnabled = false
-    
+    buttonUndo.isEnabled = false
+    buttonDone.isEnabled = false
+  
     verticalSeekbar.onUp = { brushDisplayer.clear() }
-    imageUndo.setOnClickListener { undoStore.undo() }
+    buttonUndo.setOnClickListener { undoStore.undo() }
     palette.onColorChanged = { color ->
       verticalSeekbar.updateColorIfAllowed(color)
       openGLDrawingView.updateColor(color)
@@ -71,8 +71,8 @@ class DrawingContainer(
   
   fun onHistoryChanged() {
     val canUndo = undoStore.isNotEmpty
-    imageUndo.isEnabled = canUndo
-    imageDone.isEnabled = canUndo
+    buttonUndo.isEnabled = canUndo
+    buttonDone.isEnabled = canUndo
   }
   
   fun shutdown() {

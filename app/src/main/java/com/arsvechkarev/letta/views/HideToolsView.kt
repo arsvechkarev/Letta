@@ -18,7 +18,7 @@ class HideToolsView @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
-) : Image(context, attrs, defStyleAttr) {
+) : ImageButton(context, attrs, defStyleAttr) {
   
   private var mirrored = false
   private var rotationCoeff = 1f

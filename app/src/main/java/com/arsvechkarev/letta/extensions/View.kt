@@ -37,6 +37,17 @@ fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
   return LayoutInflater.from(context).inflate(layoutRes, this, false)
 }
 
+inline fun View.findParent(predicate: (View) -> Boolean): View {
+  var parent = parent as? View
+  while (parent != null) {
+    if (predicate(parent)) {
+      return parent
+    }
+    parent = parent.parent as? View
+  }
+  throw IllegalStateException("No parent matching predicate")
+}
+
 inline fun ViewGroup.findChild(predicate: (View) -> Boolean): View {
   for (i in 0 until childCount) {
     val child = getChildAt(i)

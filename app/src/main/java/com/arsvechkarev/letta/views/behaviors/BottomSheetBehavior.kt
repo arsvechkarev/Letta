@@ -101,7 +101,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
     child: View,
     event: MotionEvent
   ): Boolean {
-    if (slideAnimator.isRunning) return false
+    if (slideAnimator.isRunning || state == HIDDEN) return false
     val action = event.action
     if (action == ACTION_MOVE && isBeingDragged) {
       return true
@@ -147,7 +147,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
     child: View,
     event: MotionEvent
   ): Boolean {
-    if (slideAnimator.isRunning) return false
+    if (slideAnimator.isRunning || state == HIDDEN) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
         val x = event.x.toInt()

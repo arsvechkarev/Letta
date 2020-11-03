@@ -57,7 +57,7 @@ class ClickableSquareImage @JvmOverloads constructor(
     return false
   }
   
-  private fun animate(down: Boolean = true) {
+  private fun animate(down: Boolean) {
     if (!scaleOnTouch) {
       return
     }

@@ -11,14 +11,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
-  <com.arsvechkarev.letta.views.Image
+  <com.arsvechkarev.letta.views.ImageButton
     android:id="@+id/imageDone"
     android:layout_width="@dimen/img_done_size"
     android:layout_height="@dimen/img_done_size"
     android:padding="@dimen/img_tool_padding"
     app:imageSrc="@drawable/ic_checkmark"/>
 
-  <com.arsvechkarev.letta.views.Image
+  <com.arsvechkarev.letta.views.ImageButton
     android:id="@+id/imageUndo"
     android:layout_width="@dimen/img_tool_size"
     android:layout_height="@dimen/img_tool_size"
@@ -37,7 +37,7 @@
     android:orientation="vertical"
     android:padding="@dimen/palette_padding"/>
 
-  <com.arsvechkarev.letta.views.Image
+  <com.arsvechkarev.letta.views.ImageButton
     android:id="@+id/imageSwapGradient"
     android:layout_width="@dimen/img_swapper"
     android:layout_height="@dimen/img_swapper"

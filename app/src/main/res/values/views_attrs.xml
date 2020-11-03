@@ -15,7 +15,7 @@
     <attr name="drawBorder" format="boolean"/>
   </declare-styleable>
 
-  <declare-styleable name="Image">
+  <declare-styleable name="ImageButton">
     <attr name="backgroundColor" format="color"/>
     <attr name="drawStroke" format="boolean"/>
     <attr name="imageSrc" format="reference"/>

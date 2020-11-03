@@ -3,7 +3,6 @@ package com.arsvechkarev.letta.views
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -31,7 +30,7 @@ class Checkmark @JvmOverloads constructor(
   }
   
   private val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = Color.BLACK
+    color = Colors.BorderVeryDark
     style = Paint.Style.STROKE
   }
   
@@ -120,7 +119,7 @@ class Checkmark @JvmOverloads constructor(
       val border = borderPaint.strokeWidth / 2f
       canvas.drawCircle(
         width / 2f, height / 2f,
-        width / 2f - border, borderPaint
+        width / 2f - border * 1.3f, borderPaint
       )
     }
     if (circlePaint.strokeWidth > 0f) {
@@ -131,9 +130,6 @@ class Checkmark @JvmOverloads constructor(
   }
   
   private fun updateCheckedState() {
-    if (animator.isRunning) {
-      return
-    }
     if (_isChecked) {
       currentDrawable = checkmarkAppear
       animator.setFloatValues(circlePaint.strokeWidth, getCircleStrokeWidth())
@@ -146,9 +142,6 @@ class Checkmark @JvmOverloads constructor(
   }
   
   private fun updateBorderState() {
-    if (borderAnimator.isRunning) {
-      return
-    }
     if (_drawBorder) {
       borderAnimator.setFloatValues(borderPaint.strokeWidth, getBorderWidth())
     } else {

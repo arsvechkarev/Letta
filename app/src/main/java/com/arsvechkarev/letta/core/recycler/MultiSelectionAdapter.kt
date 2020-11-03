@@ -80,6 +80,7 @@ abstract class MultiSelectionAdapter<D, VH : MultiSelectionViewHolder<D>>(
         }
       } else {
         switchFromSelectionModeWithoutAnimation(itemView)
+        setDisabledWithoutAnimation(itemView)
       }
     }
   }

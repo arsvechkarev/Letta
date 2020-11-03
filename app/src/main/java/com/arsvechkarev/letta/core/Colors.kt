@@ -9,6 +9,7 @@ object Colors {
   const val Transparent = 0
   const val Disabled = 0xFF999999.toInt()
   const val GraySelected = 0xFFAAAAAA.toInt()
+  const val BorderVeryDark = 0xFF444444.toInt()
   const val BorderDark = 0xFF555555.toInt()
   const val BorderLight = 0xFFAAAAAA.toInt()
   const val BorderVeryLight = 0xFFDDDDDD.toInt()

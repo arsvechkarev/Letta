@@ -121,12 +121,16 @@ class ProjectsListAdapter(
     }
     
     override fun goToSelectionModeWithoutAnimation(itemView: View) {
+      val image = itemView.childViewAs<ClickableSquareImage>(Image)
       val checkmark = itemView.childViewAs<Checkmark>(Checkmark)
+      image.scaleOnTouch = false
       checkmark.updateBorderStateWithoutAnimation(true)
     }
     
     override fun switchFromSelectionModeWithoutAnimation(itemView: View) {
+      val image = itemView.childViewAs<ClickableSquareImage>(Image)
       val checkmark = itemView.childViewAs<Checkmark>(Checkmark)
+      image.scaleOnTouch = true
       checkmark.updateBorderStateWithoutAnimation(false)
     }
   }

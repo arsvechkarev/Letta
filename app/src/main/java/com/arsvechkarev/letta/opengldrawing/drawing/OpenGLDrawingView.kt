@@ -8,9 +8,9 @@ import android.graphics.RectF
 import android.graphics.SurfaceTexture
 import android.view.MotionEvent
 import android.view.TextureView
-import com.arsvechkarev.letta.core.throwEx
 import com.arsvechkarev.letta.extensions.multiplyMatrices
 import com.arsvechkarev.letta.extensions.orthoM
+import com.arsvechkarev.letta.extensions.throwEx
 import com.arsvechkarev.letta.extensions.to4x4Matrix
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush

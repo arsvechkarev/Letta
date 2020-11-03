@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
+import com.arsvechkarev.letta.extensions.StatusBar
 import com.arsvechkarev.letta.extensions.rotate
 import com.arsvechkarev.letta.features.drawing.domain.SavingProjectRepository
 import com.arsvechkarev.letta.opengldrawing.UndoStore
@@ -39,6 +41,8 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    StatusBar.clearLightStatusBar(requireActivity())
+    StatusBar.setStatusBarColor(requireActivity(), Colors.StatusBar)
     undoStore = UndoStore(onHistoryChanged = {
       drawingContainer.onHistoryChanged()
     })
@@ -67,6 +71,7 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   
   override fun onDestroyView() {
     drawingContainer.shutdown()
+    StatusBar.setLightStatusBar(requireActivity())
     super.onDestroyView()
   }
   

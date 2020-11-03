@@ -1,8 +1,8 @@
-package com.arsvechkarev.letta.core
+package com.arsvechkarev.letta.extensions
 
 import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
-import com.arsvechkarev.letta.extensions.dp
+import com.arsvechkarev.letta.core.Colors
 
 val TEMP_PAINT = Paint(ANTI_ALIAS_FLAG)
 

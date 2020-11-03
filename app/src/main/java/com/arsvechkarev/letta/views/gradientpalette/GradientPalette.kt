@@ -20,10 +20,10 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.Colors
-import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.addBouncyBackEffect
 import com.arsvechkarev.letta.core.model.Circle
 import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
+import com.arsvechkarev.letta.extensions.STROKE_PAINT
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.execute
 import com.arsvechkarev.letta.extensions.f

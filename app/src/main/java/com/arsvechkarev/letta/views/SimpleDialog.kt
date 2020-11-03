@@ -8,18 +8,16 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
-import android.view.View
 import android.widget.FrameLayout
+import androidx.core.graphics.ColorUtils
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.DURATION_MEDIUM
-import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.EndOvershootInterpolator
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.contains
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.extensions.gone
-import com.arsvechkarev.letta.extensions.lerpColor
 import com.arsvechkarev.letta.extensions.visible
 
 class SimpleDialog @JvmOverloads constructor(
@@ -28,15 +26,16 @@ class SimpleDialog @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
   
-  private lateinit var dialogView: View
   private var wasNoMoveEvent = false
   private var currentShadowFraction = 0f
+  
+  private val dialogView get() = getChildAt(0)
   private val shadowAnimator = ValueAnimator().apply {
     interpolator = AccelerateDecelerateInterpolator
     duration = DURATION_MEDIUM
     addUpdateListener {
       currentShadowFraction = it.animatedValue as Float
-      val color = lerpColor(Color.TRANSPARENT, Colors.Shadow, currentShadowFraction)
+      val color = ColorUtils.blendARGB(Color.TRANSPARENT, Colors.Shadow, currentShadowFraction)
       setBackgroundColor(color)
     }
   }
@@ -46,12 +45,6 @@ class SimpleDialog @JvmOverloads constructor(
   
   init {
     gone()
-  }
-  
-  override fun onFinishInflate() {
-    super.onFinishInflate()
-    assertThat(childCount == 1) { "Only one child for dialog is allowed" }
-    dialogView = getChildAt(0)
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

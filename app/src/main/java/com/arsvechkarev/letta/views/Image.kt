@@ -16,9 +16,9 @@ import android.view.View
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.DURATION_ON_CLICK
-import com.arsvechkarev.letta.core.STROKE_PAINT
 import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
 import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
+import com.arsvechkarev.letta.extensions.STROKE_PAINT
 import com.arsvechkarev.letta.extensions.contains
 import com.arsvechkarev.letta.extensions.execute
 

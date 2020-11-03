@@ -1,7 +1,9 @@
 package com.arsvechkarev.letta.features.projects.presentation
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.GridLayoutManager
 import com.arsvechkarev.letta.LettaApplication
 import com.arsvechkarev.letta.R
@@ -11,9 +13,9 @@ import com.arsvechkarev.letta.core.model.BackgroundType.DrawableRes
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
+import com.arsvechkarev.letta.extensions.StatusBar
 import com.arsvechkarev.letta.extensions.animateInvisibleAndScale
 import com.arsvechkarev.letta.extensions.getDimen
-import com.arsvechkarev.letta.extensions.lerpColor
 import com.arsvechkarev.letta.extensions.paddings
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createDrawableResArgs
@@ -52,6 +54,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    StatusBar.setLightStatusBar(requireActivity())
     initViews()
     presenter.startLoadingProjects()
     prepareNewProjectDialog()
@@ -112,8 +115,13 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     buttonNewProject.setOnClickListener { bottomSheet.show() }
     createNewProjectButton.setOnClickListener { openNewProject() }
     bottomSheet.addSlideListener { percentageOpened ->
-      val color = lerpColor(Colors.Transparent, Colors.Shadow, percentageOpened)
-      bottomSheetShadowView.setBackgroundColor(color)
+      val shadowColor = ColorUtils.blendARGB(Colors.Transparent, Colors.Shadow, percentageOpened)
+      bottomSheetShadowView.setBackgroundColor(shadowColor)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val endColor = ColorUtils.compositeColors(Colors.Shadow, Colors.Background)
+        val statusColor = ColorUtils.blendARGB(Colors.Background, endColor, percentageOpened)
+        StatusBar.setStatusBarColor(requireActivity(), statusColor)
+      }
     }
     bottomSheet.addSlideListener { percentageOpened ->
       buttonNewProject.alpha = 1 - percentageOpened

@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import com.arsvechkarev.letta.core.Colors
-import com.arsvechkarev.letta.core.TEMP_PAINT
+import com.arsvechkarev.letta.extensions.TEMP_PAINT
 import com.arsvechkarev.letta.extensions.f
 import com.arsvechkarev.letta.extensions.statusBarHeight
 
@@ -29,9 +29,9 @@ class StatusBarBackground @JvmOverloads constructor(
   }
   
   companion object {
-    
-    fun drawItself(context: Context, canvas: Canvas) {
-      TEMP_PAINT.color = Colors.StatusBar
+  
+    fun draw(context: Context, canvas: Canvas, color: Int) {
+      TEMP_PAINT.color = color
       canvas.drawRect(0f, 0f, canvas.width.f, context.statusBarHeight.f, TEMP_PAINT)
     }
   }

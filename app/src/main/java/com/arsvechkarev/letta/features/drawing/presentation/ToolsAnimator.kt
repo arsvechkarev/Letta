@@ -4,8 +4,8 @@ import android.view.View
 import android.view.ViewPropertyAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.core.DURATION_DEFAULT
-import com.arsvechkarev.letta.core.throwEx
 import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
+import com.arsvechkarev.letta.extensions.throwEx
 import com.arsvechkarev.letta.views.Image
 import com.arsvechkarev.letta.views.VerticalSeekbar
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette

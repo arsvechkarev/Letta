@@ -1,9 +1,22 @@
 package com.arsvechkarev.letta.extensions
 
-import android.os.Build
+import com.arsvechkarev.letta.BuildConfig
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+
+@OptIn(ExperimentalContracts::class)
+inline fun assertThat(condition: Boolean, lazyMessage: () -> String = { "" }) {
+  contract {
+    callsInPlace(lazyMessage, InvocationKind.EXACTLY_ONCE)
+    returns() implies condition
+  }
+  if (BuildConfig.DEBUG) {
+    if (!condition) {
+      throw AssertionError(lazyMessage())
+    }
+  }
+}
 
 @OptIn(ExperimentalContracts::class)
 inline fun <T> T?.ifNotNull(block: (T) -> Unit) {
@@ -21,12 +34,12 @@ inline fun <reified T> Any?.ifTypeOf(block: (T) -> Unit) {
   if (this is T) this.apply(block)
 }
 
+fun throwEx(): Nothing {
+  throw IllegalStateException()
+}
+
 inline fun <T> Array<T>.forEachReversed(block: (T) -> Unit) {
   for (i in size - 1 downTo 0) {
     block(get(i))
   }
-}
-
-fun Any.isApiAtLeast(value: Int): Boolean {
-  return Build.VERSION.SDK_INT >= value
 }

@@ -2,9 +2,9 @@ package com.arsvechkarev.letta.features.projects.domain
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.extensions.allProjectsDirectory
+import com.arsvechkarev.letta.extensions.assertThat
 import com.arsvechkarev.letta.extensions.hasProjectFiles
 import timber.log.Timber
 import java.io.File

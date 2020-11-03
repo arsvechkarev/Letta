@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.IdRes
 import com.arsvechkarev.letta.R
+import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.extensions.findChild
 import com.arsvechkarev.letta.extensions.isNotGone
 import com.arsvechkarev.letta.extensions.layoutNormal
@@ -145,7 +146,7 @@ class PaintingViewGroup @JvmOverloads constructor(
   
   override fun dispatchDraw(canvas: Canvas) {
     super.dispatchDraw(canvas)
-    StatusBarBackground.drawItself(context, canvas)
+    StatusBarBackground.draw(context, canvas, Colors.StatusBar)
   }
   
   private fun layoutDialog(resId: Int, width: Int, height: Int) {

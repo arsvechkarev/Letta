@@ -15,7 +15,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.annotation.FloatRange
 import com.arsvechkarev.letta.core.Colors
-import com.arsvechkarev.letta.core.STROKE_PAINT
+import com.arsvechkarev.letta.extensions.STROKE_PAINT
 import com.arsvechkarev.letta.extensions.dp
 import com.arsvechkarev.letta.extensions.f
 

@@ -8,8 +8,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.core.DURATION_SHORT
-import com.arsvechkarev.letta.core.assertThat
 import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
+import com.arsvechkarev.letta.extensions.assertThat
 import com.arsvechkarev.letta.extensions.doOnEnd
 import com.arsvechkarev.letta.extensions.getBehavior
 

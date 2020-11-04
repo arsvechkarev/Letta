@@ -21,7 +21,6 @@ class ProjectsListPresenter(
   @Volatile
   private var isLoadingNow = false
   
-  private val currentlySelectedPositions = HashSet<Int>()
   private val currentlySelectedProjects = HashSet<Project>()
   
   fun loadProjects() {
@@ -37,6 +36,7 @@ class ProjectsListPresenter(
         if (currentItemIndex > 0) {
           updateView { onLoadingMoreProjects() }
         }
+        Thread.sleep(800)
         val projects = repository.getProjects(currentItemIndex, AMOUNT_PER_LOADING)
         assertThat(projects.isNotEmpty())
         if (currentItemIndex == 0) {
@@ -75,14 +75,12 @@ class ProjectsListPresenter(
     }
   }
   
-  fun onProjectSelected(position: Int, project: Project) {
-    currentlySelectedPositions.add(position)
+  fun onProjectSelected(project: Project) {
     currentlySelectedProjects.add(project)
     updateTrashIconState()
   }
   
-  fun onProjectUnselected(position: Int, project: Project) {
-    currentlySelectedPositions.remove(position)
+  fun onProjectUnselected(project: Project) {
     currentlySelectedProjects.remove(project)
     updateTrashIconState()
   }
@@ -124,7 +122,6 @@ class ProjectsListPresenter(
   }
   
   private fun updateTrashIconState() {
-    println("pp: position changed = $currentlySelectedPositions")
     if (currentlySelectedProjects.isEmpty()) {
       updateView { disableTrashIcon() }
     } else {

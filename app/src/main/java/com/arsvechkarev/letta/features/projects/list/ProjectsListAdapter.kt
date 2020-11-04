@@ -14,21 +14,22 @@ import com.arsvechkarev.letta.views.Checkmark
 import com.arsvechkarev.letta.views.ClickableSquareImage
 
 class ProjectsListAdapter(
-  private val onProjectClick: (Project) -> Unit,
+  onProjectClick: (Project) -> Unit,
   onReadyToLoadFurtherData: (() -> Unit)? = null,
   onLongClick: () -> Unit,
-  onProjectSelected: (Int, Project) -> Unit,
-  onProjectUnselected: (Int, Project) -> Unit,
+  onProjectSelected: (Project) -> Unit,
+  onProjectUnselected: (Project) -> Unit,
 ) : MultiSelectionAdapter<DifferentiableItem>(onReadyToLoadFurtherData) {
   
   init {
     val projectAdapterDelegate = ProjectItemAdapterDelegate(
       isInSelectionModeLambda,
-      { onProjectClick(it) },
-      { onProjectSelected(0, it) },
-      { onProjectUnselected(0, it) },
+      onProjectClick,
+      onProjectSelected,
+      onProjectUnselected,
       onLongClick
     )
+    @Suppress("UNCHECKED_CAST")
     projectAdapterDelegate.setSelectedPositions(selectedItems as ArrayList<Project>)
     addDelegates(projectAdapterDelegate, LoadingItemDelegate())
   }

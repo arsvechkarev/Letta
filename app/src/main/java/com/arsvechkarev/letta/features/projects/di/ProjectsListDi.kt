@@ -35,8 +35,8 @@ object ProjectsListDi {
     onProjectClick: (Project) -> Unit,
     onReadyToLoadFurtherData: () -> Unit,
     onLongClick: () -> Unit,
-    onProjectSelected: (Int, Project) -> Unit,
-    onProjectUnselected: (Int, Project) -> Unit,
+    onProjectSelected: (Project) -> Unit,
+    onProjectUnselected: (Project) -> Unit,
   ): ProjectsListAdapter {
     return ProjectsListAdapter(
       onProjectClick,

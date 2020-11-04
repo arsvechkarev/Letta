@@ -63,10 +63,10 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
       presenter.loadProjects()
     }, onLongClick = {
       presenter.onLongClickOnItem()
-    }, onProjectSelected = { position, project ->
-      presenter.onProjectSelected(position, project)
-    }, onProjectUnselected = { position, project ->
-      presenter.onProjectUnselected(position, project)
+    }, onProjectSelected = { project ->
+      presenter.onProjectSelected(project)
+    }, onProjectUnselected = { project ->
+      presenter.onProjectUnselected(project)
     })
   }
   

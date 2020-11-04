@@ -3,13 +3,13 @@ package com.arsvechkarev.letta.core.recycler
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 
-abstract class MultiSelectionAdapter<D>(
+abstract class MultiSelectionAdapter<T>(
   onReadyToLoadFurtherData: (() -> Unit)? = null
 ) : ListAdapter(onReadyToLoadFurtherData = onReadyToLoadFurtherData) {
   
   private var isInSelectionMode = false
   
-  protected val selectedItemPositions = ArrayList<Int>()
+  protected val selectedItems = ArrayList<T>()
   
   protected val isInSelectionModeLambda = { isInSelectionMode }
   
@@ -20,7 +20,7 @@ abstract class MultiSelectionAdapter<D>(
   
   fun switchBackFromSelectionMode() {
     isInSelectionMode = false
-    selectedItemPositions.clear()
+    selectedItems.clear()
     onSwitchingBackFromSelectionMode(recyclerView!!.layoutManager as LinearLayoutManager)
   }
   
@@ -28,12 +28,12 @@ abstract class MultiSelectionAdapter<D>(
   
   abstract fun onSwitchingBackFromSelectionMode(layoutManager: LinearLayoutManager)
   
-  abstract class MultiSelectionViewHolder<D>(
+  abstract class MultiSelectionViewHolder<T>(
     itemView: View,
-    private val selectedPositions: ArrayList<Int>,
+    private val selectedPositions: ArrayList<T>,
     private val isInSelectionMode: () -> Boolean,
-    onItemClick: (position: Int) -> Unit,
-  ) : DelegateViewHolder<D>(itemView) {
+    onItemClick: (item: T) -> Unit,
+  ) : DelegateViewHolder<T>(itemView) {
     
     abstract fun viewForClickListener(itemView: View): View
     
@@ -49,30 +49,30 @@ abstract class MultiSelectionAdapter<D>(
     
     abstract fun switchFromSelectionModeWithoutAnimation(itemView: View)
     
-    abstract fun bindItem(item: D)
+    abstract fun bindItem(item: T)
     
     init {
       @Suppress("LeakingThis")
       viewForClickListener(itemView).setOnClickListener {
         if (!isInSelectionMode()) {
-          onItemClick(adapterPosition)
+          onItemClick(item)
         } else {
-          if (selectedPositions.contains(adapterPosition)) {
+          if (selectedPositions.contains(item)) {
             setDisabled(itemView)
-            selectedPositions.remove(adapterPosition)
+            selectedPositions.remove(item)
           } else {
             setSelected(itemView)
-            selectedPositions.add(adapterPosition)
+            selectedPositions.add(item)
           }
         }
       }
     }
     
-    override fun bind(item: D) {
+    override fun bind(item: T) {
       bindItem(item)
       if (isInSelectionMode()) {
         goToSelectionModeWithoutAnimation(itemView)
-        if (selectedPositions.contains(adapterPosition)) {
+        if (selectedPositions.contains(item)) {
           setSelectedWithoutAnimation(itemView)
         } else {
           setDisabledWithoutAnimation(itemView)

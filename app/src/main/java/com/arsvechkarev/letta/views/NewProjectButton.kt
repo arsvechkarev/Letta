@@ -37,11 +37,25 @@ class NewProjectButton @JvmOverloads constructor(
         if (recycler.allowRecyclerScrolling()
             && abs(dy) > ViewConfiguration.get(context).scaledTouchSlop) {
           if (dy < 0) {
-            animate(isScrollingDown = true)
+            animate(down = true)
           } else {
-            animate(isScrollingDown = false)
+            animate(down = false)
           }
         }
+      }
+    }
+  }
+  
+  fun animate(down: Boolean) {
+    if (isAnimating || !allowAnimating) return
+    val range = getRange()
+    if (down) {
+      if (translationY <= 0f) {
+        performAnimation(range)
+      }
+    } else {
+      if (translationY > 0f) {
+        performAnimation(-range)
       }
     }
   }
@@ -54,20 +68,6 @@ class NewProjectButton @JvmOverloads constructor(
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
     customCoordinatorLayout.removeMotionEventListener(motionListener)
-  }
-  
-  private fun animate(isScrollingDown: Boolean) {
-    if (isAnimating || !allowAnimating) return
-    val range = getRange()
-    if (isScrollingDown) {
-      if (translationY <= 0f) {
-        performAnimation(range)
-      }
-    } else {
-      if (translationY > 0f) {
-        performAnimation(-range)
-      }
-    }
   }
   
   private fun performAnimation(translation: Float) {

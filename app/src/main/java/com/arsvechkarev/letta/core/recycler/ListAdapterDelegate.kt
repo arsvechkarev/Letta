@@ -12,7 +12,10 @@ abstract class ListAdapterDelegate<T : DifferentiableItem>(val modelClass: KClas
   
   abstract fun onCreateViewHolder(parent: ViewGroup): DelegateViewHolder<T>
   
-  open fun onBindViewHolder(holder: DelegateViewHolder<T>, item: T) = holder.bind(item)
+  open fun onBindViewHolder(holder: DelegateViewHolder<T>, item: T) {
+    holder._item = item
+    holder.bind(item)
+  }
   
   open fun onAttachedToRecyclerView(recyclerView: RecyclerView) {}
   

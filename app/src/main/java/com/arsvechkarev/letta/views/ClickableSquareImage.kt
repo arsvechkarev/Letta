@@ -25,6 +25,10 @@ class ClickableSquareImage @JvmOverloads constructor(
   
   var scaleOnTouch = true
   
+  fun resetScale() {
+    animate(down = false)
+  }
+  
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val width = MeasureSpec.getSize(widthMeasureSpec)
     val height = MeasureSpec.getSize(heightMeasureSpec)

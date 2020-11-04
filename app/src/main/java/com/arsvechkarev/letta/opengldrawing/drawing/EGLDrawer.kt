@@ -18,7 +18,7 @@ import javax.microedition.khronos.egl.EGLSurface
 
 class EGLDrawer(
   private val surfaceTexture: SurfaceTexture,
-  private var bitmap: Bitmap,
+  private var bitmap: Bitmap?,
   private val painting: Painting
 ) : DispatchQueue("EGLDrawer") {
   
@@ -115,7 +115,7 @@ class EGLDrawer(
   }
   
   override fun run() {
-    if (bitmap.isRecycled) {
+    if (bitmap == null || bitmap?.isRecycled == true) {
       return
     }
     isInitialized = initializeGL()
@@ -170,7 +170,7 @@ class EGLDrawer(
     GLES20.glDisable(GLES20.GL_DEPTH_TEST)
     painting.setupShaders()
     checkBitmap()
-    painting.setBitmap(bitmap)
+    painting.setBitmap(bitmap!!)
     Logger.printGLErrorIfAny()
     return true
   }
@@ -183,11 +183,12 @@ class EGLDrawer(
   }
   
   private fun checkBitmap() {
+    val bitmap = bitmap ?: return
     val paintingSize = painting.size
     if (bitmap.width.toFloat() != paintingSize.width || bitmap.height.toFloat() != paintingSize.height) {
       val bitmapWidth = bitmap.width.toFloat()
       val scale = paintingSize.width / bitmapWidth
-      bitmap = createBitmap(bitmap, scale)
+      this.bitmap = createBitmap(bitmap, scale)
     }
   }
   

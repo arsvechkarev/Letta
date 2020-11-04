@@ -7,6 +7,8 @@ interface ProjectsListView : MvpView {
   
   fun onSwitchToSelectionMode()
   
+  fun onSwitchToSelectionModeFromLongClick()
+  
   fun onSwitchBackFromSelectionMode()
   
   fun onLoadedFirstProjects(list: List<Project>)
@@ -18,4 +20,12 @@ interface ProjectsListView : MvpView {
   fun onProjectCreated(project: Project)
   
   fun projectsAreEmpty()
+  
+  fun enableTrashIcon()
+  
+  fun disableTrashIcon()
+  
+  fun onAskToDeleteProjects(listSize: Int)
+  
+  fun onConfirmedToDeleteProjects(list: Collection<Project>)
 }

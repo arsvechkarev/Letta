@@ -19,15 +19,13 @@ class SavingProjectRepository(
   fun saveBitmapToGallery(bitmap: Bitmap) {
     val directory = context.allProjectsDirectory
     directory.mkdirs()
-    val dateFormat = SimpleDateFormat("yyyy_MM_dd-HH_mm_ss", Locale.getDefault())
-    repeat(10) {
-      val timestamp = dateFormat.format(Date()) + UUID.randomUUID().toString()
-      val projectFile = File(directory, "Project_$timestamp.png")
-      Timber.d("Saving project, file = ${projectFile.path}")
-      FileOutputStream(projectFile).use {
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-      }
-      ProjectsFilesObserver.notifyProjectCreated(projectFile.canonicalPath)
+    val dateFormat = SimpleDateFormat("yyyy_MM_dd--HH_mm_ss--", Locale.getDefault())
+    val timestamp = dateFormat.format(Date()) + UUID.randomUUID().leastSignificantBits.toString()
+    val projectFile = File(directory, "Project_$timestamp.png")
+    Timber.d("Saving project, file = ${projectFile.path}")
+    FileOutputStream(projectFile).use {
+      bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
     }
+    ProjectsFilesObserver.notifyProjectCreated(projectFile.canonicalPath)
   }
 }

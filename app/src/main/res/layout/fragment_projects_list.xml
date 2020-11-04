@@ -9,8 +9,21 @@
     android:id="@+id/header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipChildren="false"
     android:orientation="vertical"
     app:layout_behavior=".views.behaviors.HeaderBehavior">
+
+    <com.arsvechkarev.letta.views.ImageButton
+      android:id="@+id/imageBackFromSelectionMode"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/text_title_padding"
+      android:visibility="gone"
+      app:drawStroke="false"
+      app:imageSrc="@drawable/ic_back"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
       android:id="@+id/titleAllProjects"
@@ -28,7 +41,6 @@
     <View
       android:layout_width="match_parent"
       android:layout_height="@dimen/divider_height"
-      android:layout_marginHorizontal="@dimen/divider_margin"
       android:background="?colorDivider"
       app:layout_constraintTop_toBottomOf="@id/titleAllProjects"/>
 
@@ -36,11 +48,22 @@
       android:id="@+id/imageMore"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:clickable="true"
-      android:focusable="true"
       android:padding="@dimen/text_title_padding"
+      android:visibility="invisible"
       app:drawStroke="false"
       app:imageSrc="@drawable/ic_more"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.arsvechkarev.letta.views.ImageButton
+      android:id="@+id/imageTrash"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/text_title_padding"
+      android:visibility="gone"
+      app:drawStroke="false"
+      app:imageSrc="@drawable/ic_trash"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
@@ -51,7 +74,7 @@
     android:id="@+id/recyclerAllProjects"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior=".views.behaviors.ScrollingRecyclerBehavior"/>
+    app:layout_behavior=".views.behaviors.ViewUnderHeaderBehavior"/>
 
   <com.arsvechkarev.letta.views.ProgressBar
     android:id="@+id/projectsProgressBar"
@@ -146,5 +169,62 @@
     app:backgroundColor="?colorButtonGradientStart"
     app:drawStroke="false"
     app:imageSrc="@drawable/ic_new_project"/>
+
+  <com.arsvechkarev.letta.views.SimpleDialog
+    android:id="@+id/projectsDialogConfirmDelete"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_margin="@dimen/dialog_confirm_delete_margin"
+      android:background="@drawable/bg_dialog"
+      android:padding="@dimen/dialog_confirm_delete_padding">
+
+      <TextView
+        android:id="@+id/projectsHeaderDialogConfirmDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="@dimen/header_confirm_delete_m_horizontal"
+        android:layout_marginBottom="@dimen/header_confirm_delete_m_bottom"
+        android:fontFamily="@font/segoe_ui"
+        android:text="@string/text_are_you_sure_to_delete_projects"
+        android:textColor="?colorTextPrimary"
+        android:textSize="@dimen/text_h4"
+        app:layout_constraintBottom_toTopOf="@id/projectsTextDialogCancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+      <com.arsvechkarev.letta.views.ClickableTextView
+        android:id="@+id/projectsTextDialogCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_cancel"
+        android:textColor="?colorTextPrimary"
+        android:textSize="@dimen/text_h5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/projectsTextDialogDelete"
+        app:layout_constraintTop_toBottomOf="@id/projectsHeaderDialogConfirmDelete"
+        app:rippleColor="?colorRippleDark"/>
+
+      <com.arsvechkarev.letta.views.ClickableTextView
+        android:id="@+id/projectsTextDialogDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_delete"
+        android:textColor="?colorFailure"
+        android:textSize="@dimen/text_h5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/projectsTextDialogCancel"
+        app:rippleColor="?colorRippleFailure"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+  </com.arsvechkarev.letta.views.SimpleDialog>
 
 </com.arsvechkarev.letta.views.CustomCoordinatorLayout>

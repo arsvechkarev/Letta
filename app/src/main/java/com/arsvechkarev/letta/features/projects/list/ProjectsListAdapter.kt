@@ -3,6 +3,7 @@ package com.arsvechkarev.letta.features.projects.list
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.letta.core.model.LoadingMoreProjects
 import com.arsvechkarev.letta.core.model.Project
+import com.arsvechkarev.letta.core.recycler.CallbackType
 import com.arsvechkarev.letta.core.recycler.DifferentiableItem
 import com.arsvechkarev.letta.core.recycler.MultiSelectionAdapter
 import com.arsvechkarev.letta.extensions.childViewAs
@@ -15,30 +16,42 @@ import com.arsvechkarev.letta.views.ClickableSquareImage
 class ProjectsListAdapter(
   private val onProjectClick: (Project) -> Unit,
   onReadyToLoadFurtherData: (() -> Unit)? = null,
+  onLongClick: () -> Unit,
+  onProjectSelected: (Int, Project) -> Unit,
+  onProjectUnselected: (Int, Project) -> Unit,
 ) : MultiSelectionAdapter<DifferentiableItem>(onReadyToLoadFurtherData) {
   
   init {
     val projectAdapterDelegate = ProjectItemAdapterDelegate(
       isInSelectionModeLambda,
-      { position -> onProjectClick(data[position] as Project) }
+      { onProjectClick(it) },
+      { onProjectSelected(0, it) },
+      { onProjectUnselected(0, it) },
+      onLongClick
     )
-    projectAdapterDelegate.setSelectedPositions(selectedItemPositions)
+    projectAdapterDelegate.setSelectedPositions(selectedItems as ArrayList<Project>)
     addDelegates(projectAdapterDelegate, LoadingItemDelegate())
+  }
+  
+  fun addLoadingItem(item: LoadingMoreProjects) {
+    if (data.last() != item) addItemToTheEnd(item)
+  }
+  
+  fun deleteItems(list: Collection<Project>) {
+    val newList = ArrayList(data)
+    newList.removeAll(list)
+    submitList(newList, CallbackType.TWO_LISTS)
   }
   
   override fun readyToStartLoadingData(position: Int): Boolean {
     return position == data.size - 9
   }
   
-  fun addLoadingItem(item: LoadingMoreProjects) {
-    if (data.last() != item) addItem(item)
-  }
-  
   override fun onSwitchingToSelectionMode(layoutManager: LinearLayoutManager) {
     val start = layoutManager.findFirstVisibleItemPosition()
     val end = layoutManager.findLastVisibleItemPosition()
     for (i in start..end) {
-      val holder = recyclerView!!.findViewHolderForAdapterPosition(i)!!
+      val holder = recyclerView?.findViewHolderForAdapterPosition(i) ?: continue
       if (holder !is ProjectViewHolder) continue
       val child = holder.itemView
       val checkmark = child.childViewAs<Checkmark>(Checkmark)
@@ -47,13 +60,14 @@ class ProjectsListAdapter(
       image.scaleOnTouch = false
     }
     notifyItemRangeChanged(end + 1, itemCount - end + 1)
+    notifyItemRangeChanged(0, start)
   }
   
   override fun onSwitchingBackFromSelectionMode(layoutManager: LinearLayoutManager) {
     val start = layoutManager.findFirstVisibleItemPosition()
     val end = layoutManager.findLastVisibleItemPosition()
     for (i in start..end) {
-      val holder = recyclerView!!.findViewHolderForAdapterPosition(i)!!
+      val holder = recyclerView?.findViewHolderForAdapterPosition(i) ?: continue
       if (holder !is ProjectViewHolder) continue
       val child = holder.itemView
       val checkmark = child.childViewAs<Checkmark>(Checkmark)
@@ -63,5 +77,6 @@ class ProjectsListAdapter(
       image.scaleOnTouch = true
     }
     notifyItemRangeChanged(end + 1, itemCount - end + 1)
+    notifyItemRangeChanged(0, start)
   }
 }

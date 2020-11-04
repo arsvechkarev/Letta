@@ -34,7 +34,16 @@ object ProjectsListDi {
   fun provideAdapter(
     onProjectClick: (Project) -> Unit,
     onReadyToLoadFurtherData: () -> Unit,
+    onLongClick: () -> Unit,
+    onProjectSelected: (Int, Project) -> Unit,
+    onProjectUnselected: (Int, Project) -> Unit,
   ): ProjectsListAdapter {
-    return ProjectsListAdapter(onProjectClick, onReadyToLoadFurtherData)
+    return ProjectsListAdapter(
+      onProjectClick,
+      onReadyToLoadFurtherData,
+      onLongClick,
+      onProjectSelected,
+      onProjectUnselected
+    )
   }
 }

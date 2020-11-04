@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.extensions.allProjectsDirectory
+import com.arsvechkarev.letta.extensions.assertThat
 import com.arsvechkarev.letta.extensions.hasProjectFiles
 import timber.log.Timber
 import java.io.File
@@ -15,7 +16,7 @@ class ProjectsListRepository(
   fun hasMoreProjects(currentItemIndex: Int): Boolean {
     if (context.hasProjectFiles()) {
       val files = context.allProjectsDirectory.list()!!
-      return currentItemIndex < files.lastIndex
+      return currentItemIndex <= files.lastIndex
     }
     return false
   }
@@ -26,10 +27,15 @@ class ProjectsListRepository(
       try {
         val allProjectsDir = context.allProjectsDirectory
         val directories = allProjectsDir.list()!!
+        directories.sort()
+        directories.reverse()
+        println(
+          "zzzz: from=$fromIndex, end=${fromIndex + amount}, lastIndex=${directories.lastIndex}")
         val start = minOf(fromIndex, directories.lastIndex)
         val end = minOf(fromIndex + amount, directories.lastIndex)
         for (i in start until end) {
           val filename = directories[i]
+          println("iii: $i project = $filename")
           val tempFile = File(allProjectsDir, filename)
           val options = BitmapFactory.Options().apply {
             inSampleSize = 4
@@ -52,5 +58,11 @@ class ProjectsListRepository(
     }
     val bitmap = BitmapFactory.decodeFile(tempFile.canonicalPath, options)
     return Project(tempFile.canonicalPath, bitmap)
+  }
+  
+  fun deleteProjects(projects: Collection<Project>) {
+    projects.forEach { project ->
+      assertThat(File(project.filePath).delete())
+    }
   }
 }

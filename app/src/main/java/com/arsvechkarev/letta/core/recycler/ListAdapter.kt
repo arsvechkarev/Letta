@@ -10,9 +10,8 @@ import com.arsvechkarev.letta.core.async.Threader
 import kotlin.reflect.KClass
 
 abstract class ListAdapter(
-  private val callbackType: CallbackType = CallbackType.APPENDED_LIST,
   private val threader: Threader = AndroidThreader,
-  private var onReadyToLoadFurtherData: (() -> Unit)? = null
+  protected var onReadyToLoadFurtherData: (() -> Unit)? = null
 ) : RecyclerView.Adapter<ViewHolder>() {
   
   protected var recyclerView: RecyclerView? = null
@@ -32,11 +31,14 @@ abstract class ListAdapter(
     }
   }
   
-  fun addItem(item: DifferentiableItem) {
-    threader.onMainThread {
-      data.add(item)
-      notifyItemInserted(data.lastIndex)
-    }
+  fun addItem(item: DifferentiableItem, position: Int) {
+    data.add(position, item)
+    notifyItemInserted(position)
+  }
+  
+  fun addItemToTheEnd(item: DifferentiableItem) {
+    data.add(item)
+    notifyItemInserted(data.lastIndex)
   }
   
   fun removeLastAndAdd(list: List<DifferentiableItem>) {
@@ -52,7 +54,7 @@ abstract class ListAdapter(
     applyChanges(AppendedListDiffCallbacks(data, oldSize))
   }
   
-  fun submitList(list: List<DifferentiableItem>) {
+  fun submitList(list: List<DifferentiableItem>, callbackType: CallbackType) {
     val callback = when (callbackType) {
       CallbackType.APPENDED_LIST -> AppendedListDiffCallbacks(list, data.size)
       CallbackType.TWO_LISTS -> TwoListsDiffCallBack(data, list)
@@ -64,7 +66,7 @@ abstract class ListAdapter(
   
   private fun applyChanges(callback: DiffUtil.Callback) {
     threader.onBackground {
-      val diffResult = DiffUtil.calculateDiff(callback)
+      val diffResult = DiffUtil.calculateDiff(callback, false)
       threader.onMainThread {
         diffResult.dispatchUpdatesTo(this)
       }

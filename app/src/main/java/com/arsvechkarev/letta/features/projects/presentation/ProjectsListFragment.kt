@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.graphics.ColorUtils
-import androidx.recyclerview.widget.GridLayoutManager
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.model.BackgroundType.Color
@@ -13,23 +12,37 @@ import com.arsvechkarev.letta.core.model.LoadingMoreProjects
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
+import com.arsvechkarev.letta.core.recycler.CallbackType
 import com.arsvechkarev.letta.extensions.StatusBar
 import com.arsvechkarev.letta.extensions.animateInvisibleAndScale
+import com.arsvechkarev.letta.extensions.animateLoosen
+import com.arsvechkarev.letta.extensions.animateSquash
 import com.arsvechkarev.letta.extensions.getDimen
+import com.arsvechkarev.letta.extensions.gone
 import com.arsvechkarev.letta.extensions.paddings
+import com.arsvechkarev.letta.extensions.visible
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createDrawableResArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createProjectArgs
 import com.arsvechkarev.letta.features.projects.di.ProjectsListDi
+import com.arsvechkarev.letta.views.SafeGridLayoutManager
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.State.SHOWN
+import com.arsvechkarev.letta.views.behaviors.HeaderBehavior.Companion.asHeader
 import kotlinx.android.synthetic.main.fragment_projects_list.bottomSheetShadowView
 import kotlinx.android.synthetic.main.fragment_projects_list.buttonNewProject
 import kotlinx.android.synthetic.main.fragment_projects_list.createNewProjectButton
 import kotlinx.android.synthetic.main.fragment_projects_list.dialogProjectBackground
+import kotlinx.android.synthetic.main.fragment_projects_list.header
+import kotlinx.android.synthetic.main.fragment_projects_list.imageBackFromSelectionMode
 import kotlinx.android.synthetic.main.fragment_projects_list.imageMore
+import kotlinx.android.synthetic.main.fragment_projects_list.imageTrash
+import kotlinx.android.synthetic.main.fragment_projects_list.projectsDialogConfirmDelete
+import kotlinx.android.synthetic.main.fragment_projects_list.projectsHeaderDialogConfirmDelete
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsListRoot
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsProgressBar
+import kotlinx.android.synthetic.main.fragment_projects_list.projectsTextDialogCancel
+import kotlinx.android.synthetic.main.fragment_projects_list.projectsTextDialogDelete
 import kotlinx.android.synthetic.main.fragment_projects_list.recyclerAllProjects
 import kotlinx.android.synthetic.main.fragment_projects_list.titleAllProjects
 
@@ -48,6 +61,12 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
       ))
     }, onReadyToLoadFurtherData = {
       presenter.loadProjects()
+    }, onLongClick = {
+      presenter.onLongClickOnItem()
+    }, onProjectSelected = { position, project ->
+      presenter.onProjectSelected(position, project)
+    }, onProjectUnselected = { position, project ->
+      presenter.onProjectUnselected(position, project)
     })
   }
   
@@ -65,15 +84,27 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   
   override fun onSwitchToSelectionMode() {
     adapter.switchToSelectionMode()
+    animateTransitionToSelectionMode()
+    imageTrash.isEnabled = false
+  }
+  
+  override fun onSwitchToSelectionModeFromLongClick() {
+    adapter.switchToSelectionMode()
+    animateTransitionToSelectionMode()
+    imageTrash.isEnabled = true
   }
   
   override fun onSwitchBackFromSelectionMode() {
     adapter.switchBackFromSelectionMode()
+    animateTransitionFromSelectionMode()
   }
   
   override fun onLoadedFirstProjects(list: List<Project>) {
-    adapter.submitList(list)
+    adapter.submitList(list, CallbackType.APPENDED_LIST)
     projectsProgressBar.animateInvisibleAndScale()
+    if (imageMore.visibility != View.VISIBLE) {
+      imageMore.animateLoosen()
+    }
   }
   
   override fun onLoadingMoreProjects() {
@@ -85,17 +116,44 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   override fun onProjectCreated(project: Project) {
-    adapter.addItem(project)
+    if (imageMore.visibility != View.VISIBLE) {
+      imageMore.animateLoosen()
+    }
+    adapter.addItem(project, 0)
   }
   
   override fun projectsAreEmpty() {
     projectsProgressBar.animateInvisibleAndScale()
   }
   
+  override fun enableTrashIcon() {
+    imageTrash.isEnabled = true
+  }
+  
+  override fun disableTrashIcon() {
+    imageTrash.isEnabled = false
+  }
+  
+  override fun onAskToDeleteProjects(listSize: Int) {
+    projectsDialogConfirmDelete.show()
+    projectsHeaderDialogConfirmDelete.text = getString(
+      R.string.text_are_you_sure_to_delete_projects, listSize
+    )
+  }
+  
+  override fun onConfirmedToDeleteProjects(list: Collection<Project>) {
+    projectsDialogConfirmDelete.hide()
+    adapter.deleteItems(list)
+  }
+  
   override fun onBackPressed(): Boolean {
     val bottomSheet = dialogProjectBackground.asBottomSheet
     if (bottomSheet.state == SHOWN) {
       bottomSheet.hide()
+      return false
+    }
+    if (presenter.selectionMode) {
+      presenter.switchBackFromSelectionMode()
       return false
     }
     return true
@@ -107,9 +165,11 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   private fun initViews() {
+    imageTrash.isEnabled = false
+    header.asHeader.isScrollable = false
     recyclerAllProjects.adapter = adapter
-    recyclerAllProjects.layoutManager = GridLayoutManager(requireContext(), 3,
-      GridLayoutManager.VERTICAL, false)
+    val layoutManager = SafeGridLayoutManager(requireContext(), 3)
+    recyclerAllProjects.layoutManager = layoutManager
     val padding = requireContext().getDimen(R.dimen.text_title_padding).toInt()
     titleAllProjects.paddings(
       top = padding,
@@ -117,6 +177,33 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
       bottom = padding,
     )
     imageMore.setOnClickListener { presenter.onMoreButtonClicked() }
+    imageBackFromSelectionMode.setOnClickListener { presenter.switchBackFromSelectionMode() }
+    imageTrash.setOnClickListener { presenter.onDeleteSelectedProjects() }
+    projectsTextDialogDelete.setOnClickListener { presenter.onConfirmedToDelete() }
+    projectsTextDialogCancel.setOnClickListener { projectsDialogConfirmDelete.hide() }
+  }
+  
+  private fun animateTransitionToSelectionMode() {
+    buttonNewProject.animate(down = true)
+    buttonNewProject.allowAnimating = false
+    imageMore.animateSquash(andThen = { imageMore.gone() })
+    titleAllProjects.animateSquash(andThen = { imageMore.gone() })
+    imageBackFromSelectionMode.animateLoosen()
+    imageTrash.animateLoosen()
+    imageTrash.visible()
+  }
+  
+  private fun animateTransitionFromSelectionMode() {
+    imageTrash.isEnabled = true
+    buttonNewProject.allowAnimating = true
+    buttonNewProject.animate(down = false)
+    imageTrash.animateSquash(andThen = { imageTrash.gone() })
+    imageBackFromSelectionMode.animateSquash(andThen = {
+      imageBackFromSelectionMode.gone()
+    })
+    titleAllProjects.animateLoosen()
+    imageMore.animateLoosen()
+    imageMore.visible()
   }
   
   private fun prepareNewProjectDialog() {

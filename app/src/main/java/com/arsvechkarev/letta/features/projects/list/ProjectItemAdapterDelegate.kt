@@ -19,12 +19,15 @@ import com.arsvechkarev.letta.views.drawables.RoundedCornersDrawable
 
 class ProjectItemAdapterDelegate(
   private val isInSelectionModeLambda: () -> Boolean,
-  private val onProjectItemClick: (Int) -> Unit
+  private val onProjectItemClick: (Project) -> Unit,
+  private val onProjectSelected: (Project) -> Unit,
+  private val onProjectUnselected: (Project) -> Unit,
+  private val onLongClick: () -> Unit
 ) : ListAdapterDelegate<Project>(Project::class) {
   
-  private var selectedItemPositions = ArrayList<Int>()
+  private var selectedItemPositions = ArrayList<Project>()
   
-  fun setSelectedPositions(selectedItemPositions: ArrayList<Int>) {
+  fun setSelectedPositions(selectedItemPositions: ArrayList<Project>) {
     this.selectedItemPositions = selectedItemPositions
   }
   
@@ -54,29 +57,49 @@ class ProjectItemAdapterDelegate(
       frameLayout,
       selectedItemPositions,
       isInSelectionModeLambda,
-      onProjectItemClick
+      onProjectItemClick,
+      onLongClick,
+      onProjectSelected,
+      onProjectUnselected
     )
   }
   
   class ProjectViewHolder(
     itemView: View,
-    selectedPositions: ArrayList<Int>,
+    selectedPositions: ArrayList<Project>,
     isInSelectionMode: () -> Boolean,
-    onItemClick: (Int) -> Unit,
+    onItemClick: (Project) -> Unit,
+    onLongClick: () -> Unit,
+    private val onProjectSelected: (Project) -> Unit,
+    private val onProjectUnselected: (Project) -> Unit
   ) : MultiSelectionViewHolder<Project>(
     itemView,
     selectedPositions,
     isInSelectionMode,
     onItemClick
   ) {
-    
+  
+    init {
+      viewForClickListener(itemView).setOnLongClickListener {
+        if (!isInSelectionMode()) {
+          (it as ClickableSquareImage).resetScale()
+          itemView.childViewAs<Checkmark>(Checkmark).isChecked = true
+          selectedPositions.add(item)
+          onProjectSelected(item)
+          onLongClick()
+          return@setOnLongClickListener true
+        }
+        return@setOnLongClickListener false
+      }
+    }
+  
     override fun viewForClickListener(itemView: View) = itemView.childView(Image)
-    
+  
     override fun bindItem(item: Project) {
       val drawable = RoundedCornersDrawable.ofBitmap(itemView.context, item.image)
       itemView.childImageView(Image).setImageDrawable(drawable)
     }
-    
+  
     override fun setSelectedWithoutAnimation(itemView: View) {
       itemView.childViewAs<Checkmark>(Checkmark).updateCheckedStateWithoutAnimation(true)
     }
@@ -87,10 +110,12 @@ class ProjectItemAdapterDelegate(
     
     override fun setSelected(itemView: View) {
       itemView.childViewAs<Checkmark>(Checkmark).isChecked = true
+      onProjectSelected(item)
     }
     
     override fun setDisabled(itemView: View) {
       itemView.childViewAs<Checkmark>(Checkmark).isChecked = false
+      onProjectUnselected(item)
     }
     
     override fun goToSelectionModeWithoutAnimation(itemView: View) {

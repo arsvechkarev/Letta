@@ -8,18 +8,19 @@ import android.os.Bundle
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.letta.core.model.Project
+import com.arsvechkarev.letta.extensions.getProjectPath
 
 private const val TYPE = "TYPE"
 private const val KEY_WIDTH = "KEY_WIDTH"
 private const val KEY_HEIGHT = "KEY_HEIGHT"
 
-private const val FILE_PATH = "FILE_PATH"
+private const val PROJECT_FILENAME = "PROJECT_FILENAME"
 private const val COLOR = "COLOR"
 private const val DRAWABLE_RES = "DRAWABLE_RES"
 
 fun createProjectArgs(project: Project, width: Int, height: Int) = Bundle().apply {
-  putString(TYPE, FILE_PATH)
-  putString(FILE_PATH, project.filePath)
+  putString(TYPE, PROJECT_FILENAME)
+  putString(PROJECT_FILENAME, project.filename)
   putInt(KEY_WIDTH, width)
   putInt(KEY_HEIGHT, height)
 }
@@ -40,9 +41,9 @@ fun createDrawableResArgs(@DrawableRes drawableRes: Int, width: Int, height: Int
 
 fun getBitmapBy(context: Context, arguments: Bundle): Bitmap {
   when (arguments.get(TYPE)) {
-    FILE_PATH -> {
-      val bitmapFilename = arguments.getString(FILE_PATH)!!
-      return BitmapFactory.decodeFile(bitmapFilename)
+    PROJECT_FILENAME -> {
+      val bitmapFilename = arguments.getString(PROJECT_FILENAME)!!
+      return BitmapFactory.decodeFile(context.getProjectPath(bitmapFilename))
     }
     COLOR -> {
       val width = arguments.getInt(KEY_WIDTH)

@@ -1,13 +1,18 @@
 buildscript {
-  ext.kotlin_version = '1.4.10'
+  ext {
+    kotlinVersion = '1.4.10'
+    buildToolsVersion = '4.2.0-alpha15'
+    sqldelightVersion = '1.4.3'
+  }
   repositories {
     google()
     jcenter()
-
+    mavenCentral()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:4.2.0-alpha14'
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "com.android.tools.build:gradle:$buildToolsVersion"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    classpath "com.squareup.sqldelight:gradle-plugin:$sqldelightVersion"
   }
 }
 
@@ -16,8 +21,4 @@ allprojects {
     google()
     jcenter()
   }
-}
-
-task clean(type: Delete) {
-  delete rootProject.buildDir
 }

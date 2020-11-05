@@ -5,7 +5,7 @@ import com.arsvechkarev.letta.R.id.backgroundImageExample
 import com.arsvechkarev.letta.R.id.backgroundImagePalette
 import com.arsvechkarev.letta.R.id.backgroundImagesRecyclerView
 import com.arsvechkarev.letta.core.model.Project
-import com.arsvechkarev.letta.features.projects.domain.ProjectsListRepository
+import com.arsvechkarev.letta.features.common.CommonDi
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter
 import com.arsvechkarev.letta.features.projects.presentation.ChooseBgContainer
 import com.arsvechkarev.letta.features.projects.presentation.ProjectsListFragment
@@ -16,7 +16,7 @@ import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 object ProjectsListDi {
   
   fun providePresenter(fragment: ProjectsListFragment): ProjectsListPresenter {
-    return ProjectsListPresenter(ProjectsListRepository(fragment.requireContext()))
+    return ProjectsListPresenter(CommonDi.provideProjectRepository(fragment.requireContext()))
   }
   
   fun provideChooseBgContainer(fragment: ProjectsListFragment): ChooseBgContainer {

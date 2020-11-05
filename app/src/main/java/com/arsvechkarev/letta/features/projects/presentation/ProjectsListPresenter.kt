@@ -6,10 +6,10 @@ import com.arsvechkarev.letta.core.async.Threader
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.core.mvp.MvpPresenter
 import com.arsvechkarev.letta.extensions.assertThat
-import com.arsvechkarev.letta.features.projects.domain.ProjectsListRepository
+import com.arsvechkarev.letta.features.common.ProjectsRepository
 
 class ProjectsListPresenter(
-  private val repository: ProjectsListRepository,
+  private val repository: ProjectsRepository,
   threader: Threader = AndroidThreader
 ) : MvpPresenter<ProjectsListView>(threader), ProjectsFilesObserver.Observer {
   
@@ -115,8 +115,8 @@ class ProjectsListPresenter(
     ProjectsFilesObserver.clearObserver()
   }
   
-  override fun onNewProjectCreated(projectFullPath: String) {
-    val project = repository.loadProject(projectFullPath)
+  override fun onNewProjectCreated(filename: String) {
+    val project = repository.loadLatestProject(filename)
     currentItemIndex++
     updateView { onProjectCreated(project) }
   }

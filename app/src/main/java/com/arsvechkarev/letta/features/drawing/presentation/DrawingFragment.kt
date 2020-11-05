@@ -9,6 +9,7 @@ import com.arsvechkarev.letta.core.mvp.MvpFragment
 import com.arsvechkarev.letta.core.navigation.navigator
 import com.arsvechkarev.letta.extensions.StatusBar
 import com.arsvechkarev.letta.extensions.rotate
+import com.arsvechkarev.letta.features.common.CommonDi
 import com.arsvechkarev.letta.features.drawing.domain.SavingProjectRepository
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.brushes.BRUSHES
@@ -37,7 +38,7 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   private lateinit var drawingContainer: DrawingContainer
   
   override fun createPresenter(): DrawingPresenter {
-    return DrawingPresenter(SavingProjectRepository(requireContext()))
+    return DrawingPresenter(CommonDi.provideProjectRepository(requireContext()))
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

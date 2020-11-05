@@ -4,11 +4,11 @@ import android.graphics.Bitmap
 import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
 import com.arsvechkarev.letta.core.mvp.MvpPresenter
-import com.arsvechkarev.letta.features.drawing.domain.SavingProjectRepository
+import com.arsvechkarev.letta.features.common.ProjectsRepository
 import timber.log.Timber
 
 class DrawingPresenter(
-  private val repository: SavingProjectRepository,
+  private val repository: ProjectsRepository,
   threader: Threader = AndroidThreader
 ) : MvpPresenter<DrawingMvpView>(threader) {
   
@@ -16,7 +16,7 @@ class DrawingPresenter(
     updateView { onStartUploadingImage() }
     onIoThread {
       try {
-        repository.saveBitmapToGallery(bitmap)
+        repository.createProject(bitmap)
         updateView { onImageUploaded() }
       } catch (e: Throwable) {
         Timber.d(e)

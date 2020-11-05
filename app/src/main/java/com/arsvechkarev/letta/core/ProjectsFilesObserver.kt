@@ -12,12 +12,12 @@ object ProjectsFilesObserver {
     this.observer = null
   }
   
-  fun notifyProjectCreated(projectFullPath: String) {
-    observer?.onNewProjectCreated(projectFullPath)
+  fun notifyProjectCreated(filename: String) {
+    observer?.onNewProjectCreated(filename)
   }
   
   interface Observer {
     
-    fun onNewProjectCreated(projectFullPath: String)
+    fun onNewProjectCreated(filename: String)
   }
 }

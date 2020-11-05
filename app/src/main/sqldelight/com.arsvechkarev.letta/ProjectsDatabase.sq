@@ -1,0 +1,24 @@
+CREATE TABLE projects (
+  _id INTEGER PRIMARY KEY AUTOINCREMENT,
+  file_path TEXT NOT NULL,
+  timestamp TEXT NOT NULL
+);
+
+fetchProjects:
+SELECT *
+FROM projects
+ORDER BY timestamp DESC
+LIMIT :limit OFFSET :offset;
+
+createProject:
+INSERT INTO projects(file_path, timestamp)
+VALUES (:filePath, :timestamp);
+
+deleteProject:
+DELETE FROM projects WHERE _id = :id;
+
+getNumberOfProjects:
+SELECT COUNT(*) FROM projects;
+
+getLastInsertedProjectId:
+SELECT last_insert_rowid();

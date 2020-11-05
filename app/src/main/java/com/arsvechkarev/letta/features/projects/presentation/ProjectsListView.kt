@@ -11,6 +11,8 @@ interface ProjectsListView : MvpView {
   
   fun onSwitchBackFromSelectionMode()
   
+  fun onSwitchBackFromDeletion(projectsDeleted: Int)
+  
   fun onLoadedFirstProjects(list: List<Project>)
   
   fun onLoadingMoreProjects()

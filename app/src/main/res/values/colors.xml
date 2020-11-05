@@ -16,6 +16,6 @@
   <color name="light_ripple">#99FFFFFF</color>
   <color name="light_ripple_failure">#70E64545</color>
   <color name="light_ripple_dark">#60000000</color>
-  <color name="light_progress_bar">@color/light_button</color>
+  <color name="light_progress_bar">#1E68D6</color>
   <color name="light_status_bar">#50000000</color>
 </resources>

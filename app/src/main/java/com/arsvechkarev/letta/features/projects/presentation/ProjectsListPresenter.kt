@@ -100,9 +100,9 @@ class ProjectsListPresenter(
       repository.deleteProjects(currentlySelectedProjects)
       updateView {
         selectionMode = false
+        onSwitchBackFromDeletion(currentlySelectedProjects.size)
         onConfirmedToDeleteProjects(currentlySelectedProjects)
         currentlySelectedProjects.clear()
-        onSwitchBackFromSelectionMode()
       }
     }
   }

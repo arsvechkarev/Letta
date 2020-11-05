@@ -11,7 +11,7 @@ import com.arsvechkarev.letta.core.DURATION_SHORT
 
 val LinearInterpolator = LinearInterpolator()
 val AccelerateDecelerateInterpolator = AccelerateDecelerateInterpolator()
-val EndOvershootInterpolator = OvershootInterpolator()
+val OvershootInterpolator = OvershootInterpolator()
 
 fun View.animateInvisibleAndScale() {
   animate().alpha(0f)

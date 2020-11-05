@@ -5,7 +5,6 @@ import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
 import com.arsvechkarev.letta.core.mvp.MvpPresenter
 import com.arsvechkarev.letta.features.common.ProjectsRepository
-import timber.log.Timber
 
 class DrawingPresenter(
   private val repository: ProjectsRepository,
@@ -15,13 +14,8 @@ class DrawingPresenter(
   fun uploadBitmap(bitmap: Bitmap) {
     updateView { onStartUploadingImage() }
     onIoThread {
-      try {
-        repository.createProject(bitmap)
-        updateView { onImageUploaded() }
-      } catch (e: Throwable) {
-        Timber.d(e)
-        updateView { onImageUploadingError() }
-      }
+      repository.createProject(bitmap)
+      updateView { onImageUploaded() }
     }
   }
 }

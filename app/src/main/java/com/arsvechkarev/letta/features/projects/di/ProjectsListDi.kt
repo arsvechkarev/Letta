@@ -16,7 +16,7 @@ import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 object ProjectsListDi {
   
   fun providePresenter(fragment: ProjectsListFragment): ProjectsListPresenter {
-    return ProjectsListPresenter(CommonDi.provideProjectRepository(fragment.requireContext()))
+    return ProjectsListPresenter(CommonDi.provideProjectRepository())
   }
   
   fun provideChooseBgContainer(fragment: ProjectsListFragment): ChooseBgContainer {

@@ -1,6 +1,5 @@
 package com.arsvechkarev.letta.features.projects.presentation
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.graphics.ColorUtils
@@ -29,10 +28,10 @@ import com.arsvechkarev.letta.views.SafeGridLayoutManager
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import com.arsvechkarev.letta.views.behaviors.BottomSheetBehavior.State.SHOWN
 import com.arsvechkarev.letta.views.behaviors.HeaderBehavior.Companion.asHeader
+import kotlinx.android.synthetic.main.fragment_projects_list.bottomSheetProjectBackground
 import kotlinx.android.synthetic.main.fragment_projects_list.bottomSheetShadowView
 import kotlinx.android.synthetic.main.fragment_projects_list.buttonNewProject
 import kotlinx.android.synthetic.main.fragment_projects_list.createNewProjectButton
-import kotlinx.android.synthetic.main.fragment_projects_list.dialogProjectBackground
 import kotlinx.android.synthetic.main.fragment_projects_list.header
 import kotlinx.android.synthetic.main.fragment_projects_list.imageBackFromSelectionMode
 import kotlinx.android.synthetic.main.fragment_projects_list.imageMore
@@ -80,6 +79,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     presenter.loadProjects()
     chooseBgContainer.initialize()
     prepareNewProjectDialog()
+    prepareConfirmDeletionDialog()
   }
   
   override fun onSwitchToSelectionMode() {
@@ -97,6 +97,14 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   override fun onSwitchBackFromSelectionMode() {
     adapter.switchBackFromSelectionMode()
     animateTransitionFromSelectionMode()
+  }
+  
+  override fun onSwitchBackFromDeletion(projectsDeleted: Int) {
+    adapter.switchBackFromSelectionMode()
+    println("qqq: $projectsDeleted -- ${adapter.itemCount}")
+    animateTransitionFromSelectionMode(
+      showMoreIcon = projectsDeleted != adapter.itemCount
+    )
   }
   
   override fun onLoadedFirstProjects(list: List<Project>) {
@@ -147,7 +155,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   override fun onBackPressed(): Boolean {
-    val bottomSheet = dialogProjectBackground.asBottomSheet
+    val bottomSheet = bottomSheetProjectBackground.asBottomSheet
     if (bottomSheet.state == SHOWN) {
       bottomSheet.hide()
       return false
@@ -193,7 +201,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     imageTrash.visible()
   }
   
-  private fun animateTransitionFromSelectionMode() {
+  private fun animateTransitionFromSelectionMode(showMoreIcon: Boolean = true) {
     imageTrash.isEnabled = true
     buttonNewProject.allowAnimating = true
     buttonNewProject.animate(down = false)
@@ -202,12 +210,14 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
       imageBackFromSelectionMode.gone()
     })
     titleAllProjects.animateLoosen()
-    imageMore.animateLoosen()
-    imageMore.visible()
+    if (showMoreIcon) {
+      imageMore.animateLoosen()
+      imageMore.visible()
+    }
   }
   
   private fun prepareNewProjectDialog() {
-    val bottomSheet = dialogProjectBackground.asBottomSheet
+    val bottomSheet = bottomSheetProjectBackground.asBottomSheet
     bottomSheet.onShow = { buttonNewProject.allowAnimating = false }
     bottomSheet.onHide = { buttonNewProject.allowAnimating = true }
     buttonNewProject.setOnClickListener { bottomSheet.show() }
@@ -215,16 +225,18 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     bottomSheet.addSlideListener { percentageOpened ->
       val shadowColor = ColorUtils.blendARGB(Colors.Transparent, Colors.Shadow, percentageOpened)
       bottomSheetShadowView.setBackgroundColor(shadowColor)
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val endColor = ColorUtils.compositeColors(Colors.Shadow, Colors.Background)
-        val statusColor = ColorUtils.blendARGB(Colors.Background, endColor, percentageOpened)
-        StatusBar.setStatusBarColor(requireActivity(), statusColor)
-      }
+      StatusBar.applyShadow(requireActivity(), percentageOpened)
     }
     bottomSheet.addSlideListener { percentageOpened ->
-      buttonNewProject.alpha = 1 - percentageOpened
+      buttonNewProject.alpha = 1f - percentageOpened
       buttonNewProject.translationY = (buttonNewProject.measuredHeight / 2f) * percentageOpened
       buttonNewProject.isClickable = buttonNewProject.alpha != 0f
+    }
+  }
+  
+  private fun prepareConfirmDeletionDialog() {
+    projectsDialogConfirmDelete.onShadowFractionChangedListener = { percentage ->
+      StatusBar.applyShadow(requireActivity(), percentage)
     }
   }
   
@@ -236,5 +248,13 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
       is DrawableRes -> createDrawableResArgs(type.drawableRes, width, height)
     }
     navigator.openProject(args)
+    val duration = requireContext().resources.getInteger(R.integer.duration_fragment_transition)
+    requireView().postDelayed({
+      bottomSheetShadowView.setBackgroundColor(Colors.Transparent)
+      buttonNewProject.translationY = 0f
+      buttonNewProject.alpha = 1f
+      buttonNewProject.isClickable = true
+      bottomSheetProjectBackground.asBottomSheet.hideWithoutAnimation()
+    }, (duration * 1.2f).toLong())
   }
 }

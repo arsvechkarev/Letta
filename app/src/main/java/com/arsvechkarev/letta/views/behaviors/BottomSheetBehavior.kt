@@ -7,11 +7,14 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_POINTER_DOWN
+import android.view.MotionEvent.ACTION_POINTER_UP
 import android.view.MotionEvent.ACTION_UP
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.ViewCompat
 import com.arsvechkarev.letta.core.INVALID_POINTER
 import com.arsvechkarev.letta.extensions.doOnEnd
 import com.arsvechkarev.letta.extensions.getBehavior
@@ -22,19 +25,14 @@ import kotlin.math.abs
 class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
   CoordinatorLayout.Behavior<View>() {
   
-  enum class State {
-    SHOWN, HIDDEN
-  }
-  
-  private var touchSlop = ViewConfiguration.get(context).scaledTouchSlop
-  private var maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
+  private val offsetListeners = ArrayList<((percentageOpened: Float) -> Unit)>()
+  private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+  private val maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
   private var activePointerId = INVALID_POINTER
   private var isBeingDragged = false
   private var latestY = -1
   private var velocityTracker: VelocityTracker? = null
   private var bottomSheetOffsetHelper: BottomSheetOffsetHelper? = null
-  private val offsetListeners = ArrayList<((percentageOpened: Float) -> Unit)>()
-  
   private var currentState = HIDDEN
   private var bottomSheet: View? = null
   private var parentHeight = 0
@@ -71,6 +69,11 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
     }
   }
   
+  fun hideWithoutAnimation() {
+    ViewCompat.offsetTopAndBottom(bottomSheet!!, slideRange)
+    currentState = HIDDEN
+  }
+  
   fun addSlideListener(listener: (percentageOpened: Float) -> Unit) {
     offsetListeners.add(listener)
   }
@@ -96,12 +99,8 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
     return true
   }
   
-  override fun onInterceptTouchEvent(
-    parent: CoordinatorLayout,
-    child: View,
-    event: MotionEvent
-  ): Boolean {
-    if (slideAnimator.isRunning || state == HIDDEN) return false
+  override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: View, event: MotionEvent): Boolean {
+    if (slideAnimator.isRunning) return false
     val action = event.action
     if (action == ACTION_MOVE && isBeingDragged) {
       return true
@@ -112,17 +111,16 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
         val x = event.x.toInt()
         val y = event.y.toInt()
         if (parent.isPointInChildBounds(child, x, y)) {
-          latestY = y
           activePointerId = event.getPointerId(0)
+          latestY = y
           ensureVelocityTracker()
         }
       }
+      ACTION_POINTER_DOWN -> {
+        activePointerId = event.getPointerId(event.actionIndex)
+        latestY = event.getY(event.actionIndex).toInt()
+      }
       ACTION_MOVE -> {
-        val activePointerId = activePointerId
-        if (activePointerId == INVALID_POINTER) {
-          // If we don't have a valid id, the touch down wasn't on content.
-          return false
-        }
         val pointerIndex = event.findPointerIndex(activePointerId)
         if (pointerIndex == -1) {
           return false
@@ -134,6 +132,9 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
           latestY = y
         }
       }
+      ACTION_POINTER_UP -> {
+        onPointerUp(event)
+      }
       ACTION_CANCEL, ACTION_UP -> {
         endTouch()
       }
@@ -142,12 +143,8 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
     return isBeingDragged
   }
   
-  override fun onTouchEvent(
-    parent: CoordinatorLayout,
-    child: View,
-    event: MotionEvent
-  ): Boolean {
-    if (slideAnimator.isRunning || state == HIDDEN) return false
+  override fun onTouchEvent(parent: CoordinatorLayout, child: View, event: MotionEvent): Boolean {
+    if (slideAnimator.isRunning) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
         val x = event.x.toInt()
@@ -158,12 +155,16 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
           ensureVelocityTracker()
         }
       }
+      ACTION_POINTER_DOWN -> {
+        activePointerId = event.getPointerId(event.actionIndex)
+        latestY = event.getY(event.actionIndex).toInt()
+      }
       ACTION_MOVE -> {
-        val activePointerIndex = event.findPointerIndex(activePointerId)
-        if (activePointerIndex == -1) {
+        val pointerIndex = event.findPointerIndex(activePointerId)
+        if (pointerIndex == -1) {
           return true
         }
-        val y = event.getY(activePointerIndex).toInt()
+        val y = event.getY(pointerIndex).toInt()
         var dy = y - latestY
         if (!isBeingDragged && abs(dy) > touchSlop) {
           isBeingDragged = true
@@ -179,6 +180,9 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
           updateDyOffset(dy)
         }
       }
+      ACTION_POINTER_UP -> {
+        onPointerUp(event)
+      }
       ACTION_UP -> {
         handleUpEvent(event)
       }
@@ -188,6 +192,15 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
     }
     velocityTracker?.addMovement(event)
     return true
+  }
+  
+  private fun onPointerUp(event: MotionEvent) {
+    val actionIndex = event.actionIndex
+    if (event.getPointerId(actionIndex) == activePointerId) {
+      val newIndex = if (actionIndex == 0) 1 else 0
+      activePointerId = event.getPointerId(newIndex)
+      latestY = event.getY(newIndex).toInt()
+    }
   }
   
   private fun handleUpEvent(event: MotionEvent) {
@@ -238,6 +251,10 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet) :
   
   private fun notifyOffsetListeners(percentageOpened: Float) {
     offsetListeners.forEach { it.invoke(percentageOpened) }
+  }
+  
+  enum class State {
+    SHOWN, HIDDEN
   }
   
   companion object {

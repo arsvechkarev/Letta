@@ -13,7 +13,7 @@ import androidx.core.graphics.ColorUtils
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.DURATION_MEDIUM
 import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
-import com.arsvechkarev.letta.extensions.EndOvershootInterpolator
+import com.arsvechkarev.letta.extensions.OvershootInterpolator
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.contains
 import com.arsvechkarev.letta.extensions.f
@@ -28,28 +28,25 @@ class SimpleDialog @JvmOverloads constructor(
   
   private var wasNoMoveEvent = false
   private var currentShadowFraction = 0f
-  
   private val dialogView get() = getChildAt(0)
   private val shadowAnimator = ValueAnimator().apply {
     interpolator = AccelerateDecelerateInterpolator
     duration = DURATION_MEDIUM
     addUpdateListener {
       currentShadowFraction = it.animatedValue as Float
+      onShadowFractionChangedListener?.invoke(currentShadowFraction)
       val color = ColorUtils.blendARGB(Color.TRANSPARENT, Colors.Shadow, currentShadowFraction)
       setBackgroundColor(color)
     }
   }
+  
+  var onShadowFractionChangedListener: ((Float) -> Unit)? = null
   
   var isOpened = false
     private set
   
   init {
     gone()
-  }
-  
-  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    dialogView.translationY = getTranslationForDialogView()
-    dialogView.scaleX = getScaleXDialogView()
   }
   
   fun show() {
@@ -68,7 +65,7 @@ class SimpleDialog @JvmOverloads constructor(
           .alpha(1f)
           .translationY(0f)
           .setDuration(DURATION_MEDIUM)
-          .setInterpolator(EndOvershootInterpolator)
+          .setInterpolator(OvershootInterpolator)
           .start()
     }
   }
@@ -87,9 +84,14 @@ class SimpleDialog @JvmOverloads constructor(
           .translationY(getTranslationForDialogView())
           .setDuration((DURATION_MEDIUM * 0.8).toLong())
           .setInterpolator(AccelerateDecelerateInterpolator)
-          .withEndAction { gone() }
+          .withEndAction(::gone)
           .start()
     }
+  }
+  
+  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    dialogView.translationY = getTranslationForDialogView()
+    dialogView.scaleX = getScaleXDialogView()
   }
   
   override fun onTouchEvent(event: MotionEvent): Boolean {

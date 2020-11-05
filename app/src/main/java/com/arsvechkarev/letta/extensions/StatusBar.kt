@@ -4,6 +4,8 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.view.View
+import androidx.core.graphics.ColorUtils
+import com.arsvechkarev.letta.core.Colors
 
 object StatusBar {
   
@@ -29,6 +31,19 @@ object StatusBar {
   fun setStatusBarColor(activity: Activity, color: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       activity.window.statusBarColor = color
+    }
+  }
+  
+  fun applyShadow(
+    activity: Activity,
+    percentage: Float,
+    shadowColor: Int = Colors.Shadow,
+    backgroundColor: Int = Colors.Background
+  ) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      val endColor = ColorUtils.compositeColors(shadowColor, backgroundColor)
+      val statusColor = ColorUtils.blendARGB(backgroundColor, endColor, percentage)
+      setStatusBarColor(activity, statusColor)
     }
   }
 }

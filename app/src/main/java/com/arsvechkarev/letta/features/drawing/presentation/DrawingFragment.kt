@@ -2,7 +2,6 @@ package com.arsvechkarev.letta.features.drawing.presentation
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import com.arsvechkarev.letta.R
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.core.mvp.MvpFragment
@@ -10,7 +9,6 @@ import com.arsvechkarev.letta.core.navigation.navigator
 import com.arsvechkarev.letta.extensions.StatusBar
 import com.arsvechkarev.letta.extensions.rotate
 import com.arsvechkarev.letta.features.common.CommonDi
-import com.arsvechkarev.letta.features.drawing.domain.SavingProjectRepository
 import com.arsvechkarev.letta.opengldrawing.UndoStore
 import com.arsvechkarev.letta.opengldrawing.brushes.BRUSHES
 import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
@@ -38,7 +36,7 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   private lateinit var drawingContainer: DrawingContainer
   
   override fun createPresenter(): DrawingPresenter {
-    return DrawingPresenter(CommonDi.provideProjectRepository(requireContext()))
+    return DrawingPresenter(CommonDi.provideProjectRepository())
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,10 +62,6 @@ class DrawingFragment : MvpFragment<DrawingMvpView, DrawingPresenter>(
   override fun onImageUploaded() {
     dialogLoading.hide()
     navigator.popBackStack()
-  }
-  
-  override fun onImageUploadingError() {
-    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
   }
   
   override fun onDestroyView() {

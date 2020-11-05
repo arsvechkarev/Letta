@@ -7,6 +7,4 @@ interface DrawingMvpView : MvpView {
   fun onStartUploadingImage()
   
   fun onImageUploaded()
-  
-  fun onImageUploadingError()
 }

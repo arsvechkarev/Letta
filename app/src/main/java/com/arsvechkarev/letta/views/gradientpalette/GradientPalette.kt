@@ -283,6 +283,7 @@ class GradientPalette @JvmOverloads constructor(
   }
   
   companion object {
+  
     const val SWAP_ANIMATION_DURATION = 400L
   
     private const val GRADIENT_SENSITIVITY = 2

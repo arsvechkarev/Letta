@@ -5,6 +5,8 @@
   </style>
 
   <style name="AppTheme" parent="BaseTheme">
+    <item name="colorPrimary">?colorBackground</item>
+    <item name="colorTextPrimary">?colorTextPrimary</item>
     <item name="android:windowBackground">?colorBackground</item>
     <item name="android:textViewStyle">@style/TextView</item>
   </style>

@@ -4,13 +4,10 @@ import android.graphics.Bitmap
 import com.arsvechkarev.letta.core.recycler.DifferentiableItem
 
 class Project(
-  _id: Long,
+  override val id: Long,
   val filename: String,
   val image: Bitmap
 ) : DifferentiableItem {
-  
-  val idLong = _id
-  override val id = _id.toString()
   
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

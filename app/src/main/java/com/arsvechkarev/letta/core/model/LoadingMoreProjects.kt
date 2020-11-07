@@ -4,7 +4,7 @@ import com.arsvechkarev.letta.core.recycler.DifferentiableItem
 
 object LoadingMoreProjects : DifferentiableItem {
   
-  override val id = "LoadingMoreProjects"
+  override val id = Long.MAX_VALUE
   
   override fun equals(other: Any?): Boolean {
     return other === LoadingMoreProjects

@@ -23,6 +23,10 @@ abstract class ListAdapter(
   private val classesToViewTypes = HashMap<KClass<*>, Int>()
   private val delegatesSparseArray = SparseArrayCompat<ListAdapterDelegate<out DifferentiableItem>>()
   
+  init {
+    setHasStableIds(true)
+  }
+  
   fun addDelegates(vararg delegates: ListAdapterDelegate<out DifferentiableItem>) {
     this.delegates.addAll(delegates)
     this.delegates.forEachIndexed { i, delegate ->
@@ -97,6 +101,10 @@ abstract class ListAdapter(
   override fun getItemViewType(position: Int): Int {
     return classesToViewTypes[data[position]::class] ?: error(
       "Can't find delegate for position: $position")
+  }
+  
+  override fun getItemId(position: Int): Long {
+    return data[position].id
   }
   
   override fun getItemCount(): Int {

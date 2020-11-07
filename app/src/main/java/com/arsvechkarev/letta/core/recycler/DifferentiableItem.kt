@@ -10,7 +10,7 @@ interface DifferentiableItem {
   /**
    * Id to distinguish two different elements
    */
-  val id: String
+  val id: Long
   
   /**
    * Every class inherits from [DifferentiableItem] should override equals in order to compare elements

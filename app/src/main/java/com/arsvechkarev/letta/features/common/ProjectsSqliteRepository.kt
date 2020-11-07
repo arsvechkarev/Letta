@@ -31,7 +31,7 @@ class ProjectsSqliteRepository(
   }
   
   override fun createProject(bitmap: Bitmap) {
-    val dateFormat = SimpleDateFormat("yyyy_MM_dd--HH_mm_ss--", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("yyyy_MM_dd--HH_mm_ss_SSS__", Locale.getDefault())
     val timestamp = dateFormat.format(Date())
     val randomizedTimeStamp = timestamp + UUID.randomUUID().leastSignificantBits.toString()
     val projectFilename = "Project_$randomizedTimeStamp.png"
@@ -42,7 +42,7 @@ class ProjectsSqliteRepository(
   
   override fun deleteProjects(projects: Iterable<Project>) {
     projects.forEach { project ->
-      database.deleteProject(project.idLong)
+      database.deleteProject(project.id)
       projectFileStorage.deleteProject(project.filename)
     }
   }

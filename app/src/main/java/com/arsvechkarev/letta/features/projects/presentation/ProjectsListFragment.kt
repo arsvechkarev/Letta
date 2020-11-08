@@ -176,7 +176,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     imageTrash.isEnabled = false
     header.asHeader.isScrollable = false
     recyclerAllProjects.adapter = adapter
-    val layoutManager = SafeGridLayoutManager(requireContext(), 3)
+    val layoutManager = SafeGridLayoutManager(adapter, requireContext(), 3)
     recyclerAllProjects.layoutManager = layoutManager
     val padding = requireContext().getDimen(R.dimen.text_title_padding).toInt()
     titleAllProjects.paddings(

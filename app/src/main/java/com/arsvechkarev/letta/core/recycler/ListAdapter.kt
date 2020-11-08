@@ -68,13 +68,8 @@ abstract class ListAdapter(
     applyChanges(callback)
   }
   
-  private fun applyChanges(callback: DiffUtil.Callback) {
-    threader.onBackground {
-      val diffResult = DiffUtil.calculateDiff(callback, false)
-      threader.onMainThread {
-        diffResult.dispatchUpdatesTo(this)
-      }
-    }
+  fun getItemClassByPosition(position: Int): KClass<out DifferentiableItem> {
+    return data[position]::class
   }
   
   abstract fun readyToStartLoadingData(position: Int): Boolean
@@ -118,5 +113,14 @@ abstract class ListAdapter(
   override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
     delegates.forEach { it.onDetachedFromRecyclerView(recyclerView) }
     onReadyToLoadFurtherData = null
+  }
+  
+  private fun applyChanges(callback: DiffUtil.Callback) {
+    threader.onBackground {
+      val diffResult = DiffUtil.calculateDiff(callback, false)
+      threader.onMainThread {
+        diffResult.dispatchUpdatesTo(this)
+      }
+    }
   }
 }

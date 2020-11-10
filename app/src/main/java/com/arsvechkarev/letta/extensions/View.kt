@@ -16,7 +16,11 @@ import kotlin.contracts.contract
 operator fun View.contains(event: MotionEvent): Boolean {
   val x = event.x
   val y = event.y
-  return x >= 0 && y >= 0 && x <= width && y <= height
+  return x >= left && y >= top && x <= right && y <= bottom
+}
+
+infix fun MotionEvent.happenedIn(view: View): Boolean {
+  return x >= 0 && y >= 0 && x <= view.width && y <= view.height
 }
 
 fun View.visible() {

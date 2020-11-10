@@ -11,10 +11,9 @@ import com.arsvechkarev.letta.opengldrawing.Logger
 import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 import com.arsvechkarev.letta.opengldrawing.shaders.BLIT
 import com.arsvechkarev.letta.opengldrawing.shaders.BLIT_WITH_MASK
-import com.arsvechkarev.letta.opengldrawing.shaders.BLIT_WITH_MASK_LIGHT
+import com.arsvechkarev.letta.opengldrawing.shaders.BRUSH
 import com.arsvechkarev.letta.opengldrawing.shaders.COLOR
 import com.arsvechkarev.letta.opengldrawing.shaders.COMPOSITE_WITH_MASK
-import com.arsvechkarev.letta.opengldrawing.shaders.COMPOSITE_WITH_MASK_LIGHT
 import com.arsvechkarev.letta.opengldrawing.shaders.MASK
 import com.arsvechkarev.letta.opengldrawing.shaders.MVP_MATRIX
 import com.arsvechkarev.letta.opengldrawing.shaders.NON_PRE_MULTIPLIED_BLIT
@@ -102,13 +101,13 @@ class Painting(
   fun paintStroke(path: Path, clearBuffer: Boolean, action: Action) {
     openGLDrawingView!!.performInEGLContext {
       activePath = path
-    
+  
       var bounds: RectF? = null
-    
+  
       GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, getReusableFramebuffer())
       GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
         GLES20.GL_TEXTURE_2D, getPaintTexture(), 0)
-    
+  
       Logger.printGLErrorIfAny()
       
       val status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER)
@@ -120,8 +119,7 @@ class Painting(
           GLES20.glClearColor(0f, 0f, 0f, 0f)
           GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
         }
-        val key = if (brush.isLightSaber) "brushLight" else "brush"
-        val shader = shaders.getValue(key)
+        val shader = shaders.getValue(BRUSH)
         GLES20.glUseProgram(shader.program)
         if (brushTexture == null) {
           brushTexture = Texture(brush.getStamp(openGLDrawingView!!.context))
@@ -151,26 +149,25 @@ class Painting(
   fun commitStroke(color: Int) {
     openGLDrawingView!!.performInEGLContext {
       registerUndo(activeStrokeBounds)
-    
+  
       beginSuppressingChanges()
-    
+  
       update {
-        val key = if (brush.isLightSaber) COMPOSITE_WITH_MASK_LIGHT else COMPOSITE_WITH_MASK
-        val shader = shaders.getValue(key)
-      
+        val shader = shaders.getValue(COMPOSITE_WITH_MASK)
+    
         GLES20.glUseProgram(shader.program)
-      
+    
         GLES20.glUniformMatrix4fv(shader.getUniform(MVP_MATRIX), 1, false,
           FloatBuffer.wrap(projection))
         GLES20.glUniform1i(shader.getUniform(MASK), 0)
         Shader.setColorUniform(shader.getUniform(COLOR), color)
-      
+    
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getPaintTexture())
-      
+    
         GLES20.glBlendFuncSeparate(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA,
           GLES20.GL_SRC_ALPHA, GLES20.GL_ONE)
-      
+    
         GLES20.glVertexAttribPointer(0, 2, GLES20.GL_FLOAT, false, 8, vertexBuffer)
         GLES20.glEnableVertexAttribArray(0)
         GLES20.glVertexAttribPointer(1, 2, GLES20.GL_FLOAT, false, 8, textureBuffer)
@@ -342,8 +339,7 @@ class Painting(
   }
   
   private fun render(mask: Int, color: Int) {
-    val s = if (brush.isLightSaber) BLIT_WITH_MASK_LIGHT else BLIT_WITH_MASK
-    val shader = shaders.getValue(s)
+    val shader = shaders.getValue(BLIT_WITH_MASK)
   
     GLES20.glUseProgram(shader.program)
   

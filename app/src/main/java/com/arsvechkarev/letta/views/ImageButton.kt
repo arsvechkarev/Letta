@@ -19,8 +19,8 @@ import com.arsvechkarev.letta.core.DURATION_ON_CLICK
 import com.arsvechkarev.letta.core.VIEW_CLICK_SCALE_FACTOR
 import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
 import com.arsvechkarev.letta.extensions.STROKE_PAINT
-import com.arsvechkarev.letta.extensions.contains
 import com.arsvechkarev.letta.extensions.execute
+import com.arsvechkarev.letta.extensions.happenedIn
 
 open class ImageButton @JvmOverloads constructor(
   context: Context,
@@ -93,7 +93,7 @@ open class ImageButton @JvmOverloads constructor(
         return true
       }
       ACTION_UP, ACTION_CANCEL -> {
-        if (event.action == ACTION_UP && event in this) {
+        if (event.action == ACTION_UP && event happenedIn this) {
           performClick()
         }
         animate(down = false)

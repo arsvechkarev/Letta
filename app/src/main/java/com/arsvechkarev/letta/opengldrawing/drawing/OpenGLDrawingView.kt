@@ -88,7 +88,7 @@ class OpenGLDrawingView(
         return true
       }
       
-      override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
+      override fun onSurfaceTextureUpdated(surface: SurfaceTexture) = Unit
     }
   }
   

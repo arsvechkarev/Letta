@@ -5,6 +5,9 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
+  <uses-feature android:glEsVersion="0x00020000"
+    android:required="true"/>
+
   <application android:name=".LettaApplication"
     android:allowBackup="false"
     android:icon="@mipmap/ic_launcher"

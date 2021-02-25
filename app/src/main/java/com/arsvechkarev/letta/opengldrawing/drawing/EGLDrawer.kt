@@ -6,8 +6,9 @@ import android.graphics.RectF
 import android.graphics.SurfaceTexture
 import android.opengl.GLES20
 import android.opengl.GLUtils
+import android.os.Handler
 import android.os.Looper
-import com.arsvechkarev.letta.opengldrawing.DispatchQueue
+import com.arsvechkarev.letta.opengldrawing.Action
 import com.arsvechkarev.letta.opengldrawing.Logger
 import java.util.concurrent.CountDownLatch
 import javax.microedition.khronos.egl.EGL10
@@ -20,7 +21,10 @@ class EGLDrawer(
   private val surfaceTexture: SurfaceTexture,
   private var bitmap: Bitmap?,
   private val painting: Painting
-) : DispatchQueue("EGLDrawer") {
+) : Thread("EGLDrawer") {
+  
+  private lateinit var handler: Handler
+  private val syncLatch = CountDownLatch(1)
   
   private lateinit var egl10: EGL10
   private var eglDisplay: EGLDisplay? = null
@@ -53,6 +57,24 @@ class EGLDrawer(
     if (!isReady) {
       postRunnable(200) { isReady = true }
     }
+  }
+  
+  init {
+    start()
+  }
+  
+  fun cancelRunnable(action: Action) {
+    syncLatch.await()
+    handler.removeCallbacks(action)
+  }
+  
+  fun postRunnable(action: Action) {
+    postRunnable(0, action)
+  }
+  
+  fun postRunnable(delay: Long = 0, action: Action) {
+    syncLatch.await()
+    handler.postDelayed(action, delay)
   }
   
   fun setCurrentContext(): Boolean {
@@ -119,7 +141,10 @@ class EGLDrawer(
       return
     }
     isInitialized = initializeGL()
-    super.run()
+    Looper.prepare()
+    handler = Handler(Looper.myLooper()!!)
+    syncLatch.countDown()
+    Looper.loop()
   }
   
   private fun initializeGL(): Boolean {
@@ -210,6 +235,7 @@ class EGLDrawer(
   }
   
   companion object {
+  
     private const val EGL_CONTEXT_CLIENT_VERSION = 0x3098
     private const val EGL_OPEN_GL_ES2_BIT = 4
   }

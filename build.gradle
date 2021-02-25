@@ -1,7 +1,7 @@
 buildscript {
   ext {
     kotlinVersion = '1.4.10'
-    buildToolsVersion = '4.2.0-alpha15'
+    buildToolsVersion = '4.2.0-beta04'
     sqldelightVersion = '1.4.3'
   }
   repositories {

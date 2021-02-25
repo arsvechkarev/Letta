@@ -101,7 +101,6 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   
   override fun onSwitchBackFromDeletion(projectsDeleted: Int) {
     adapter.switchBackFromSelectionMode()
-    println("qqq: $projectsDeleted -- ${adapter.itemCount}")
     animateTransitionFromSelectionMode(
       showMoreIcon = projectsDeleted != adapter.itemCount
     )

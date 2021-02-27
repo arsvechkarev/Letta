@@ -46,10 +46,10 @@ abstract class ListAdapter(
   }
   
   fun removeLastAndAdd(list: List<DifferentiableItem>) {
-    val oldSize = data.size
     data.removeLast()
-    data.addAll(list)
-    applyChanges(AppendedListDiffCallbacks(data, oldSize))
+    val newList = ArrayList(data)
+    newList.addAll(list)
+    submitList(newList, CallbackType.TWO_LISTS)
   }
   
   fun addItems(list: List<DifferentiableItem>) {

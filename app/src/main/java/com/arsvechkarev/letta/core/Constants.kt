@@ -8,3 +8,4 @@ const val DURATION_ON_CLICK = 50L
 const val DURATION_SHORT = 170L
 const val DURATION_DEFAULT = 300L
 const val DURATION_MEDIUM = 500L
+const val LOADING_DELAY = 800L

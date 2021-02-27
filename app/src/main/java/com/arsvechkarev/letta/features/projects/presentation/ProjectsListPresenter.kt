@@ -1,5 +1,6 @@
 package com.arsvechkarev.letta.features.projects.presentation
 
+import com.arsvechkarev.letta.core.LOADING_DELAY
 import com.arsvechkarev.letta.core.ProjectsFilesObserver
 import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
@@ -36,7 +37,7 @@ class ProjectsListPresenter(
         if (currentItemIndex > 0) {
           updateView { onLoadingMoreProjects() }
         }
-        Thread.sleep(800)
+        Thread.sleep(LOADING_DELAY)
         val projects = repository.getProjects(currentItemIndex, AMOUNT_PER_LOADING)
         assertThat(projects.isNotEmpty())
         if (currentItemIndex == 0) {

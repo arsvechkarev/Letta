@@ -2,16 +2,16 @@ package com.arsvechkarev.letta.features.drawing.presentation
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.arsvechkarev.letta.core.BRUSHES
 import com.arsvechkarev.letta.features.drawing.list.BrushAdapter
-import com.arsvechkarev.letta.opengldrawing.UndoStore
-import com.arsvechkarev.letta.opengldrawing.brushes.BRUSHES
-import com.arsvechkarev.letta.opengldrawing.brushes.Brush
-import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.views.BrushDisplayer
 import com.arsvechkarev.letta.views.HideToolsView
 import com.arsvechkarev.letta.views.ImageButton
 import com.arsvechkarev.letta.views.VerticalSeekbar
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
+import com.arsvechkarev.opengldrawing.Brush
+import com.arsvechkarev.opengldrawing.UndoStore
+import com.arsvechkarev.opengldrawing.drawing.OpenGLDrawingView
 import kotlin.math.pow
 
 class DrawingContainer(

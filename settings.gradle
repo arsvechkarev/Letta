@@ -1,2 +1,3 @@
 rootProject.name='Letta'
 include ':app'
+include ':opengl-drawing'

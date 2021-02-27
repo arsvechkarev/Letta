@@ -13,7 +13,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.arsvechkarev.letta.core.Colors
 import com.arsvechkarev.letta.extensions.f
-import com.arsvechkarev.letta.opengldrawing.brushes.Brush
+import com.arsvechkarev.opengldrawing.Brush
 
 class BrushExampleView @JvmOverloads constructor(
   context: Context,

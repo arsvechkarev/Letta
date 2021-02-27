@@ -7,8 +7,8 @@ import com.arsvechkarev.letta.R.dimen.brush_example_size
 import com.arsvechkarev.letta.core.recycler.SingleSelectionAdapter
 import com.arsvechkarev.letta.extensions.withParams
 import com.arsvechkarev.letta.features.drawing.list.BrushAdapter.BrushViewHolder
-import com.arsvechkarev.letta.opengldrawing.brushes.Brush
 import com.arsvechkarev.letta.views.BrushExampleView
+import com.arsvechkarev.opengldrawing.Brush
 
 class BrushAdapter(
   items: List<Brush>,

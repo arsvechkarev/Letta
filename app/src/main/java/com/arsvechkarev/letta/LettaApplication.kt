@@ -2,6 +2,7 @@ package com.arsvechkarev.letta
 
 import android.app.Application
 import android.content.Context
+import com.arsvechkarev.opengldrawing.ContextHolder
 import timber.log.Timber
 
 class LettaApplication : Application() {
@@ -9,6 +10,7 @@ class LettaApplication : Application() {
   override fun onCreate() {
     super.onCreate()
     Timber.plant(Timber.DebugTree())
+    ContextHolder.setApplicationContext(applicationContext)
     appContext = applicationContext
   }
   

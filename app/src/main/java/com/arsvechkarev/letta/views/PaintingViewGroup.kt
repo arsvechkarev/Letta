@@ -17,8 +17,8 @@ import com.arsvechkarev.letta.extensions.statusBarHeight
 import com.arsvechkarev.letta.extensions.totalHeight
 import com.arsvechkarev.letta.extensions.totalWidth
 import com.arsvechkarev.letta.extensions.withParams
-import com.arsvechkarev.letta.opengldrawing.drawing.OpenGLDrawingView
 import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
+import com.arsvechkarev.opengldrawing.drawing.OpenGLDrawingView
 
 class PaintingViewGroup @JvmOverloads constructor(
   context: Context,

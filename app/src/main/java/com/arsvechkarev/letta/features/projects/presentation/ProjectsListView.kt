@@ -5,29 +5,31 @@ import com.arsvechkarev.letta.core.mvp.MvpView
 
 interface ProjectsListView : MvpView {
   
-  fun onSwitchToSelectionMode()
+  fun showSwitchToSelectionMode()
   
-  fun onSwitchToSelectionModeFromLongClick()
+  fun showSwitchToSelectionModeFromLongClick()
   
-  fun onSwitchBackFromSelectionMode()
+  fun showSwitchBackFromSelectionMode()
   
-  fun onSwitchBackFromDeletion(projectsDeleted: Int)
+  fun showSwitchBackFromDeletion(projectsDeleted: Int)
   
-  fun onLoadedFirstProjects(list: List<Project>)
+  fun showLoadingFirstProjects()
   
-  fun onLoadingMoreProjects()
+  fun showLoadedFirstProjects(list: List<Project>)
   
-  fun onLoadedMoreProjects(list: List<Project>)
+  fun showLoadingMoreProjects()
+  
+  fun showLoadedMoreProjects(list: List<Project>)
   
   fun onProjectCreated(project: Project)
   
-  fun projectsAreEmpty()
+  fun showProjectsAreEmpty()
   
   fun enableTrashIcon()
   
   fun disableTrashIcon()
   
-  fun onAskToDeleteProjects(listSize: Int)
+  fun showAskToDeleteProjects(listSize: Int)
   
-  fun onConfirmedToDeleteProjects(list: Collection<Project>)
+  fun showConfirmedToDeleteProjects(list: Collection<Project>)
 }

@@ -27,27 +27,30 @@ class ProjectsListPresenter(
   fun loadProjects() {
     if (isLoadingNow) return
     isLoadingNow = true
+    if (currentItemIndex == 0) {
+      updateView { showLoadingFirstProjects() }
+    }
     onIoThread {
       if (!repository.hasMoreProjects(currentItemIndex)) {
         updateView {
-          projectsAreEmpty()
+          showProjectsAreEmpty()
           isLoadingNow = false
         }
       } else {
         if (currentItemIndex > 0) {
-          updateView { onLoadingMoreProjects() }
+          updateView { showLoadingMoreProjects() }
         }
         Thread.sleep(LOADING_DELAY)
         val projects = repository.getProjects(currentItemIndex, AMOUNT_PER_LOADING)
         assertThat(projects.isNotEmpty())
         if (currentItemIndex == 0) {
           updateView {
-            onLoadedFirstProjects(projects)
+            showLoadedFirstProjects(projects)
             isLoadingNow = false
           }
         } else {
           updateView {
-            onLoadedMoreProjects(projects)
+            showLoadedMoreProjects(projects)
             isLoadingNow = false
           }
         }
@@ -59,20 +62,20 @@ class ProjectsListPresenter(
   fun onMoreButtonClicked() {
     if (currentItemIndex > 0) {
       selectionMode = true
-      updateView { onSwitchToSelectionMode() }
+      updateView { showSwitchToSelectionMode() }
     }
   }
   
   fun switchBackFromSelectionMode() {
     selectionMode = false
     currentlySelectedProjects.clear()
-    updateView { onSwitchBackFromSelectionMode() }
+    updateView { showSwitchBackFromSelectionMode() }
   }
   
   fun onLongClickOnItem() {
     if (!selectionMode) {
       selectionMode = true
-      updateView { onSwitchToSelectionModeFromLongClick() }
+      updateView { showSwitchToSelectionModeFromLongClick() }
     }
   }
   
@@ -90,7 +93,7 @@ class ProjectsListPresenter(
     onIoThread {
       if (currentlySelectedProjects.isNotEmpty()) {
         updateView {
-          onAskToDeleteProjects(currentlySelectedProjects.size)
+          showAskToDeleteProjects(currentlySelectedProjects.size)
         }
       }
     }
@@ -99,10 +102,13 @@ class ProjectsListPresenter(
   fun onConfirmedToDelete() {
     onIoThread {
       repository.deleteProjects(currentlySelectedProjects)
+      if (repository.getNumberOfProjects() == 0) {
+        updateView { showProjectsAreEmpty() }
+      }
       updateView {
         selectionMode = false
-        onSwitchBackFromDeletion(currentlySelectedProjects.size)
-        onConfirmedToDeleteProjects(currentlySelectedProjects)
+        showSwitchBackFromDeletion(currentlySelectedProjects.size)
+        showConfirmedToDeleteProjects(currentlySelectedProjects)
         currentlySelectedProjects.clear()
       }
     }
@@ -117,7 +123,7 @@ class ProjectsListPresenter(
   }
   
   override fun onNewProjectCreated(filename: String) {
-    val project = repository.loadLatestProject(filename)
+    val project = repository.getLatestProject(filename)
     currentItemIndex++
     updateView { onProjectCreated(project) }
   }

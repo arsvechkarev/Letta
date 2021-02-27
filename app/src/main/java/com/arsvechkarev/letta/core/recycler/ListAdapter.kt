@@ -23,10 +23,6 @@ abstract class ListAdapter(
   private val classesToViewTypes = HashMap<KClass<*>, Int>()
   private val delegatesSparseArray = SparseArrayCompat<ListAdapterDelegate<out DifferentiableItem>>()
   
-  init {
-    setHasStableIds(true)
-  }
-  
   fun addDelegates(vararg delegates: ListAdapterDelegate<out DifferentiableItem>) {
     this.delegates.addAll(delegates)
     this.delegates.forEachIndexed { i, delegate ->

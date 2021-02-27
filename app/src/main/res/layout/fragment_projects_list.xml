@@ -80,7 +80,34 @@
     android:id="@+id/projectsProgressBar"
     android:layout_width="@dimen/project_progress_bar_big_size"
     android:layout_height="@dimen/project_progress_bar_big_size"
-    android:layout_gravity="center"/>
+    android:layout_gravity="center"
+    android:visibility="invisible"/>
+
+  <LinearLayout
+    android:id="@+id/layoutNoProjects"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <ImageView
+      android:layout_width="@dimen/layout_no_projects_image_size"
+      android:layout_height="@dimen/layout_no_projects_image_size"
+      android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/layout_no_projects_text_margin"
+      android:layout_marginTop="@dimen/layout_no_projects_text_margin"
+      android:gravity="center"
+      android:text="@string/text_click_plus"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/text_h4"/>
+
+  </LinearLayout>
 
   <View
     android:id="@+id/bottomSheetShadowView"

@@ -18,6 +18,7 @@ import com.arsvechkarev.letta.extensions.animateLoosen
 import com.arsvechkarev.letta.extensions.animateSquash
 import com.arsvechkarev.letta.extensions.getDimen
 import com.arsvechkarev.letta.extensions.gone
+import com.arsvechkarev.letta.extensions.invisible
 import com.arsvechkarev.letta.extensions.paddings
 import com.arsvechkarev.letta.extensions.visible
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
@@ -36,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_projects_list.header
 import kotlinx.android.synthetic.main.fragment_projects_list.imageBackFromSelectionMode
 import kotlinx.android.synthetic.main.fragment_projects_list.imageMore
 import kotlinx.android.synthetic.main.fragment_projects_list.imageTrash
+import kotlinx.android.synthetic.main.fragment_projects_list.layoutNoProjects
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsDialogConfirmDelete
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsHeaderDialogConfirmDelete
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsListRoot
@@ -82,31 +84,36 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     prepareConfirmDeletionDialog()
   }
   
-  override fun onSwitchToSelectionMode() {
+  override fun showSwitchToSelectionMode() {
     adapter.switchToSelectionMode()
     animateTransitionToSelectionMode()
     imageTrash.isEnabled = false
   }
   
-  override fun onSwitchToSelectionModeFromLongClick() {
+  override fun showSwitchToSelectionModeFromLongClick() {
     adapter.switchToSelectionMode()
     animateTransitionToSelectionMode()
     imageTrash.isEnabled = true
   }
   
-  override fun onSwitchBackFromSelectionMode() {
+  override fun showSwitchBackFromSelectionMode() {
     adapter.switchBackFromSelectionMode()
     animateTransitionFromSelectionMode()
   }
   
-  override fun onSwitchBackFromDeletion(projectsDeleted: Int) {
+  override fun showSwitchBackFromDeletion(projectsDeleted: Int) {
     adapter.switchBackFromSelectionMode()
     animateTransitionFromSelectionMode(
       showMoreIcon = projectsDeleted != adapter.itemCount
     )
   }
   
-  override fun onLoadedFirstProjects(list: List<Project>) {
+  override fun showLoadingFirstProjects() {
+    layoutNoProjects.invisible()
+    projectsProgressBar.visible()
+  }
+  
+  override fun showLoadedFirstProjects(list: List<Project>) {
     adapter.submitList(list, CallbackType.APPENDED_LIST)
     projectsProgressBar.animateInvisibleAndScale()
     if (imageMore.visibility != View.VISIBLE) {
@@ -114,23 +121,25 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     }
   }
   
-  override fun onLoadingMoreProjects() {
+  override fun showLoadingMoreProjects() {
     adapter.addLoadingItem(LoadingMoreProjects)
   }
   
-  override fun onLoadedMoreProjects(list: List<Project>) {
+  override fun showLoadedMoreProjects(list: List<Project>) {
     adapter.removeLastAndAdd(list)
   }
   
   override fun onProjectCreated(project: Project) {
+    layoutNoProjects.invisible()
     if (imageMore.visibility != View.VISIBLE) {
       imageMore.animateLoosen()
     }
     adapter.addItem(project, 0)
   }
   
-  override fun projectsAreEmpty() {
-    projectsProgressBar.animateInvisibleAndScale()
+  override fun showProjectsAreEmpty() {
+    projectsProgressBar.invisible()
+    layoutNoProjects.visible()
   }
   
   override fun enableTrashIcon() {
@@ -141,14 +150,14 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     imageTrash.isEnabled = false
   }
   
-  override fun onAskToDeleteProjects(listSize: Int) {
+  override fun showAskToDeleteProjects(listSize: Int) {
     projectsDialogConfirmDelete.show()
     projectsHeaderDialogConfirmDelete.text = getString(
       R.string.text_are_you_sure_to_delete_projects, listSize
     )
   }
   
-  override fun onConfirmedToDeleteProjects(list: Collection<Project>) {
+  override fun showConfirmedToDeleteProjects(list: Collection<Project>) {
     projectsDialogConfirmDelete.hide()
     adapter.deleteItems(list)
   }

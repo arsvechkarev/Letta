@@ -22,6 +22,7 @@ class ProjectsListAdapter(
 ) : MultiSelectionAdapter<DifferentiableItem>(onReadyToLoadFurtherData) {
   
   init {
+    setHasStableIds(true)
     val projectAdapterDelegate = ProjectItemAdapterDelegate(
       isInSelectionModeLambda,
       onProjectClick,

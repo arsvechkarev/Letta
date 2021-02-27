@@ -14,6 +14,10 @@ class ProjectsSqliteRepository(
   private val projectFileStorage: ProjectFileStorage
 ) : ProjectsRepository {
   
+  override fun getNumberOfProjects(): Int {
+    return database.getNumberOfProjects().executeAsOne().toInt()
+  }
+  
   override fun hasMoreProjects(currentIndex: Int): Boolean {
     return currentIndex < getNumberOfProjects()
   }
@@ -25,7 +29,7 @@ class ProjectsSqliteRepository(
     }.executeAsList()
   }
   
-  override fun loadLatestProject(filename: String): Project {
+  override fun getLatestProject(filename: String): Project {
     val id = database.getLastInsertedProjectId().executeAsOne()
     return projectFileStorage.getProject(id, filename)
   }
@@ -46,6 +50,4 @@ class ProjectsSqliteRepository(
       projectFileStorage.deleteProject(project.filename)
     }
   }
-  
-  private fun getNumberOfProjects() = database.getNumberOfProjects().executeAsOne().toInt()
 }

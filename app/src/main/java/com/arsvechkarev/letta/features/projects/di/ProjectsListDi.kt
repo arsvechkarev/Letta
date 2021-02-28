@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.letta.R.id.backgroundImageExample
 import com.arsvechkarev.letta.R.id.backgroundImagePalette
 import com.arsvechkarev.letta.R.id.backgroundImagesRecyclerView
+import com.arsvechkarev.letta.core.AndroidSharer
 import com.arsvechkarev.letta.core.model.Project
 import com.arsvechkarev.letta.features.common.CommonDi
 import com.arsvechkarev.letta.features.projects.list.ProjectsListAdapter
@@ -16,7 +17,8 @@ import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 object ProjectsListDi {
   
   fun providePresenter(fragment: ProjectsListFragment): ProjectsListPresenter {
-    return ProjectsListPresenter(CommonDi.provideProjectRepository())
+    return ProjectsListPresenter(CommonDi.provideProjectRepository(),
+      AndroidSharer(fragment.requireContext()))
   }
   
   fun provideChooseBgContainer(fragment: ProjectsListFragment): ChooseBgContainer {

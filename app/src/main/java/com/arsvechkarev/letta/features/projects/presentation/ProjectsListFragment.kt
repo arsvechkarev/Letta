@@ -19,6 +19,7 @@ import com.arsvechkarev.letta.extensions.animateSquash
 import com.arsvechkarev.letta.extensions.getDimen
 import com.arsvechkarev.letta.extensions.gone
 import com.arsvechkarev.letta.extensions.invisible
+import com.arsvechkarev.letta.extensions.isNotVisible
 import com.arsvechkarev.letta.extensions.paddings
 import com.arsvechkarev.letta.extensions.visible
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
@@ -36,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_projects_list.createNewProjectBut
 import kotlinx.android.synthetic.main.fragment_projects_list.header
 import kotlinx.android.synthetic.main.fragment_projects_list.imageBackFromSelectionMode
 import kotlinx.android.synthetic.main.fragment_projects_list.imageMore
+import kotlinx.android.synthetic.main.fragment_projects_list.imageShare
 import kotlinx.android.synthetic.main.fragment_projects_list.imageTrash
 import kotlinx.android.synthetic.main.fragment_projects_list.layoutNoProjects
 import kotlinx.android.synthetic.main.fragment_projects_list.projectsDialogConfirmDelete
@@ -63,7 +65,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     }, onReadyToLoadFurtherData = {
       presenter.loadProjects()
     }, onLongClick = {
-      presenter.onLongClickOnItem()
+      presenter.onItemLongClick()
     }, onProjectSelected = { project ->
       presenter.onProjectSelected(project)
     }, onProjectUnselected = { project ->
@@ -94,6 +96,17 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     adapter.switchToSelectionMode()
     animateTransitionToSelectionMode()
     imageTrash.isEnabled = true
+  }
+  
+  override fun showShareIcon() {
+    if (imageShare.isNotVisible) {
+      imageShare.animateLoosen()
+      imageShare.visible()
+    }
+  }
+  
+  override fun hideShareIcon() {
+    imageShare.animateSquash(andThen = { imageShare.gone() })
   }
   
   override fun showSwitchBackFromSelectionMode() {
@@ -181,6 +194,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
   }
   
   private fun initViews() {
+    imageShare.setOnClickListener { presenter.shareProject() }
     imageTrash.isEnabled = false
     header.asHeader.isScrollable = false
     recyclerAllProjects.adapter = adapter
@@ -213,6 +227,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     imageTrash.isEnabled = true
     buttonNewProject.allowAnimating = true
     buttonNewProject.animate(down = false)
+    imageShare.animateSquash(andThen = { imageShare.gone() })
     imageTrash.animateSquash(andThen = { imageTrash.gone() })
     imageBackFromSelectionMode.animateSquash(andThen = {
       imageBackFromSelectionMode.gone()

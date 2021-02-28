@@ -57,6 +57,18 @@
       app:layout_constraintTop_toTopOf="parent"/>
 
     <com.arsvechkarev.letta.views.ImageButton
+      android:id="@+id/imageShare"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/text_title_padding"
+      android:visibility="gone"
+      app:drawStroke="false"
+      app:imageSrc="@drawable/ic_share"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/imageTrash"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.arsvechkarev.letta.views.ImageButton
       android:id="@+id/imageTrash"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"

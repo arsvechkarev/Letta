@@ -2,6 +2,7 @@ package com.arsvechkarev.letta.features.projects.presentation
 
 import com.arsvechkarev.letta.core.LOADING_DELAY
 import com.arsvechkarev.letta.core.ProjectsFilesObserver
+import com.arsvechkarev.letta.core.Sharer
 import com.arsvechkarev.letta.core.async.AndroidThreader
 import com.arsvechkarev.letta.core.async.Threader
 import com.arsvechkarev.letta.core.model.Project
@@ -11,6 +12,7 @@ import com.arsvechkarev.letta.features.common.ProjectsRepository
 
 class ProjectsListPresenter(
   private val repository: ProjectsRepository,
+  private val sharer: Sharer,
   threader: Threader = AndroidThreader
 ) : MvpPresenter<ProjectsListView>(threader), ProjectsFilesObserver.Observer {
   
@@ -66,27 +68,33 @@ class ProjectsListPresenter(
     }
   }
   
-  fun switchBackFromSelectionMode() {
-    selectionMode = false
-    currentlySelectedProjects.clear()
-    updateView { showSwitchBackFromSelectionMode() }
-  }
-  
-  fun onLongClickOnItem() {
+  fun onItemLongClick() {
     if (!selectionMode) {
       selectionMode = true
       updateView { showSwitchToSelectionModeFromLongClick() }
     }
   }
   
+  fun shareProject() {
+    sharer.share(currentlySelectedProjects)
+  }
+  
+  fun switchBackFromSelectionMode() {
+    selectionMode = false
+    currentlySelectedProjects.clear()
+    updateView { showSwitchBackFromSelectionMode() }
+  }
+  
   fun onProjectSelected(project: Project) {
     currentlySelectedProjects.add(project)
     updateTrashIconState()
+    updateShareIconState()
   }
   
   fun onProjectUnselected(project: Project) {
     currentlySelectedProjects.remove(project)
     updateTrashIconState()
+    updateShareIconState()
   }
   
   fun onDeleteSelectedProjects() {
@@ -133,6 +141,14 @@ class ProjectsListPresenter(
       updateView { disableTrashIcon() }
     } else {
       updateView { enableTrashIcon() }
+    }
+  }
+  
+  private fun updateShareIconState() {
+    if (currentlySelectedProjects.isEmpty()) {
+      updateView { hideShareIcon() }
+    } else {
+      updateView { showShareIcon() }
     }
   }
   

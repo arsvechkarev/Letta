@@ -15,7 +15,7 @@ class ProjectFileStorage(
     projectsDirectory.mkdirs()
     val projectFile = File(projectsDirectory, filename)
     FileOutputStream(projectFile).use {
-      bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
     }
     ProjectsFilesObserver.notifyProjectCreated(filename)
   }

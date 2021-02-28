@@ -35,6 +35,8 @@ fun View.gone() {
   visibility = View.INVISIBLE
 }
 
+val View.isNotVisible get() = visibility != View.VISIBLE
+
 val View.isNotGone get() = visibility != View.GONE
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {

@@ -4,12 +4,10 @@ import android.content.Context
 import android.os.Environment
 import java.io.File
 
-val directoryProjects = "${File.separator}Letta${File.separator}Projects"
-
 val Context.projectsDirectory: File
   get() {
     val picturesDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-    return File(picturesDirectory, directoryProjects)
+    return File(picturesDirectory, "${File.separator}Letta${File.separator}Projects")
   }
 
 fun Context.getProjectPath(filename: String): String {

@@ -13,6 +13,7 @@ import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 class ChooseBgContainer(
   private val backgroundImageExample: BorderImageView,
   private val paletteBackground: GradientPalette,
+
   private val backgroundImagesRecyclerView: RecyclerView
 ) {
   
@@ -22,7 +23,7 @@ class ChooseBgContainer(
       adapter.disableSelection()
       backgroundImageExample.updateColor(it)
     }
-    backgroundImageExample.updateDrawable(R.drawable.bg1)
+    backgroundImageExample.updateDrawable(R.drawable.project_bg_1)
   }
   
   fun getBackgroundType(): BackgroundType {
@@ -35,14 +36,14 @@ class ChooseBgContainer(
   
   private fun initializeAdapter(): BackgroundImageAdapter {
     val images = listOf(
-      ImageModel(R.drawable.bg1),
-      ImageModel(R.drawable.bg2),
-      ImageModel(R.drawable.bg3),
-      ImageModel(R.drawable.bg4),
-      ImageModel(R.drawable.bg5),
-      ImageModel(R.drawable.bg6),
-      ImageModel(R.drawable.bg7),
-      ImageModel(R.drawable.bg8)
+      ImageModel(R.drawable.project_bg_small_1, R.drawable.project_bg_1),
+      ImageModel(R.drawable.project_bg_small_2, R.drawable.project_bg_2),
+      ImageModel(R.drawable.project_bg_small_3, R.drawable.project_bg_3),
+      ImageModel(R.drawable.project_bg_small_4, R.drawable.project_bg_4),
+      ImageModel(R.drawable.project_bg_small_5, R.drawable.project_bg_5),
+      ImageModel(R.drawable.project_bg_small_6, R.drawable.project_bg_6),
+      ImageModel(R.drawable.project_bg_small_7, R.drawable.project_bg_7),
+      ImageModel(R.drawable.project_bg_small_8, R.drawable.project_bg_8)
     )
     val adapter = BackgroundImageAdapter(images, ::onImageSelected)
     backgroundImagesRecyclerView.adapter = adapter
@@ -54,7 +55,7 @@ class ChooseBgContainer(
   private fun onImageSelected(image: ImageModel?) {
     when (image) {
       null -> backgroundImageExample.updateColor(paletteBackground.currentColor)
-      else -> backgroundImageExample.updateDrawable(image.drawableRes)
+      else -> backgroundImageExample.updateDrawable(image.actualImageRes)
     }
   }
 }

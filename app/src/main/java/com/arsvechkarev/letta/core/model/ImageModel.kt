@@ -1,5 +1,6 @@
 package com.arsvechkarev.letta.core.model
 
 class ImageModel(
-  val drawableRes: Int
+  val displayImageRes: Int,
+  val actualImageRes: Int,
 )

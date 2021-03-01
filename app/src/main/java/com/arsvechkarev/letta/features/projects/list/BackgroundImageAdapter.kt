@@ -60,7 +60,7 @@ class BackgroundImageAdapter(
     }
     
     override fun bind(item: ImageModel) {
-      val drawable = RoundedCornersDrawable.ofResource(itemView.context, item.drawableRes)
+      val drawable = RoundedCornersDrawable.ofResource(itemView.context, item.displayImageRes)
       itemView.image.setImageDrawable(drawable)
       val isChecked = selectedPosition == adapterPosition
       itemView.checkmark.updateCheckedStateWithoutAnimation(isChecked)

@@ -19,8 +19,8 @@ import com.arsvechkarev.letta.extensions.animateSquash
 import com.arsvechkarev.letta.extensions.getDimen
 import com.arsvechkarev.letta.extensions.gone
 import com.arsvechkarev.letta.extensions.invisible
-import com.arsvechkarev.letta.extensions.isNotVisible
 import com.arsvechkarev.letta.extensions.paddings
+import com.arsvechkarev.letta.extensions.setSafeClickListener
 import com.arsvechkarev.letta.extensions.visible
 import com.arsvechkarev.letta.features.drawing.presentation.createColorArgs
 import com.arsvechkarev.letta.features.drawing.presentation.createDrawableResArgs
@@ -90,23 +90,22 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     adapter.switchToSelectionMode()
     animateTransitionToSelectionMode()
     imageTrash.isEnabled = false
+    imageShare.isEnabled = false
   }
   
   override fun showSwitchToSelectionModeFromLongClick() {
     adapter.switchToSelectionMode()
     animateTransitionToSelectionMode()
     imageTrash.isEnabled = true
+    imageShare.isEnabled = true
   }
   
-  override fun showShareIcon() {
-    if (imageShare.isNotVisible) {
-      imageShare.animateLoosen()
-      imageShare.visible()
-    }
+  override fun enableShareIcon() {
+    imageShare.isEnabled = true
   }
   
-  override fun hideShareIcon() {
-    imageShare.animateSquash(andThen = { imageShare.gone() })
+  override fun disableShareIcon() {
+    imageShare.isEnabled = false
   }
   
   override fun showSwitchBackFromSelectionMode() {
@@ -219,6 +218,8 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     imageMore.animateSquash(andThen = { imageMore.gone() })
     titleAllProjects.animateSquash(andThen = { imageMore.gone() })
     imageBackFromSelectionMode.animateLoosen()
+    imageShare.animateLoosen()
+    imageShare.visible()
     imageTrash.animateLoosen()
     imageTrash.visible()
   }
@@ -244,7 +245,7 @@ class ProjectsListFragment : MvpFragment<ProjectsListView, ProjectsListPresenter
     bottomSheet.onShow = { buttonNewProject.allowAnimating = false }
     bottomSheet.onHide = { buttonNewProject.allowAnimating = true }
     buttonNewProject.setOnClickListener { bottomSheet.show() }
-    createNewProjectButton.setOnClickListener { openNewProject() }
+    createNewProjectButton.setSafeClickListener { openNewProject() }
     bottomSheet.addSlideListener { percentageOpened ->
       val shadowColor = ColorUtils.blendARGB(Colors.Transparent, Colors.Shadow, percentageOpened)
       bottomSheetShadowView.setBackgroundColor(shadowColor)

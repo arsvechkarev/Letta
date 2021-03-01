@@ -11,9 +11,9 @@ import android.view.MotionEvent.ACTION_UP
 import android.widget.FrameLayout
 import androidx.core.graphics.ColorUtils
 import com.arsvechkarev.letta.core.Colors
+import com.arsvechkarev.letta.core.DURATION_DEFAULT
 import com.arsvechkarev.letta.core.DURATION_MEDIUM
 import com.arsvechkarev.letta.extensions.AccelerateDecelerateInterpolator
-import com.arsvechkarev.letta.extensions.OvershootInterpolator
 import com.arsvechkarev.letta.extensions.cancelIfRunning
 import com.arsvechkarev.letta.extensions.contains
 import com.arsvechkarev.letta.extensions.f
@@ -61,11 +61,10 @@ class SimpleDialog @JvmOverloads constructor(
       shadowAnimator.start()
       dialogView.animate()
           .withLayer()
-          .scaleX(1f)
           .alpha(1f)
           .translationY(0f)
-          .setDuration(DURATION_MEDIUM)
-          .setInterpolator(OvershootInterpolator)
+          .setDuration(DURATION_DEFAULT)
+          .setInterpolator(AccelerateDecelerateInterpolator)
           .start()
     }
   }
@@ -80,9 +79,8 @@ class SimpleDialog @JvmOverloads constructor(
       dialogView.animate()
           .withLayer()
           .alpha(0f)
-          .scaleX(getScaleXDialogView())
           .translationY(getTranslationForDialogView())
-          .setDuration((DURATION_MEDIUM * 0.8).toLong())
+          .setDuration(DURATION_DEFAULT)
           .setInterpolator(AccelerateDecelerateInterpolator)
           .withEndAction(::gone)
           .start()
@@ -91,7 +89,6 @@ class SimpleDialog @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     dialogView.translationY = getTranslationForDialogView()
-    dialogView.scaleX = getScaleXDialogView()
   }
   
   override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -114,6 +111,4 @@ class SimpleDialog @JvmOverloads constructor(
   }
   
   private fun getTranslationForDialogView(): Float = dialogView.measuredHeight.f
-  
-  private fun getScaleXDialogView(): Float = 0.8f
 }

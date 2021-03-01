@@ -13,7 +13,6 @@ import com.arsvechkarev.letta.views.gradientpalette.GradientPalette
 class ChooseBgContainer(
   private val backgroundImageExample: BorderImageView,
   private val paletteBackground: GradientPalette,
-
   private val backgroundImagesRecyclerView: RecyclerView
 ) {
   

@@ -9,9 +9,9 @@ interface ProjectsListView : MvpView {
   
   fun showSwitchToSelectionModeFromLongClick()
   
-  fun showShareIcon()
+  fun enableShareIcon()
   
-  fun hideShareIcon()
+  fun disableShareIcon()
   
   fun showSwitchBackFromSelectionMode()
   

@@ -76,6 +76,7 @@ class ProjectsListPresenter(
   }
   
   fun shareProject() {
+    assertThat(currentlySelectedProjects.isNotEmpty())
     sharer.share(currentlySelectedProjects)
   }
   
@@ -146,9 +147,9 @@ class ProjectsListPresenter(
   
   private fun updateShareIconState() {
     if (currentlySelectedProjects.isEmpty()) {
-      updateView { hideShareIcon() }
+      updateView { disableShareIcon() }
     } else {
-      updateView { showShareIcon() }
+      updateView { enableShareIcon() }
     }
   }
   

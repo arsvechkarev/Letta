@@ -5,7 +5,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.DimenRes
 import androidx.annotation.LayoutRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -39,6 +38,14 @@ val View.isNotVisible get() = visibility != View.VISIBLE
 
 val View.isNotGone get() = visibility != View.GONE
 
+fun View.setSafeClickListener(block: () -> Unit) {
+  setOnClickListener {
+    block()
+    isClickable = false
+    handler.postDelayed({ isClickable = true }, 1000)
+  }
+}
+
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
   return LayoutInflater.from(context).inflate(layoutRes, this, false)
 }
@@ -62,12 +69,6 @@ inline fun ViewGroup.findChild(predicate: (View) -> Boolean): View {
     }
   }
   throw IllegalStateException("No child matching predicate")
-}
-
-inline fun ViewGroup.forEachChild(block: (View) -> Unit) {
-  for (i in 0 until childCount) {
-    block(getChildAt(i))
-  }
 }
 
 val View.totalWidth: Int
@@ -134,16 +135,8 @@ fun View.paddings(
   }
 }
 
-fun View.tag(tag: String) {
-  this.tag = tag
-}
-
 fun View.childView(tag: String): View {
   return findViewWithTag(tag)
-}
-
-fun View.childTextView(tag: String): TextView {
-  return findViewWithTag(tag) as TextView
 }
 
 fun View.childImageView(tag: String): ImageView {

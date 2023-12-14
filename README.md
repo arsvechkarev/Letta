@@ -1,4 +1,4 @@
-ARCHIVED: This once was my pet project, it is no longer maintained ;)
+# ARCHIVED: This once was my pet project, it is no longer maintained ;)
 
 # Letta
 
